@@ -1,0 +1,86 @@
+#cloud-config
+hostname: ${hostname}
+timezone: Asia/Novosibirsk
+locale: en_US.UTF-8
+manage_etc_hosts: true
+growpart: {mode: 'on'}
+locale: C.UTF-8
+preserve_hostname: false
+resize_rootfs: true
+ssh_pwauth: false
+disable_root: true
+users:
+ - name: root
+   lock-passwd: true
+# - default #for default user in /etc/cloud/cloud.cfg
+ - name: its
+   groups: [sudo,admin]
+   lock-passwd: true
+   gecos: its
+   #passwd: $1$SaltSalt$fe0kz01dUWfKzl83jI7vG/
+   shell: /bin/bash
+   sudo: ALL=(ALL) NOPASSWD:ALL
+   ssh-authorized-keys:
+    - ${vm_rsa_ssh_key}
+package_update: true
+package_upgrade: true
+package_reboot_if_required: true
+packages:
+  - htop
+  - mc
+  - apt-transport-https
+  - ca-certificates
+  - curl
+no_ssh_fingerprints: false
+ssh_deletekeys: 1
+ssh:
+  emit_keys_to_console: false
+runcmd:
+#  - sed -i -e '/^Port/s/^.*$/Port 4444/' /etc/ssh/sshd_config
+  - sysctl --system
+  - sed -i -e '/^PasswordAuthentication/s/^.*$/PasswordAuthentication no/' /etc/ssh/sshd_config
+  - sed -i -e '/^PermitRootLogin/s/^.*$/PermitRootLogin no/' /etc/ssh/sshd_config
+  - sed -i -e '$aAllowUsers its' /etc/ssh/sshd_config
+  - systemctl restart sshd
+  - /bin/echo > /var/log/cloud-init.log
+  - /bin/echo > /var/log/cloud-init-output.log
+write_files:
+  - path: /etc/sysctl.d/10-disable-ipv6.conf
+    permissions: 0644
+    owner: root
+    content: |
+      net.ipv6.conf.all.disable_ipv6 = 1
+      net.ipv6.conf.default.disable_ipv6 = 1
+      net.ipv6.conf.lo.disable_ipv6 = 1
+  - path: /etc/sysctl.d/11-kubernetes.conf
+    permissions: 0644
+    owner: root
+    content: |
+      net.bridge.bridge-nf-call-iptables = 1
+      net.ipv4.ip_forward = 1  
+  - path: /etc/modules-load.d/containerd.conf
+    permissions: 0644
+    owner: root
+    content: |
+      overlay
+      br_netfilter  
+apt:
+  sources_list: |
+    deb http://deb.debian.org/debian/ $RELEASE main contrib non-free
+    deb-src http://deb.debian.org/debian/ $RELEASE main contrib non-free
+    deb http://deb.debian.org/debian/ $RELEASE-updates main contrib non-free
+    deb-src http://deb.debian.org/debian/ $RELEASE-updates main contrib non-free
+    deb http://deb.debian.org/debian-security $RELEASE/updates main
+    deb-src http://deb.debian.org/debian-security $RELEASE/updates main
+  conf: |
+    APT {
+      Get {
+        Assume-Yes "true";
+        Fix-Broken "true";
+      };
+    };
+power_state:
+  delay: '+1'
+  mode: reboot
+  condition: true
+  message: "End cloud_config init"

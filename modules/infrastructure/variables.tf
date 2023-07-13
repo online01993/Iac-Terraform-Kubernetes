@@ -1,0 +1,120 @@
+variable "node_count" {
+  #default = 6
+  type = number
+}
+variable "vm_disk_size_gb" {
+  #default = 16
+  type = number
+}
+variable "vm_storage_disk_size_gb" {
+  #default = 150
+  type = number
+}
+variable "vm_memory_size_gb" {
+  #default = 1
+  type = number
+}
+variable "vm_cpu_count" {
+  #default = 1
+  type = number
+}
+variable "master_count" {
+  #default = 3
+  type = number
+}
+variable "master_disk_size_gb" {
+  #default = 16
+  type = number
+}
+variable "master_memory_size_gb" {
+  #default = 1
+  type = number
+}
+variable "master_cpu_count" {
+  #default = 1
+  type = number
+}
+variable "dns_key_name" {
+  type = string
+}
+variable "dns_key_secret" {
+  sensitive = true
+  type      = string
+}
+variable "dns_server" {
+  type = string
+}
+variable "dns_zone" {
+  type = string
+}
+variable "dns_sub_zone" {
+  type = string
+}
+variable "dns_ttl" {
+  type    = number
+  default = 600
+}
+variable "certificate_params" {
+  type = object({
+    organization        = string
+    organizational_unit = string
+    locality            = string
+    country             = string
+    province            = string
+  })
+  #default = {
+  #  organization        = "Test"
+  #  organizational_unit = "Test"
+  #  locality            = "Montreal"
+  #  country             = "CA"
+  #  province            = "QC"
+  #}
+}
+variable "node_labels" {
+  type = map(string)
+  #default = {}
+}
+variable "master_labels" {
+  type = map(string)
+  #default = {}
+}
+variable "master_vm_tags" {
+  type = list(string)
+  #default = []
+}
+variable "node_vm_tags" {
+  type = list(string)
+  #default = []
+}
+variable "xen_sr_id" {
+  type = list(string)
+}
+variable "xen_large_sr_id" {
+  type = list(string)
+}
+variable "xen_network_name" {
+  type = string
+}
+variable "xen_vm_template_name" {
+  type = string
+}
+variable "xen_pool_name" {
+  type = string
+}
+variable "xen_xoa_url" {
+  type = string
+}
+variable "xen_xoa_username" {
+  type = string
+}
+variable "xen_xoa_password" {
+  type      = string
+  sensitive = true
+}
+variable "xen_xoa_insecure" {
+  type    = bool
+  default = false
+}
+variable "vm_rsa_ssh_key" {
+  type = string
+}
