@@ -69,6 +69,7 @@ runcmd:
   - systemctl enable --now containerd
   - /bin/echo > /var/log/cloud-init.log
   - /bin/echo > /var/log/cloud-init-output.log
+  - touch /etc/cloud/cloud-init.disabled
 write_files:
   - path: /etc/sysctl.d/10-disable-ipv6.conf
     permissions: 0644
