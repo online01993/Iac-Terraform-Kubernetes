@@ -32,7 +32,7 @@ module "infrastructure" {
   dns_sub_zone             = var.global_dns_sub_zone
   master_node_address_mask = var.global_master_node_address_mask
   worker_node_address_mask = var.global_worker_node_address_mask
-  nodes_mask 			   = var.global_nodes_mask
-  nodes_gateway 		   = var.global_nodes_gateway
-  nodes_dns_address 	   = var.global_nodes_dns_address
+  nodes_mask               = var.global_nodes_mask
+  nodes_gateway            = var.global_nodes_gateway
+  nodes_dns_address        = var.global_nodes_dns_address
 }

@@ -33,11 +33,11 @@ resource "xenorchestra_cloud_config" "cloud_network_config_masters" {
   name  = "debian-network-base-config-master-${count.index}"
   #template = "./modules/infrastructure/cloud_network_dhcp.yaml"
   template = templatefile("./modules/infrastructure/cloud_network_static.yaml", {
-    node_address   = "${var.master_node_address_mask}${count.index + 2}"
-    node_mask      = "${var.nodes_mask}"
-    node_gateway   = "${var.nodes_gateway}"
-	node_dns_address = "${var.nodes_dns_address}"
-    node_dns_search = "${substr(lower(var.dns_zone), 0, length(var.dns_zone) - 1)}"
+    node_address     = "${var.master_node_address_mask}${count.index + 2}"
+    node_mask        = "${var.nodes_mask}"
+    node_gateway     = "${var.nodes_gateway}"
+    node_dns_address = "${var.nodes_dns_address}"
+    node_dns_search  = "${substr(lower(var.dns_zone), 0, length(var.dns_zone) - 1)}"
   })
 }
 resource "xenorchestra_cloud_config" "bar_vm" {
@@ -53,11 +53,11 @@ resource "xenorchestra_cloud_config" "cloud_network_config_workers" {
   name  = "debian-network-base-config-node-${count.index}"
   #template = "./modules/infrastructure/cloud_network_dhcp.yaml"
   template = templatefile("./modules/infrastructure/cloud_network_static.yaml", {
-    node_address   = "${var.worker_node_address_mask}${count.index + 1}"
-    node_mask      = "${var.nodes_mask}"
-    node_gateway   = "${var.nodes_gateway}"
-	node_dns_address = "${var.nodes_dns_address}"
-    node_dns_search = "${substr(lower(var.dns_zone), 0, length(var.dns_zone) - 1)}"
+    node_address     = "${var.worker_node_address_mask}${count.index + 1}"
+    node_mask        = "${var.nodes_mask}"
+    node_gateway     = "${var.nodes_gateway}"
+    node_dns_address = "${var.nodes_dns_address}"
+    node_dns_search  = "${substr(lower(var.dns_zone), 0, length(var.dns_zone) - 1)}"
   })
 }
 resource "xenorchestra_vm" "vm_master" {
