@@ -60,7 +60,7 @@ resource "xenorchestra_vm" "vm_master" {
   count                = var.master_count
   name_label           = "deb11-k8s-master-${random_uuid.vm_master_id[count.index].result}.${var.dns_sub_zone}.${substr(lower(var.dns_zone), 0, length(var.dns_zone) - 1)}"
   cloud_config         = xenorchestra_cloud_config.bar_vm_master[count.index].template
-  cloud_network_config = data.local_file.cloud_network_config_masters.content
+  cloud_network_config = data.local_file.cloud_network_config_masters[count.index].content
   template             = data.xenorchestra_template.vm.id
   auto_poweron         = true
   network {
@@ -87,7 +87,7 @@ resource "xenorchestra_vm" "vm" {
   count                = var.node_count
   name_label           = "deb11-k8s-node-${random_uuid.vm_id[count.index].result}.${var.dns_sub_zone}.${substr(lower(var.dns_zone), 0, length(var.dns_zone) - 1)}"
   cloud_config         = xenorchestra_cloud_config.bar_vm[count.index].template
-  cloud_network_config = data.local_file.cloud_network_config_workers.content
+  cloud_network_config = data.local_file.cloud_network_config_workers[count.index].content
   template             = data.xenorchestra_template.vm.id
   auto_poweron         = true
   network {
