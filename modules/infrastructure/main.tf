@@ -26,24 +26,33 @@ resource "xenorchestra_cloud_config" "bar_vm" {
   template = templatefile("./modules/infrastructure/cloud_config.tftpl", {
     hostname       = "deb11-k8s-${random_uuid.vm_id[count.index].result}.${lower(var.dns_sub_zone)}.${substr(lower(var.dns_zone), 0, length(var.dns_zone) - 1)}"
     vm_rsa_ssh_key = "${var.vm_rsa_ssh_key}"
+	node_address   = "${var.worker_node_address_mask[count.index + 2]}"
+    node_mask      = "${var.nodes_mask}"
+    node_gateway   = "${var.nodes_gateway}"
+	node_dns_address = "${var.nodes_dns_address}"
   })
 }
-data "local_file" "cloud_network_config" {
-  filename = "./modules/infrastructure/cloud_network_config.yaml"
-}
+# data "local_file" "cloud_network_config" {
+  # #filename = "./modules/infrastructure/cloud_network_config_dhcp.yaml"
+  # filename = "./modules/infrastructure/cloud_network_config_static.yaml"
+# }
 resource "xenorchestra_cloud_config" "bar_vm_master" {
   count = var.master_count
   name  = "debian-base-config-master-${count.index}"
   template = templatefile("./modules/infrastructure/cloud_config.tftpl", {
     hostname       = "deb11-k8s-${random_uuid.vm_master_id[count.index].result}.${lower(var.dns_sub_zone)}.${substr(lower(var.dns_zone), 0, length(var.dns_zone) - 1)}"
     vm_rsa_ssh_key = "${var.vm_rsa_ssh_key}"
+	node_address   = "${var.master_node_address_mask[count.index + 2]}"
+    node_mask      = "${var.nodes_mask}"
+    node_gateway   = "${var.nodes_gateway}"
+	node_dns_address = "${var.nodes_dns_address}"
   })
 }
 resource "xenorchestra_vm" "vm" {
   count                = var.node_count
   name_label           = "deb11-k8s-node-${random_uuid.vm_id[count.index].result}.${var.dns_sub_zone}.${substr(lower(var.dns_zone), 0, length(var.dns_zone) - 1)}"
   cloud_config         = xenorchestra_cloud_config.bar_vm[count.index].template
-  cloud_network_config = data.local_file.cloud_network_config.content
+  #cloud_network_config = data.local_file.cloud_network_config.content
   template             = data.xenorchestra_template.vm.id
   auto_poweron         = true
   network {
@@ -75,7 +84,7 @@ resource "xenorchestra_vm" "vm_master" {
   count                = var.master_count
   name_label           = "deb11-k8s-master-${random_uuid.vm_master_id[count.index].result}.${var.dns_sub_zone}.${substr(lower(var.dns_zone), 0, length(var.dns_zone) - 1)}"
   cloud_config         = xenorchestra_cloud_config.bar_vm_master[count.index].template
-  cloud_network_config = data.local_file.cloud_network_config.content
+  #cloud_network_config = data.local_file.cloud_network_config.content
   template             = data.xenorchestra_template.vm.id
   auto_poweron         = true
   network {

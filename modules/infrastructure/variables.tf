@@ -1,3 +1,23 @@
+variable "master_node_address_mask" {
+  #default = 10.244.0.
+  type = string
+}
+variable "worker_node_address_mask" {
+  #default = 10.244.1.
+  type = string
+}
+variable "nodes_mask" {
+  #default = 255.255.0.0
+  type = string
+}
+variable "nodes_gateway" {
+  #default = 10.244.0.
+  type = string
+}
+variable "nodes_dns_address" {
+  #default = 10.244.0.1
+  type = string
+}
 variable "node_count" {
   #default = 6
   type = number
