@@ -52,15 +52,15 @@ global_certificate_params = {
 # VM settings
 #
 #Master node IP address mask
-global_master_node_address_mask = 10.244.0.
+global_master_node_address_mask = "10.244.0."
 #Worker node IP address mask
-global_worker_node_address_mask = 10.244.1.
+global_worker_node_address_mask = "10.244.1."
 #Nodes mask, default /16
-global_nodes_mask" = 255.255.0.0
+global_nodes_mask" = "255.255.0.0"
 #Nodes gateway address
-global_nodes_gateway = 10.244.0.1
+global_nodes_gateway = "10.244.0.1"
 #Nodes DNS server address
-global_nodes_dns_address = 10.244.0.1
+global_nodes_dns_address = "10.244.0.1"
 #Count for VM master node
 #need minimal 3 for Kubernetes etcd и controlplane ( 3 для HA)
 #https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/high-availability/
