@@ -9,20 +9,6 @@ preserve_hostname: false
 resize_rootfs: true
 ssh_pwauth: false
 disable_root: true
-network:
-  version: 1
-  config:
-  - type: physical
-    name: eth0
-    subnets:
-     - type: static
-       address: ${node_address}
-       netmask: ${node_mask}
-       gateway: ${node_gateway}
-       dns_nameservers:
-        - ${node_dns_address}
-       #dns_search: 
-        #  - {node_dns_search}
 users:
  - name: root
    lock-passwd: true

@@ -4,13 +4,11 @@ network:
   - type: physical
     name: eth0
     subnets:
-      - type: static
-        address: ${node_address}
-        netmask: ${node_mask}
-        gateway: ${node_gateway}
-  - type: nameserver
-      #interface: interface0  # Ties nameserver to interface0 only
-      address:
+     - type: static
+       address: ${node_address}
+       netmask: ${node_mask}
+       gateway: ${node_gateway}
+       dns_nameservers:
         - ${node_dns_address}
-      #search:
-      #  - exemplary     
+       #dns_search: 
+        #  - {node_dns_search}
