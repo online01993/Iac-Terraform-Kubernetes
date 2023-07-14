@@ -19,12 +19,10 @@ network:
        address: ${node_address}
        netmask: ${node_mask}
        gateway: ${node_gateway}
-  - type: nameserver
-    #interface: interface0  # Ties nameserver to interface0 only
-    address:
-     - ${node_dns_address}
-      #search:
-      #  - exemplary     
+	   dns_nameservers: 
+	     - ${node_dns_address}
+	   #dns_search: 
+	   #  - ${node_dns_search}
 users:
  - name: root
    lock-passwd: true
