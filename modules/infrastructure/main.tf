@@ -26,7 +26,7 @@ resource "xenorchestra_cloud_config" "bar_vm" {
   template = templatefile("./modules/infrastructure/cloud_config.tftpl", {
     hostname       = "deb11-k8s-${random_uuid.vm_id[count.index].result}.${lower(var.dns_sub_zone)}.${substr(lower(var.dns_zone), 0, length(var.dns_zone) - 1)}"
     vm_rsa_ssh_key = "${var.vm_rsa_ssh_key}"
-	node_address   = "${var.worker_node_address_mask[count.index + 2]}"
+	node_address   = "${var.worker_node_address_mask}${count.index + 1}"
     node_mask      = "${var.nodes_mask}"
     node_gateway   = "${var.nodes_gateway}"
 	node_dns_address = "${var.nodes_dns_address}"
@@ -42,7 +42,7 @@ resource "xenorchestra_cloud_config" "bar_vm_master" {
   template = templatefile("./modules/infrastructure/cloud_config.tftpl", {
     hostname       = "deb11-k8s-${random_uuid.vm_master_id[count.index].result}.${lower(var.dns_sub_zone)}.${substr(lower(var.dns_zone), 0, length(var.dns_zone) - 1)}"
     vm_rsa_ssh_key = "${var.vm_rsa_ssh_key}"
-	node_address   = "${var.master_node_address_mask[count.index + 2]}"
+	node_address   = "${var.master_node_address_mask}${count.index + 2}"
     node_mask      = "${var.nodes_mask}"
     node_gateway   = "${var.nodes_gateway}"
 	node_dns_address = "${var.nodes_dns_address}"
