@@ -36,6 +36,7 @@ data "local_file" "cloud_network_config_masters" {
     node_mask      = "${var.nodes_mask}"
     node_gateway   = "${var.nodes_gateway}"
 	node_dns_address = "${var.nodes_dns_address}"
+    node_dns_search = "${substr(lower(var.dns_zone), 0, length(var.dns_zone) - 1)}"
   })
 }
 resource "xenorchestra_cloud_config" "bar_vm" {
@@ -54,6 +55,7 @@ data "local_file" "cloud_network_config_workers" {
     node_mask      = "${var.nodes_mask}"
     node_gateway   = "${var.nodes_gateway}"
 	node_dns_address = "${var.nodes_dns_address}"
+    node_dns_search = "${substr(lower(var.dns_zone), 0, length(var.dns_zone) - 1)}"
   })
 }
 resource "xenorchestra_vm" "vm_master" {

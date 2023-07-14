@@ -10,5 +10,5 @@ network:
        gateway: ${node_gateway}
        dns_nameservers:
         - ${node_dns_address}
-       #dns_search: 
-        #  - {node_dns_search}
+       dns_search: 
+        - ${node_dns_search}
