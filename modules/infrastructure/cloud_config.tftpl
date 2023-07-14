@@ -19,10 +19,10 @@ network:
        address: ${node_address}
        netmask: ${node_mask}
        gateway: ${node_gateway}
-	   dns_nameservers: 
+	   dns_nameservers:
 	     - ${node_dns_address}
 	   #dns_search: 
-	   #  - ${node_dns_search}
+	   #  - {node_dns_search}
 users:
  - name: root
    lock-passwd: true
