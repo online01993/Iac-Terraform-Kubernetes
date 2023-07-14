@@ -31,7 +31,7 @@ resource "xenorchestra_cloud_config" "bar_vm_master" {
 data "local_file" "cloud_network_config_masters" {
   count = var.master_count
   #filename = "./modules/infrastructure/cloud_network_dhcp.yaml"
-  filename = templatefile("./modules/infrastructure/cloud_network_static.yaml", {
+  filename = templatefile("./modules/infrastructure/cloud_network_static1.yaml", {
     node_address   = "${var.master_node_address_mask}${count.index + 2}"
     node_mask      = "${var.nodes_mask}"
     node_gateway   = "${var.nodes_gateway}"
@@ -50,7 +50,7 @@ resource "xenorchestra_cloud_config" "bar_vm" {
 data "local_file" "cloud_network_config_workers" {
   count = var.node_count
   #filename = "./modules/infrastructure/cloud_network_dhcp.yaml"
-  filename = templatefile("./modules/infrastructure/cloud_network_static.yaml", {
+  filename = templatefile("./modules/infrastructure/cloud_network_static1.yaml", {
     node_address   = "${var.worker_node_address_mask}${count.index + 1}"
     node_mask      = "${var.nodes_mask}"
     node_gateway   = "${var.nodes_gateway}"
