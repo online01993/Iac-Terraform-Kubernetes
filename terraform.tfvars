@@ -51,6 +51,10 @@ global_certificate_params = {
 #
 # VM settings
 #
+#Master node IP address type, true(dhcp) or false(static)
+global_master_node_network_dhcp = false
+#Worker node IP address type, true(dhcp) or false(static)
+global_worker_node_network_dhcp = false
 #Master node IP address mask
 global_master_node_address_mask = "10.244.0."
 #Worker node IP address mask
@@ -61,14 +65,15 @@ global_nodes_mask = "255.255.0.0"
 global_nodes_gateway = "10.244.0.1"
 #Nodes DNS server address
 global_nodes_dns_address = "10.244.0.1"
+#Need to deploy HA cluster - if true (count = 3) else (count = 1)
 #Count for VM master node
 #need minimal 3 for Kubernetes etcd и controlplane ( 3 для HA)
 #https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/high-availability/
-global_master_count = 3
+global_master_node_high_availability = true
 #Count for VM worker node
-#need minimal 3 node workers for HA kubernetes data
+#need minimal 2 node workers for HA kubernetes data
 #https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/high-availability/
-global_node_count = 3
+global_node_count = 2
 #Size for VM master node system disk size
 global_master_disk_size_gb = 16
 #Size for VM worker node system disk size

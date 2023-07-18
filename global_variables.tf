@@ -9,7 +9,6 @@ variable "global_xen_xoa_username" {}
 variable "global_xen_xoa_password" {}
 variable "global_xen_xoa_insecure" {}
 variable "global_node_count" {}
-variable "global_master_count" {}
 variable "global_master_disk_size_gb" {}
 variable "global_vm_disk_size_gb" {}
 variable "global_master_memory_size_gb" {}
@@ -34,3 +33,10 @@ variable "global_worker_node_address_mask" {}
 variable "global_nodes_mask" {}
 variable "global_nodes_gateway" {}
 variable "global_nodes_dns_address" {}
+variable "global_master_node_network_dhcp" {}
+variable "global_worker_node_network_dhcp" {}
+variable "global_master_node_high_availability" {
+  type        = bool
+  description = "If this is a multiple instance deployment, choose `true` to deploy 3 instances"
+  default     = true
+}

@@ -1,3 +1,11 @@
+variable "master_node_network_dhcp" {
+  default = true
+  type = bool
+}
+variable "worker_node_network_dhcp" {
+  default = true
+  type = bool
+}
 variable "master_node_address_mask" {
   #default = 10.244.0.
   type = string
