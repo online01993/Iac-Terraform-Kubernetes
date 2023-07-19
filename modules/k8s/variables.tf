@@ -4,13 +4,13 @@ variable "vm_rsa_ssh_key_private" {
 variable "masters" {
   type = list(object({
     fqdn = string
-	address = strint
+	address = string
   }))
 }
 variable "nodes" {
   type = list(object({
     fqdn = string
-	address = strint
+	address = string
   }))
 }
 variable "version_containerd" {

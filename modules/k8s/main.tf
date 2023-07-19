@@ -1,5 +1,5 @@
 #main.tf
-resource "terraform_data" "01-k8s-base-setup_resource_masters" {
+resource "terraform_data" "k8s-base-setup_01_resource_masters" {
   count = "${length(var.masters)}"
   connection {
       type     = "ssh"
@@ -23,7 +23,7 @@ resource "terraform_data" "01-k8s-base-setup_resource_masters" {
     ]
   }
 }
-resource "terraform_data" "01-k8s-base-setup_resource_nodes" {
+resource "terraform_data" "k8s-base-setup_01_resource_nodes" {
   count = "${length(var.nodes)}"
   connection {
       type     = "ssh"
@@ -47,14 +47,14 @@ resource "terraform_data" "01-k8s-base-setup_resource_nodes" {
     ]
   }
 }
-resource "terraform_data" "02-k8s-kubeadm_init_resource" {
+resource "terraform_data" "k8s-kubeadm_init_02_resource" {
   #count = var.02-k8s-kubeadm_init == false ? 1 : 0
   #triggers_replace = [
   #  var.02-k8s-kubeadm_init
   #]
   #input = var.02-k8s-kubeadm_init
   depends_on = [ 
-      01-k8s-base-setup_resource_masters 
+      k8s-base-setup_01_resource_masters 
   ]
   connection {
       type     = "ssh"
