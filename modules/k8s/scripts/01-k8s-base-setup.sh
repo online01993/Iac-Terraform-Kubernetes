@@ -1,5 +1,8 @@
 #!/bin/bash
 
+set -e
+
+
 sudo cat <<EOF > /etc/sysctl.d/11-kubernetes.conf
 net.bridge.bridge-nf-call-iptables = 1
 net.ipv4.ip_forward = 1

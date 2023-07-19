@@ -63,4 +63,9 @@ module "kubernetes" {
   source = "modules/k8s"
   #vm_rsa_ssh_key           = var.global_vm_rsa_ssh_key
   vm_rsa_ssh_key           = "${tls_private_key.terrafrom_generated_private_key.public_key_openssh}"
+  nodes     = module.infrastructure.nodes
+  nodes_ips = module.infrastructure.nodes_ips
+  masters = module.infrastructure.masters
+  masters_ips = module.infrastructure.masters_ips  
+ }
 }
