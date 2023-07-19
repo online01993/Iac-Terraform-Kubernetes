@@ -65,7 +65,7 @@ resource "terraform_data" "k8s-kubeadm_init_02_resource" {
   provisioner "file" {
     destination = "/tmp/02-k8s-kubeadm_init.sh"
     content = templatefile("${path.module}/scripts/02-k8s-kubeadm_init.sh.tpl", {
-        #consul_version = "${local.consul_version}"
+        vm_rsa_ssh_key = "${var.vm_rsa_ssh_key_private}"
     })
   } 
   provisioner "remote-exec" {
