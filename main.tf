@@ -18,6 +18,7 @@ resource "tls_private_key" "terrafrom_generated_private_key" {
   }
  }
 module "infrastructure" {
+  depends_on = [ tls_private_key.terrafrom_generated_private_key ]
   source = "./modules/infrastructure"
   #make linking vars from source and tfvars
   master_cpu_count         = var.global_master_cpu_count
