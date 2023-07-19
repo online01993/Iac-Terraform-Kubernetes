@@ -23,7 +23,7 @@ resource "random_uuid" "vm_master_id" {
 resource "xenorchestra_cloud_config" "bar_vm_master" {
   count = var.master_count
   name  = "debian-base-config-master-${count.index}"
-  template = templatefile("cloud_config.tftpl", {
+  template = templatefile("${path.module}/cloud_config.tftpl", {
     hostname       = "deb11-k8s-${random_uuid.vm_master_id[count.index].result}.${lower(var.dns_sub_zone)}.${substr(lower(var.dns_zone), 0, length(var.dns_zone) - 1)}"
     vm_rsa_ssh_key = "${var.vm_rsa_ssh_key}"
   })
@@ -32,18 +32,18 @@ resource "xenorchestra_cloud_config" "cloud_network_config_masters" {
   count = var.master_count
   name  = "debian-network-base-config-master-${count.index}"
   #template = "cloud_network_dhcp.yaml"
-  template = var.master_node_network_dhcp == false ? templatefile("cloud_network_static.yaml", {
+  template = var.master_node_network_dhcp == false ? templatefile("${path.module}/cloud_network_static.yaml", {
     node_address     = "${var.master_node_address_mask}${count.index + 2}"
     node_mask        = "${var.nodes_mask}"
     node_gateway     = "${var.nodes_gateway}"
     node_dns_address = "${var.nodes_dns_address}"
     node_dns_search  = "${substr(lower(var.dns_zone), 0, length(var.dns_zone) - 1)}"
-  }) : "cloud_network_dhcp.yaml"
+  }) : "${path.module}/cloud_network_dhcp.yaml"
 }
 resource "xenorchestra_cloud_config" "bar_vm" {
   count = var.node_count
   name  = "debian-base-config-node-${count.index}"
-  template = templatefile("cloud_config.tftpl", {
+  template = templatefile("${path.module}/cloud_config.tftpl", {
     hostname       = "deb11-k8s-${random_uuid.vm_id[count.index].result}.${lower(var.dns_sub_zone)}.${substr(lower(var.dns_zone), 0, length(var.dns_zone) - 1)}"
     vm_rsa_ssh_key = "${var.vm_rsa_ssh_key}"
   })
@@ -52,13 +52,13 @@ resource "xenorchestra_cloud_config" "cloud_network_config_workers" {
   count = var.node_count
   name  = "debian-network-base-config-node-${count.index}"
   #template = "cloud_network_dhcp.yaml"
-  template = var.worker_node_network_dhcp == false ? templatefile("cloud_network_static.yaml", {
+  template = var.worker_node_network_dhcp == false ? templatefile("${path.module}/cloud_network_static.yaml", {
     node_address     = "${var.worker_node_address_mask}${count.index + 1}"
     node_mask        = "${var.nodes_mask}"
     node_gateway     = "${var.nodes_gateway}"
     node_dns_address = "${var.nodes_dns_address}"
     node_dns_search  = "${substr(lower(var.dns_zone), 0, length(var.dns_zone) - 1)}"
-  }) : "cloud_network_dhcp.yaml"
+  }) : "${path.module}/cloud_network_dhcp.yaml"
 }
 resource "xenorchestra_vm" "vm_master" {
   count                = var.master_count
