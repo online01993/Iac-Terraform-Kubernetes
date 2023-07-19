@@ -129,20 +129,6 @@ variable "xen_vm_template_name" {
 variable "xen_pool_name" {
   type = string
 }
-variable "xen_xoa_url" {
-  type = string
-}
-variable "xen_xoa_username" {
-  type = string
-}
-variable "xen_xoa_password" {
-  type      = string
-  sensitive = true
-}
-variable "xen_xoa_insecure" {
-  type    = bool
-  default = false
-}
 variable "vm_rsa_ssh_key" {
   type = string
 }

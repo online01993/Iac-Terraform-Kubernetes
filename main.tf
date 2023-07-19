@@ -25,10 +25,6 @@ module "infrastructure" {
   xen_network_name         = var.global_xen_network_name
   xen_vm_template_name     = var.global_xen_vm_template_name
   xen_pool_name            = var.global_xen_pool_name
-  xen_xoa_url              = var.global_xen_xoa_url
-  xen_xoa_username         = var.global_xen_xoa_username
-  xen_xoa_password         = var.global_xen_xoa_password
-  xen_xoa_insecure         = var.global_xen_xoa_insecure
   node_count               = var.global_node_count
   master_count             = var.global_master_node_high_availability == true ? 3 : 1
   master_disk_size_gb      = var.global_master_disk_size_gb
