@@ -18,7 +18,7 @@ resource "tls_private_key" "terrafrom_generated_private_key" {
   }
  }
 module "infrastructure" {
-  source = "modules/infrastructure"
+  source = "./modules/infrastructure"
   #make linking vars from source and tfvars
   master_cpu_count         = var.global_master_cpu_count
   xen_network_name         = var.global_xen_network_name
@@ -60,7 +60,7 @@ module "infrastructure" {
 }
 module "kubernetes" {
   depends_on = [ module.infrastructure ]
-  source = "modules/k8s"
+  source = "./modules/k8s"
   #vm_rsa_ssh_key           = var.global_vm_rsa_ssh_key
   vm_rsa_ssh_key_private    = "${tls_private_key.terrafrom_generated_private_key.private_key_openssh}"
   masters = module.infrastructure.masters
