@@ -116,7 +116,7 @@ global_node_vm_tags = [
   "ntmax.ca/provisionning:terraform",
   "kubernetes.io/role:worker"
 ]
-#VM common SSH pub key to its user
+#VM common SSH pub key to robot user
 global_vm_rsa_ssh_key = <<EOF
 "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCt5+QyPfxJ6UB0aOn9HvEn9bX3HGy/6i0ibZpkJjBKAQAgV5GBgBihjCm5D2CevI7WOvBXrR6JXPgu0wQSAv9cNyi8Tpvia6IhE1Jva8Fp3JMnig1+dmhqu69goBfPNrmTO/33+GqJ6cGx80EuVsnQGnqcIIfEHo+n50ZNhKXEPzPaOCQfBjwMPXrl2mX0WBkUW3oXh7VkaYHA2mX8KgRKjgxX2Ws8uAzZ+k0N3qBUIWWzoempIIXuCGzvt9XpOjfYM+dXbbj9Ux4qqC8uPM9wnQYcMAUG0N061oClp9vJEeGvY3z01d8ISpmNAooAMcbpMj18Dzt8jogQ831bsyhzco0PEzipZQUWs3RLwTxgInyZCZFpwd/GRnkl0fHIPNbzIGjoDMIywy1CJKqa1vJLoJccNDAki2tIsUqCJXghCmbkUA+D8QA8IyNkmCDa8pDbH7/NuujvD22vpA6sp6kYF2I9KdF3nqtlyWRG0JYal8SIoiUwv2oJ3i6V2uI6Drs= n.nikitashin@nick-mgmt
 
@@ -125,3 +125,15 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCrSoLe1bqObD8Eh+7dhMRd66g9m3/wVqviFNdxyDLI
 EOF
 #need to be here
 #https://github.com/terraform-linters/tflint-ruleset-aws/issues/42#issuecomment-928199917
+#
+#
+#Kubernetes settings
+#Runtime containerd version
+#https://github.com/containerd/containerd/releases
+global_version_containerd = "1.7.2"
+#Runtime runc library version
+#https://github.com/opencontainers/runc/releases/download
+global_version_runc = "1.1.7"
+#CNI network plugin
+#https://github.com/containernetworking/plugins/releases/download
+global_version_cni-plugin = "1.3.0"

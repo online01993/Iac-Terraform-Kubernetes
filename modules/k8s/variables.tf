@@ -1,19 +1,24 @@
-variable "vm_rsa_ssh_key" {
+variable "vm_rsa_ssh_key_private" {
   type = string
 }
-variable "nodes" {
-  type = map(string)
-  #default = {}
-}
 variable "masters" {
-  type = map(string)
-  #default = {}
+  type = list(object({
+    fqdn = string
+	address = strint
+  }))
 }
-variable "nodes_ips" {
-  type = map(string)
-  #default = {}
+variable "nodes" {
+  type = list(object({
+    fqdn = string
+	address = strint
+  }))
 }
-variable "masters_ips" {
-  type = map(string)
-  #default = {}
+variable "version_containerd" {
+  type = string
+}
+variable "version_runc" {
+  type = string
+}
+variable "version_cni-plugin" {
+  type = string
 }

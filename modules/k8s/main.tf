@@ -1,16 +1,78 @@
 #main.tf
-template = templatefile("./modules/infrastructure/cloud_config.tftpl", {
-    hostname       = "deb11-k8s-${random_uuid.vm_master_id[count.index].result}.${lower(var.dns_sub_zone)}.${substr(lower(var.dns_zone), 0, length(var.dns_zone) - 1)}"
-    vm_rsa_ssh_key = "${var.vm_rsa_ssh_key}"
-  })
-  
-resource "terraform_data" "01-k8s-base-setup" {
-  triggers_replace = [
-    aws_instance.web.id,
-    aws_instance.database.id
+resource "terraform_data" "01-k8s-base-setup_resource_masters" {
+  count = "${length(var.masters)}"
+  connection {
+      type     = "ssh"
+      user     = "robot"
+      private_key = "${var.vm_rsa_ssh_key_private}"
+      host     = "${values(var.masters[count.index].address)}"
+    }
+  provisioner "file" {
+    destination = "/tmp/01-k8s-base-setup.sh"
+    content = templatefile("scripts/01-k8s-base-setup.sh.tpl", {
+        version_containerd = "${var.version_containerd}"
+        version_runc = "${var.version_runc}"
+        version_cni-plugin = "${var.version_cni-plugin}"
+    })
+  } 
+  provisioner "remote-exec" {
+    inline = [
+      "chmod +x /tmp/01-k8s-base-setup.sh",
+      "/tmp/01-k8s-base-setup.sh",
+      "rm -rf /tmp/01-k8s-base-setup.sh",
+    ]
+  }
+}
+resource "terraform_data" "01-k8s-base-setup_resource_nodes" {
+  count = "${length(var.nodes)}"
+  connection {
+      type     = "ssh"
+      user     = "robot"
+      private_key = "${var.vm_rsa_ssh_key_private}"
+      host     = "${values(var.nodes[count.index].address)}"
+    }
+  provisioner "file" {
+    destination = "/tmp/01-k8s-base-setup.sh"
+    content = templatefile("scripts/01-k8s-base-setup.sh.tpl", {
+        version_containerd = "${var.version_containerd}"
+        version_runc = "${var.version_runc}"
+        version_cni-plugin = "${var.version_cni-plugin}"
+    })
+  } 
+  provisioner "remote-exec" {
+    inline = [
+      "chmod +x /tmp/01-k8s-base-setup.sh",
+      "/tmp/01-k8s-base-setup.sh",
+      "rm -rf /tmp/01-k8s-base-setup.sh",
+    ]
+  }
+}
+resource "terraform_data" "02-k8s-kubeadm_init_resource" {
+  #count = var.02-k8s-kubeadm_init == false ? 1 : 0
+  #triggers_replace = [
+  #  var.02-k8s-kubeadm_init
+  #]
+  #input = var.02-k8s-kubeadm_init
+  depends_on = [ 
+      01-k8s-base-setup_resource_masters 
   ]
-
-  provisioner "local-exec" {
-    command = "bootstrap-hosts.sh"
+  connection {
+      type     = "ssh"
+      user     = "robot"
+      private_key = "${var.vm_rsa_ssh_key_private}"
+      host     = var.Master0_VM_IP
+    }
+  provisioner "file" {
+    destination = "/tmp/02-k8s-kubeadm_init.sh"
+    content = templatefile("scripts/02-k8s-kubeadm_init.sh.tpl", {
+        consul_version = "${local.consul_version}"
+    })
+  } 
+  provisioner "remote-exec" {
+    inline = [
+      "chmod +x /tmp/02-k8s-kubeadm_init.sh",
+      "/tmp/02-k8s-kubeadm_init.sh",
+      "rm -rf /tmp/02-k8s-kubeadm_init.sh",
+    ]
   }
 }

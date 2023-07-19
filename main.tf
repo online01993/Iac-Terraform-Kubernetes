@@ -62,10 +62,11 @@ module "kubernetes" {
   depends_on = [ module.infrastructure ]
   source = "modules/k8s"
   #vm_rsa_ssh_key           = var.global_vm_rsa_ssh_key
-  vm_rsa_ssh_key           = "${tls_private_key.terrafrom_generated_private_key.public_key_openssh}"
-  nodes     = module.infrastructure.nodes
-  nodes_ips = module.infrastructure.nodes_ips
+  vm_rsa_ssh_key_private    = "${tls_private_key.terrafrom_generated_private_key.private_key_openssh}"
   masters = module.infrastructure.masters
-  masters_ips = module.infrastructure.masters_ips  
+  nodes = module.infrastructure.nodes
+  version_containerd = var.global_version_containerd
+  version_runc = var.global_version_runc
+  version_cni-plugin = var.global_version_cni-plugin
  }
 }

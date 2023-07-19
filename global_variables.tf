@@ -40,3 +40,6 @@ variable "global_master_node_high_availability" {
   description = "If this is a multiple instance deployment, choose `true` to deploy 3 instances"
   default     = true
 }
+variable "global_version_containerd" {}
+variable "global_version_runc" {}
+variable "global_version_cni-plugin" {}
