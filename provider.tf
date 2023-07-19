@@ -5,22 +5,17 @@ terraform {
       source  = "terra-farm/xenorchestra"
       version = "~> 0.9"
     }
-    #rke = {
-    #  source = "rancher/rke"
-    #  #version = "1.4.1"
-    #}
     tls = {
       source = "hashicorp/tls"
       #version = "4.0.4"
     }
-  #required_version = "~> 1.14"
  }
 } 
 # Configure the tls Provider
 provider "tls" {
   # Configuration options
 }
-provider "terra-farm/xenorchestra" {
+provider "xenorchestra" {
   # Must be ws or wss
   url      = var.global_xen_xoa_url      # Or set XOA_URL environment variable
   username = var.global_xen_xoa_username # Or set XOA_USER environment variable
