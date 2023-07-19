@@ -54,7 +54,7 @@ resource "terraform_data" "k8s-kubeadm_init_02_resource" {
   #]
   #input = var.02-k8s-kubeadm_init
   depends_on = [ 
-      k8s-base-setup_01_resource_masters 
+      terraform_data.k8s-base-setup_01_resource_masters 
   ]
   connection {
       type     = "ssh"
