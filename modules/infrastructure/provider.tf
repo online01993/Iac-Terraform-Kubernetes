@@ -10,7 +10,7 @@ terraform {
       #version = "1.4.1"
     }
   }
-  required_version = "~> 1.14"
+  #required_version = "~> 1.14"
 }
 # Configure the XCP-NG/Xen Orchestra Provider
 provider "xenorchestra" {
