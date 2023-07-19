@@ -68,5 +68,4 @@ module "kubernetes" {
   version_containerd = var.global_version_containerd
   version_runc = var.global_version_runc
   version_cni-plugin = var.global_version_cni-plugin
- }
 }
