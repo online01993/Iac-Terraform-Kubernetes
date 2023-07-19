@@ -5,10 +5,10 @@ terraform {
       source  = "terra-farm/xenorchestra"
       version = "~> 0.9"
     }
-    rke = {
-      source = "rancher/rke"
-      #version = "1.4.1"
-    }
+    #rke = {
+    #  source = "rancher/rke"
+    #  #version = "1.4.1"
+    #}
     tls = {
       source = "hashicorp/tls"
       #version = "4.0.4"
