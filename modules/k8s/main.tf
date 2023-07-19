@@ -9,7 +9,7 @@ resource "terraform_data" "k8s-base-setup_01_resource_masters" {
     }
   provisioner "file" {
     destination = "/tmp/01-k8s-base-setup.sh"
-    content = templatefile("scripts/01-k8s-base-setup.sh.tpl", {
+    content = templatefile("${path.module}/scripts/01-k8s-base-setup.sh.tpl", {
         version_containerd = "${var.version_containerd}"
         version_runc = "${var.version_runc}"
         version_cni-plugin = "${var.version_cni-plugin}"
@@ -33,7 +33,7 @@ resource "terraform_data" "k8s-base-setup_01_resource_nodes" {
     }
   provisioner "file" {
     destination = "/tmp/01-k8s-base-setup.sh"
-    content = templatefile("scripts/01-k8s-base-setup.sh.tpl", {
+    content = templatefile("${path.module}/scripts/01-k8s-base-setup.sh.tpl", {
         version_containerd = "${var.version_containerd}"
         version_runc = "${var.version_runc}"
         version_cni-plugin = "${var.version_cni-plugin}"
@@ -64,8 +64,8 @@ resource "terraform_data" "k8s-kubeadm_init_02_resource" {
     }
   provisioner "file" {
     destination = "/tmp/02-k8s-kubeadm_init.sh"
-    content = templatefile("scripts/02-k8s-kubeadm_init.sh.tpl", {
-        consul_version = "${local.consul_version}"
+    content = templatefile("${path.module}/scripts/02-k8s-kubeadm_init.sh.tpl", {
+        #consul_version = "${local.consul_version}"
     })
   } 
   provisioner "remote-exec" {
