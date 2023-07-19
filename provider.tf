@@ -20,7 +20,7 @@ terraform {
 provider "tls" {
   # Configuration options
 }
-provider "xenorchestra" {
+provider "terra-farm/xenorchestra" {
   # Must be ws or wss
   url      = var.global_xen_xoa_url      # Or set XOA_URL environment variable
   username = var.global_xen_xoa_username # Or set XOA_USER environment variable
