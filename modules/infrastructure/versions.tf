@@ -11,9 +11,6 @@ terraform {
   }
 } 
 # Configure the tls Provider
-provider "tls" {
-  # Configuration options
-}
 provider "xenorchestra" {
   # Must be ws or wss
   url      = var.xen_xoa_url      # Or set XOA_URL environment variable
