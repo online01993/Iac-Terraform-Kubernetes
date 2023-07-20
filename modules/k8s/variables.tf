@@ -1,6 +1,9 @@
 variable "vm_rsa_ssh_key_private" {
   type = string
 }
+variable "vm_rsa_ssh_key_public" {
+  type = string
+}
 variable "masters" {
   type = list(object({
     fqdn = string
