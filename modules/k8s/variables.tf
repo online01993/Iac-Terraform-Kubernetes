@@ -6,14 +6,14 @@ variable "vm_rsa_ssh_key_public" {
 }
 variable "masters" {
   type = list(object({
-    id   = integer
+    id   = number
     fqdn = string
 	address = string
   }))
 }
 variable "nodes" {
   type = list(object({
-    id   = integer
+    id   = number
     fqdn = string
 	address = string
   }))
