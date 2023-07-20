@@ -1,3 +1,7 @@
+locals {
+  vm_rsa_ssh_key_public    = module.infrastructure.vm_rsa_ssh_key_public
+  vm_rsa_ssh_key_private   = module.infrastructure.vm_rsa_ssh_key_private
+}
 module "infrastructure" {
   source = "./modules/infrastructure"
   #make linking vars from source and tfvars
@@ -41,8 +45,8 @@ module "infrastructure" {
 module "kubernetes" {
   depends_on = [ module.infrastructure ]
   source = "./modules/k8s"
-  vm_rsa_ssh_key_public    = module.infrastructure.vm_rsa_ssh_key_public
-  vm_rsa_ssh_key_private   = module.infrastructure.vm_rsa_ssh_key_private
+  vm_rsa_ssh_key_public    = local.vm_rsa_ssh_key_public
+  vm_rsa_ssh_key_private   = local.vm_rsa_ssh_key_private
   masters = module.infrastructure.masters
   nodes = module.infrastructure.nodes
   version_containerd = var.global_version_containerd
