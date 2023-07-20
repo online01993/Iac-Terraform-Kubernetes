@@ -43,19 +43,5 @@ sudo tar Cxzvf /opt/cni/bin cni-plugins-linux-amd64-v${version_cni-plugin}.tgz
 rm cni-plugins-linux-amd64-v${version_cni-plugin}.tgz
 sudo systemctl daemon-reload
 sudo systemctl enable --now containerd
-if [[ ${master_count} -eq 1 ]]
-then
-	sudo bash -c 'echo `date` > /var/lib/cloud/instance/01-k8s-base-setup'
-	sudo echo "K8s install with 1 control plane master" >> /var/lib/cloud/instance/01-k8s-base-setup
-elif [[ ${master_count} -eq 3 ]]
-then
-	sudo bash -c 'echo `date` > /var/lib/cloud/instance/01-k8s-base-setup'
-	sudo echo "K8s install with 3 control plane master" >> /var/lib/cloud/instance/01-k8s-base-setup
-elif [[ ${master_count} -gt 3 ]]
-then
-	sudo bash -c 'echo `date` > /var/lib/cloud/instance/01-k8s-base-setup'
-	sudo echo "K8s install with ${master_count} control plane master" >> /var/lib/cloud/instance/01-k8s-base-setup
-else
-	sudo bash -c 'echo `date` > /var/lib/cloud/instance/01-k8s-base-setup'
-	sudo echo "ERROR: K8s install FAILED with ${master_count} control plane master" >> /var/lib/cloud/instance/01-k8s-base-setup
-	exit -1
+sudo bash -c 'echo `date` > /var/lib/cloud/instance/01-k8s-base-setup'
+sudo echo "K8s dependencies install" >> /var/lib/cloud/instance/01-k8s-base-setup

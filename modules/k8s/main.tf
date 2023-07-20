@@ -39,7 +39,6 @@ resource "terraform_data" "k8s-base-setup_01_resource_nodes" {
         version_containerd = "${var.version_containerd}"
         version_runc = "${var.version_runc}"
         version_cni-plugin = "${var.version_cni-plugin}"
-        master_count          = "${var.master_count}"
     })
   } 
   provisioner "remote-exec" {
