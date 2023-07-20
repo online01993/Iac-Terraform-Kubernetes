@@ -42,7 +42,7 @@ module "kubernetes" {
   depends_on = [ module.infrastructure ]
   source = "./modules/k8s"
   vm_rsa_ssh_key_public    = module.infrastructure.vm_rsa_ssh_key_public
-  vm_rsa_ssh_key_private   = module.infrastructure.vm_rsa_ssh_key_public
+  vm_rsa_ssh_key_private   = module.infrastructure.vm_rsa_ssh_key_private
   masters = module.infrastructure.masters
   nodes = module.infrastructure.nodes
   version_containerd = var.global_version_containerd
