@@ -40,3 +40,4 @@ else
 	sudo bash -c 'echo `date` > /var/lib/cloud/instance/02-k8s-kubeadm_init'
 	sudo echo "ERROR: K8s init FAILED with ${master_count} control plane master" >> /var/lib/cloud/instance/02-k8s-kubeadm_init
 	exit -1
+fi	
