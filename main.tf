@@ -1,7 +1,3 @@
-locals {
-  vm_rsa_ssh_key_public    = module.infrastructure.vm_rsa_ssh_key_public
-  vm_rsa_ssh_key_private   = module.infrastructure.vm_rsa_ssh_key_private
-}
 module "infrastructure" {
   source = "./modules/infrastructure"
   #make linking vars from source and tfvars
@@ -49,6 +45,11 @@ module "kubernetes" {
   vm_rsa_ssh_key_private   = local.vm_rsa_ssh_key_private
   masters = module.infrastructure.masters
   nodes = module.infrastructure.nodes
+  master_node_address_mask = var.global_master_node_address_mask
+  worker_node_address_mask = var.global_worker_node_address_mask  
+  nodes_mask_cidr          = var.global_nodes_mask_cidr
+  nodes_dns_address        = var.global_nodes_dns_address
+  master_count             = var.global_master_node_high_availability == true ? 3 : 1
   version_containerd = var.global_version_containerd
   version_runc = var.global_version_runc
   version_cni-plugin = var.global_version_cni-plugin

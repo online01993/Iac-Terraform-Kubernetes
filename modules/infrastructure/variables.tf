@@ -11,7 +11,7 @@ variable "master_node_address_mask" {
   type = string
 }
 variable "worker_node_address_mask" {
-  #default = 10.244.1.
+  #default = 10.244.0.
   type = string
 }
 variable "nodes_mask" {

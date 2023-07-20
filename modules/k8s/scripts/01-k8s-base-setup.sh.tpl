@@ -9,15 +9,12 @@ while [ ! -f /var/lib/cloud/instance/boot-finished ]; do
   echo -e "\033[1;36mWaiting for cloud-init..."
   sleep 1
 done
-
 sudo bash -c 'cat <<EOF > /etc/sysctl.d/11-kubernetes.conf
 net.bridge.bridge-nf-call-iptables = 1
 net.ipv4.ip_forward = 1
 EOF'
 sudo chown root:root /etc/sysctl.d/11-kubernetes.conf && sudo chmod 644 /etc/sysctl.d/11-kubernetes.conf
 sudo sysctl --system
-
-
 sudo bash -c 'cat <<EOF > /etc/modules-load.d/containerd.conf
 overlay
 br_netfilter
@@ -25,9 +22,6 @@ EOF'
 sudo chown root:root /etc/modules-load.d/containerd.conf && sudo chmod 644 /etc/modules-load.d/containerd.conf
 sudo modprobe overlay
 sudo modprobe br_netfilter
-
-
-
 curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/kubernetes-archive-keyring.gpg
 sudo echo "deb [signed-by=/etc/apt/trusted.gpg.d/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
 sudo apt update
@@ -49,4 +43,19 @@ sudo tar Cxzvf /opt/cni/bin cni-plugins-linux-amd64-v${version_cni-plugin}.tgz
 rm cni-plugins-linux-amd64-v${version_cni-plugin}.tgz
 sudo systemctl daemon-reload
 sudo systemctl enable --now containerd
-sudo bash -c 'echo `date` > /var/lib/cloud/instance/01-k8s-base-setup'
+if [[ ${master_count} -eq 1 ]]
+then
+	sudo bash -c 'echo `date` > /var/lib/cloud/instance/01-k8s-base-setup'
+	sudo echo "K8s install with 1 control plane master" >> /var/lib/cloud/instance/01-k8s-base-setup
+elif [[ ${master_count} -eq 3 ]]
+then
+	sudo bash -c 'echo `date` > /var/lib/cloud/instance/01-k8s-base-setup'
+	sudo echo "K8s install with 3 control plane master" >> /var/lib/cloud/instance/01-k8s-base-setup
+elif [[ ${master_count} -gt 3 ]]
+then
+	sudo bash -c 'echo `date` > /var/lib/cloud/instance/01-k8s-base-setup'
+	sudo echo "K8s install with ${master_count} control plane master" >> /var/lib/cloud/instance/01-k8s-base-setup
+else
+	sudo bash -c 'echo `date` > /var/lib/cloud/instance/01-k8s-base-setup'
+	sudo echo "ERROR: K8s install FAILED with ${master_count} control plane master" >> /var/lib/cloud/instance/01-k8s-base-setup
+	exit -1

@@ -58,9 +58,11 @@ global_worker_node_network_dhcp = false
 #Master node IP address mask
 global_master_node_address_mask = "10.244.0."
 #Worker node IP address mask
-global_worker_node_address_mask = "10.244.1."
-#Nodes mask, default /16
+global_worker_node_address_mask = "10.244.0."
+#Nodes mask, default 255.255.0.0
 global_nodes_mask = "255.255.0.0"
+#Nodes mask in CIDR format, default 16
+global_nodes_mask_cidr = 16
 #Nodes gateway address
 global_nodes_gateway = "10.244.0.1"
 #Nodes DNS server address
