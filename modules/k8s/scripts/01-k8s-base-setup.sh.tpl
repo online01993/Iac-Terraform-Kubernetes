@@ -36,12 +36,12 @@ wget https://github.com/containerd/containerd/releases/download/v${version_conta
 sudo tar Cxzvf /usr/local containerd-${version_containerd}-linux-amd64.tar.gz
 sudo rm containerd-${version_containerd}-linux-amd64.tar.gz
 sudo mkdir /etc/containerd/
-sudo containerd config default > /etc/containerd/config.toml
+sudo bash -c 'containerd config default > /etc/containerd/config.toml'
 sudo sed -i 's/SystemdCgroup \= false/SystemdCgroup \= true/g' /etc/containerd/config.toml
 wget https://raw.githubusercontent.com/containerd/containerd/main/containerd.service
 sudo mv containerd.service /etc/systemd/system/
 wget https://github.com/opencontainers/runc/releases/download/v${version_runc}/runc.amd64
-sudo install -m 755 runc.amd64 /usr/local/sbin/runc
+sudo bash -c 'install -m 755 runc.amd64 /usr/local/sbin/runc'
 rm runc.amd64
 wget https://github.com/containernetworking/plugins/releases/download/v${version_cni-plugin}/cni-plugins-linux-amd64-v${version_cni-plugin}.tgz
 sudo mkdir -p /opt/cni/bin
