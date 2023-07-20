@@ -66,7 +66,7 @@ resource "terraform_data" "k8s-kubeadm_init_02_resource" {
       type     = "ssh"
       user     = "robot"
       private_key = "${var.vm_rsa_ssh_key_private}"
-      host     = ${var.masters[0].address}
+      host     = "${var.masters[0].address}"
     }
   provisioner "file" {
     destination = "/tmp/02-k8s-kubeadm_init.sh"
