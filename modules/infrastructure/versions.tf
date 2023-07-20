@@ -5,11 +5,7 @@ terraform {
       source  = "terra-farm/xenorchestra"
       version = "~> 0.9"
     }
-    tls = {
-      source = "hashicorp/tls"
-      #version = "4.0.4"
-    }
- }
+  }
 } 
 # Configure the tls Provider
 provider "tls" {
