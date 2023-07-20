@@ -5,6 +5,9 @@ terraform {
       source  = "terra-farm/xenorchestra"
       version = "~> 0.9"
     }
+	tls = {
+      source = "hashicorp/tls"
+    }
   }
 } 
 # Configure the tls Provider
@@ -13,10 +16,10 @@ provider "tls" {
 }
 provider "xenorchestra" {
   # Must be ws or wss
-  url      = var.global_xen_xoa_url      # Or set XOA_URL environment variable
-  username = var.global_xen_xoa_username # Or set XOA_USER environment variable
-  password = var.global_xen_xoa_password # Or set XOA_PASSWORD environment variable
-  insecure = var.global_xen_xoa_insecure # Or set XOA_INSECURE environment variable to any value
+  url      = var.xen_xoa_url      # Or set XOA_URL environment variable
+  username = var.xen_xoa_username # Or set XOA_USER environment variable
+  password = var.xen_xoa_password # Or set XOA_PASSWORD environment variable
+  insecure = var.xen_xoa_insecure # Or set XOA_INSECURE environment variable to any value
 }
 # Configure the DNS Provider
 # provider "dns" {

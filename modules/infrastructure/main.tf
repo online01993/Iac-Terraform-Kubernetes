@@ -1,4 +1,23 @@
 #main.tf
+resource "tls_private_key" "terrafrom_generated_private_key" {
+   algorithm = "RSA"
+   rsa_bits  = 4096
+   provisioner "local-exec" {
+    command = <<EOF
+      mkdir -p .ssh-robot-access/
+      cat <<< "${tls_private_key.terrafrom_generated_private_key.private_key_openssh}" > .ssh-robot-access/robot_id_rsa.key
+      cat <<< "${tls_private_key.terrafrom_generated_private_key.public_key_openssh}" > .ssh-robot-access/robot_id_rsa.pub
+      chmod 400 .ssh-robot-access/id_rsa.key
+      chmod 400 .ssh-robot-access/id_rsa.key
+    EOF
+  }
+   provisioner "local-exec" {
+    when    = destroy
+    command = <<EOF
+      rm -rvf .ssh-robot-access/
+    EOF
+  }
+}
 data "xenorchestra_pool" "pool" {
   name_label = var.xen_pool_name
 }
@@ -21,11 +40,14 @@ resource "random_uuid" "vm_master_id" {
   count = var.master_count
 }
 resource "xenorchestra_cloud_config" "bar_vm_master" {
+  depends_on = [
+    tls_private_key.terrafrom_generated_private_key
+  ]
   count = var.master_count
   name  = "debian-base-config-master-${count.index}"
   template = templatefile("${path.module}/cloud_config.tftpl", {
     hostname       = "deb11-k8s-${random_uuid.vm_master_id[count.index].result}.${lower(var.dns_sub_zone)}.${substr(lower(var.dns_zone), 0, length(var.dns_zone) - 1)}"
-    vm_rsa_ssh_key = "${var.vm_rsa_ssh_key}"
+    vm_rsa_ssh_key = "${tls_private_key.terrafrom_generated_private_key.public_key_openssh}"
   })
 }
 resource "xenorchestra_cloud_config" "cloud_network_config_masters" {
@@ -41,11 +63,14 @@ resource "xenorchestra_cloud_config" "cloud_network_config_masters" {
   }) : "${path.module}/cloud_network_dhcp.yaml"
 }
 resource "xenorchestra_cloud_config" "bar_vm" {
+  depends_on = [
+    tls_private_key.terrafrom_generated_private_key
+  ]
   count = var.node_count
   name  = "debian-base-config-node-${count.index}"
   template = templatefile("${path.module}/cloud_config.tftpl", {
     hostname       = "deb11-k8s-${random_uuid.vm_id[count.index].result}.${lower(var.dns_sub_zone)}.${substr(lower(var.dns_zone), 0, length(var.dns_zone) - 1)}"
-    vm_rsa_ssh_key = "${var.vm_rsa_ssh_key}"
+    vm_rsa_ssh_key = "${tls_private_key.terrafrom_generated_private_key.public_key_openssh}"
   })
 }
 resource "xenorchestra_cloud_config" "cloud_network_config_workers" {
