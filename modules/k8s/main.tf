@@ -63,7 +63,7 @@ resource "terraform_data" "k8s-kubeadm_init_02_resource" {
   provisioner "file" {
     destination = "/tmp/02-k8s-kubeadm_init.sh"
     content = templatefile("${path.module}/scripts/02-k8s-kubeadm_init.sh.tpl", {
-        itterator             = i.id
+        itterator             = i
         master_count          = "${var.master_count}"
         pod-network-cidr      = "${var.master_node_address_mask}0/${var.nodes_mask_cidr}"
     })
