@@ -14,6 +14,7 @@ output "masters" {
   value = [
     for i in range(length(xenorchestra_vm.vm_master)) :
     {
+      "id"      = i
       "fqdn"    = xenorchestra_vm.vm_master[i].name_label
 	  "address" = xenorchestra_vm.vm_master[i].ipv4_addresses[0]
     }
@@ -23,6 +24,7 @@ output "nodes" {
   value = [
     for i in range(length(xenorchestra_vm.vm)) :
     {
+      "id"      = i
       "fqdn"    = xenorchestra_vm.vm[i].name_label
 	  "address" = xenorchestra_vm.vm[i].ipv4_addresses[0]
     }
