@@ -10,13 +10,11 @@ while [ ! -f /var/lib/cloud/instance/boot-finished ]; do
   sleep 1
 done
 
-${vm_rsa_ssh_key}
-
-#yum update -y
-
-#yum install -y zip unzip
-
-
+#01-k8s-base-setup-wait
+while [ ! -f /var/lib/cloud/instance/01-k8s-base-setup ]; do
+  echo -e "\033[1;36mWaiting for 01-k8s-base-setup..."
+  sleep 1
+done
 
 
 

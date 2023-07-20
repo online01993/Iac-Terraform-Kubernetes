@@ -49,3 +49,4 @@ sudo tar Cxzvf /opt/cni/bin cni-plugins-linux-amd64-v${version_cni-plugin}.tgz
 rm cni-plugins-linux-amd64-v${version_cni-plugin}.tgz
 sudo systemctl daemon-reload
 sudo systemctl enable --now containerd
+sudo bash -c 'echo `date` > /var/lib/cloud/instance/01-k8s-base-setup'
