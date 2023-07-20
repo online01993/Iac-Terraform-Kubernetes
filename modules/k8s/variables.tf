@@ -5,13 +5,13 @@ variable "vm_rsa_ssh_key_public" {
   type = string
 }
 variable "masters" {
-  type = list(map({
+  type = list(object({
     fqdn = string
 	address = string
   }))
 }
 variable "nodes" {
-  type = list(map({
+  type = list(object({
     fqdn = string
 	address = string
   }))
