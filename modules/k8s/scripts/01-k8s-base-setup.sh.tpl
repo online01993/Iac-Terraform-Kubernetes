@@ -10,18 +10,18 @@ while [ ! -f /var/lib/cloud/instance/boot-finished ]; do
   sleep 1
 done
 
-sudo cat <<EOF > /etc/sysctl.d/11-kubernetes.conf
+sudo bash -c 'cat <<EOF > /etc/sysctl.d/11-kubernetes.conf
 net.bridge.bridge-nf-call-iptables = 1
 net.ipv4.ip_forward = 1
-EOF
+EOF'
 sudo chown root:root /etc/sysctl.d/11-kubernetes.conf && sudo chmod 644 /etc/sysctl.d/11-kubernetes.conf
 sudo sysctl --system
 
 
-sudo cat <<EOF > /etc/modules-load.d/containerd.conf
+sudo bash -c 'cat <<EOF > /etc/modules-load.d/containerd.conf
 overlay
 br_netfilter
-EOF
+EOF'
 sudo chown root:root /etc/modules-load.d/containerd.conf && sudo chmod 644 /etc/modules-load.d/containerd.conf
 sudo modprobe overlay
 sudo modprobe br_netfilter
