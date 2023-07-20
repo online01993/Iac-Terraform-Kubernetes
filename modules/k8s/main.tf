@@ -1,6 +1,7 @@
 #main.tf
 resource "terraform_data" "k8s-base-setup_01_resource_masters" {
-  count = "${length(var.masters)}"
+  #count = "${length(var.masters)}"
+  for_each = module.infrastructure.masters
   connection {
       type     = "ssh"
       user     = "robot"
@@ -24,7 +25,8 @@ resource "terraform_data" "k8s-base-setup_01_resource_masters" {
   }
 }
 resource "terraform_data" "k8s-base-setup_01_resource_nodes" {
-  count = "${length(var.nodes)}"
+  #count = "${length(var.nodes)}"
+  for_each = module.infrastructure.nodes
   connection {
       type     = "ssh"
       user     = "robot"
