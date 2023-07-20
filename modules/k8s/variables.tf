@@ -11,7 +11,7 @@ variable "masters" {
   }))
 }
 variable "nodes" {
-  type = list(mao({
+  type = list(map({
     fqdn = string
 	address = string
   }))
