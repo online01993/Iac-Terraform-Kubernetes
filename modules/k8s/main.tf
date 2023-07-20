@@ -1,12 +1,14 @@
 #main.tf
 resource "terraform_data" "k8s-base-setup_01_resource_masters" {
   #count = "${length(var.masters)}"
-  for_each = module.infrastructure.masters
+  #for_each = module.infrastructure.masters
+  for_each = var.masters
   connection {
       type     = "ssh"
       user     = "robot"
       private_key = "${var.vm_rsa_ssh_key_private}"
-      host     = "${var.masters[count.index].address}"
+      #host     = "${var.masters[count.index].address}"
+	  host     = "each.value.address"
     }
   provisioner "file" {
     destination = "/tmp/01-k8s-base-setup.sh"
@@ -26,12 +28,14 @@ resource "terraform_data" "k8s-base-setup_01_resource_masters" {
 }
 resource "terraform_data" "k8s-base-setup_01_resource_nodes" {
   #count = "${length(var.nodes)}"
-  for_each = module.infrastructure.nodes
+  #for_each = module.infrastructure.nodes
+  for_each = var.nodes
   connection {
       type     = "ssh"
       user     = "robot"
       private_key = "${var.vm_rsa_ssh_key_private}"
-      host     = "${var.nodes[count.index].address}"
+      #host     = "${var.nodes[count.index].address}"
+	  host     = "each.value.address"
     }
   provisioner "file" {
     destination = "/tmp/01-k8s-base-setup.sh"
