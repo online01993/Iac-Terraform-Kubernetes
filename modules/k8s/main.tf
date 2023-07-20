@@ -2,7 +2,7 @@
 resource "terraform_data" "k8s-base-setup_01_resource_masters" {
   #count = "${length(var.masters)}"
   #for_each = module.infrastructure.masters
-  for_each = var.masters
+  for_each = merge(var.masters)
   connection {
       type     = "ssh"
       user     = "robot"
@@ -29,7 +29,7 @@ resource "terraform_data" "k8s-base-setup_01_resource_masters" {
 resource "terraform_data" "k8s-base-setup_01_resource_nodes" {
   #count = "${length(var.nodes)}"
   #for_each = module.infrastructure.nodes
-  for_each = var.nodes
+  for_each = merge(var.nodes)
   connection {
       type     = "ssh"
       user     = "robot"
