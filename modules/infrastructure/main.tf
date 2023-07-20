@@ -60,7 +60,7 @@ resource "xenorchestra_cloud_config" "cloud_network_config_masters" {
     node_gateway     = "${var.nodes_gateway}"
     node_dns_address = "${var.nodes_dns_address}"
     node_dns_search  = "${substr(lower(var.dns_zone), 0, length(var.dns_zone) - 1)}"
-  }) : "${path.module}/cloud_network_dhcp.yaml"
+  }) : templatefile("${path.module}/cloud_network_dhcp.yaml", {})
 }
 resource "xenorchestra_cloud_config" "bar_vm" {
   depends_on = [
@@ -83,7 +83,7 @@ resource "xenorchestra_cloud_config" "cloud_network_config_workers" {
     node_gateway     = "${var.nodes_gateway}"
     node_dns_address = "${var.nodes_dns_address}"
     node_dns_search  = "${substr(lower(var.dns_zone), 0, length(var.dns_zone) - 1)}"
-  }) : "${path.module}/cloud_network_dhcp.yaml"
+  }) : templatefile("${path.module}/cloud_network_dhcp.yaml", {})
 }
 resource "xenorchestra_vm" "vm_master" {
   count                = var.master_count

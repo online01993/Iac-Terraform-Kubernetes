@@ -52,9 +52,9 @@ global_certificate_params = {
 # VM settings
 #
 #Master node IP address type, true(dhcp) or false(static)
-global_master_node_network_dhcp = false
+global_master_node_network_dhcp = true
 #Worker node IP address type, true(dhcp) or false(static)
-global_worker_node_network_dhcp = false
+global_worker_node_network_dhcp = true
 #Master node IP address mask
 global_master_node_address_mask = "10.244.0."
 #Worker node IP address mask

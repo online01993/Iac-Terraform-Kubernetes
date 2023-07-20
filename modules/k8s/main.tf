@@ -8,7 +8,7 @@ resource "terraform_data" "k8s-base-setup_01_resource_masters" {
       user     = "robot"
       private_key = "${var.vm_rsa_ssh_key_private}"
       #host     = "${var.masters[count.index].address}"
-	  host     = "each.value.address"
+	  host     = each.value.address
     }
   provisioner "file" {
     destination = "/tmp/01-k8s-base-setup.sh"
@@ -35,7 +35,7 @@ resource "terraform_data" "k8s-base-setup_01_resource_nodes" {
       user     = "robot"
       private_key = "${var.vm_rsa_ssh_key_private}"
       #host     = "${var.nodes[count.index].address}"
-	  host     = "each.value.address"
+	  host     = each.value.address
     }
   provisioner "file" {
     destination = "/tmp/01-k8s-base-setup.sh"
@@ -66,7 +66,7 @@ resource "terraform_data" "k8s-kubeadm_init_02_resource" {
       type     = "ssh"
       user     = "robot"
       private_key = "${var.vm_rsa_ssh_key_private}"
-      host     = "${var.masters[0].address}"
+      host     = ${var.masters[0].address}
     }
   provisioner "file" {
     destination = "/tmp/02-k8s-kubeadm_init.sh"
