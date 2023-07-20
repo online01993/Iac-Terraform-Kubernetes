@@ -143,7 +143,7 @@ resource "xenorchestra_vm" "vm" {
   timeouts {
     create = "20m"
   }
-  depends_on = [
-    xenorchestra_vm.vm_master
-  ]
+  #depends_on = [
+  #  xenorchestra_vm.vm_master
+  #]
 }
