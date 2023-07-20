@@ -44,4 +44,4 @@ rm cni-plugins-linux-amd64-v${version_cni-plugin}.tgz
 sudo systemctl daemon-reload
 sudo systemctl enable --now containerd
 sudo bash -c 'echo `date` > /var/lib/cloud/instance/01-k8s-base-setup'
-sudo echo "K8s dependencies install" >> /var/lib/cloud/instance/01-k8s-base-setup
+sudo bash -c 'echo "K8s dependencies install" >> /var/lib/cloud/instance/01-k8s-base-setup'
