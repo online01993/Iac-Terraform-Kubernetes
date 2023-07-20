@@ -29,15 +29,15 @@ elif [[ ${master_count} -eq 3 ]]
 then
 	echo "${itterator}"
 	sudo bash -c 'echo `date` > /var/lib/cloud/instance/02-k8s-kubeadm_init'
-	sudo echo "K8s init with 3 control plane master" >> /var/lib/cloud/instance/02-k8s-kubeadm_init
+	sudo bash -c 'echo "K8s init with 3 control plane master" >> /var/lib/cloud/instance/02-k8s-kubeadm_init'
 elif [[ ${master_count} -gt 3 ]]
 then
 	echo "${itterator}"
 	sudo bash -c 'echo `date` > /var/lib/cloud/instance/02-k8s-kubeadm_init'
-	sudo echo "K8s init with ${master_count} control plane master" >> /var/lib/cloud/instance/02-k8s-kubeadm_init
+	sudo bash -c 'echo "K8s init with ${master_count} control plane master" >> /var/lib/cloud/instance/02-k8s-kubeadm_init'
 else
     echo "${itterator}"
 	sudo bash -c 'echo `date` > /var/lib/cloud/instance/02-k8s-kubeadm_init'
-	sudo echo "ERROR: K8s init FAILED with ${master_count} control plane master" >> /var/lib/cloud/instance/02-k8s-kubeadm_init
+	sudo bash -c 'echo "ERROR: K8s init FAILED with ${master_count} control plane master" >> /var/lib/cloud/instance/02-k8s-kubeadm_init'
 	exit -1
 fi	

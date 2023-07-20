@@ -71,7 +71,7 @@ global_nodes_dns_address = "10.244.0.1"
 #Count for VM master node
 #need minimal 3 for Kubernetes etcd и controlplane ( 3 для HA)
 #https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/high-availability/
-global_master_node_high_availability = true
+global_master_node_high_availability = false
 #Count for VM worker node
 #need minimal 2 node workers for HA kubernetes data
 #https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/high-availability/
