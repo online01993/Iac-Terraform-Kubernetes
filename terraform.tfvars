@@ -23,7 +23,7 @@ global_xen_sr_id = [
 #Xen large SR ID`s 
 global_xen_large_sr_id = [
   #"UUID",
-  "60121d03-b7c4-6f8b-4c70-1d6e93b89004"
+  "0714cdc3-2eea-f339-f10c-4777c715400a"
 ]
 
 #
