@@ -23,7 +23,6 @@ then
 	sudo cp -i /etc/kubernetes/admin.conf ~/.kube/config
 	sudo chown $(id -u):$(id -g) ~/.kube/config
 	#kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
-	kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.9.1/Documentation/kube-flannel.yml
 	sudo bash -c 'crictl --runtime-endpoint unix:///var/run/containerd/containerd.sock version'
 	sudo bash -c 'ctr images pull docker.io/library/hello-world:latest'
 	sudo bash -c 'ctr run docker.io/library/hello-world:latest hello-world'
