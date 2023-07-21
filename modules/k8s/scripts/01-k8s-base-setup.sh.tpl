@@ -25,7 +25,7 @@ sudo modprobe br_netfilter
 curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/kubernetes-archive-keyring.gpg
 sudo echo "deb [signed-by=/etc/apt/trusted.gpg.d/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
 sudo apt update
-sudo apt install -y kubeadm kubectl keepalived haproxy
+sudo apt install -y kubeadm kubectl kubelet keepalived haproxy
 wget https://github.com/containerd/containerd/releases/download/v${version_containerd}/containerd-${version_containerd}-linux-amd64.tar.gz
 sudo tar Cxzvf /usr/local containerd-${version_containerd}-linux-amd64.tar.gz
 sudo rm containerd-${version_containerd}-linux-amd64.tar.gz
