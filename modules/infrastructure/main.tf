@@ -46,7 +46,7 @@ resource "xenorchestra_cloud_config" "bar_vm_master" {
   count = var.master_count
   name  = "debian-base-config-master-${count.index}"
   template = templatefile("${path.module}/cloud_config.tftpl", {
-    hostname       = "deb11-k8s-${random_uuid.vm_master_id[count.index].result}.${lower(var.dns_sub_zone)}.${substr(lower(var.dns_zone), 0, length(var.dns_zone) - 1)}"
+    hostname       = "deb11-k8s-master-${count.index}-${random_uuid.vm_master_id[count.index].result}.${lower(var.dns_sub_zone)}.${substr(lower(var.dns_zone), 0, length(var.dns_zone) - 1)}"
     vm_rsa_ssh_key = "${tls_private_key.terrafrom_generated_private_key.public_key_openssh}"
   })
 }
@@ -69,7 +69,7 @@ resource "xenorchestra_cloud_config" "bar_vm" {
   count = var.node_count
   name  = "debian-base-config-node-${count.index}"
   template = templatefile("${path.module}/cloud_config.tftpl", {
-    hostname       = "deb11-k8s-${random_uuid.vm_id[count.index].result}.${lower(var.dns_sub_zone)}.${substr(lower(var.dns_zone), 0, length(var.dns_zone) - 1)}"
+    hostname       = "deb11-k8s-worker-${count.index}-${random_uuid.vm_id[count.index].result}.${lower(var.dns_sub_zone)}.${substr(lower(var.dns_zone), 0, length(var.dns_zone) - 1)}"
     vm_rsa_ssh_key = "${tls_private_key.terrafrom_generated_private_key.public_key_openssh}"
   })
 }
@@ -87,7 +87,7 @@ resource "xenorchestra_cloud_config" "cloud_network_config_workers" {
 }
 resource "xenorchestra_vm" "vm_master" {
   count                = var.master_count
-  name_label           = "deb11-k8s-master-${random_uuid.vm_master_id[count.index].result}.${var.dns_sub_zone}.${substr(lower(var.dns_zone), 0, length(var.dns_zone) - 1)}"
+  name_label           = "deb11-k8s-master-${count.index}-${random_uuid.vm_master_id[count.index].result}.${var.dns_sub_zone}.${substr(lower(var.dns_zone), 0, length(var.dns_zone) - 1)}"
   cloud_config         = xenorchestra_cloud_config.bar_vm_master[count.index].template
   cloud_network_config = xenorchestra_cloud_config.cloud_network_config_masters[count.index].template
   template             = data.xenorchestra_template.vm.id
@@ -97,7 +97,7 @@ resource "xenorchestra_vm" "vm_master" {
   }
   disk {
     sr_id      = var.xen_sr_id[count.index % length(var.xen_sr_id)]
-    name_label = "deb11-k8s-master-${random_uuid.vm_master_id[count.index].result}.${var.dns_sub_zone}.${substr(lower(var.dns_zone), 0, length(var.dns_zone) - 1)}--system"
+    name_label = "deb11-k8s-master-${count.index}-${random_uuid.vm_master_id[count.index].result}.${var.dns_sub_zone}.${substr(lower(var.dns_zone), 0, length(var.dns_zone) - 1)}--system"
     size       = var.master_disk_size_gb * 1024 * 1024 * 1024 # GB to B
   }
   cpus          = var.master_cpu_count
@@ -114,7 +114,7 @@ resource "xenorchestra_vm" "vm_master" {
 }
 resource "xenorchestra_vm" "vm" {
   count                = var.node_count
-  name_label           = "deb11-k8s-node-${random_uuid.vm_id[count.index].result}.${var.dns_sub_zone}.${substr(lower(var.dns_zone), 0, length(var.dns_zone) - 1)}"
+  name_label           = "deb11-k8s-worker-${count.index}-${random_uuid.vm_id[count.index].result}.${var.dns_sub_zone}.${substr(lower(var.dns_zone), 0, length(var.dns_zone) - 1)}"
   cloud_config         = xenorchestra_cloud_config.bar_vm[count.index].template
   cloud_network_config = xenorchestra_cloud_config.cloud_network_config_workers[count.index].template
   template             = data.xenorchestra_template.vm.id
@@ -124,12 +124,12 @@ resource "xenorchestra_vm" "vm" {
   }
   disk {
     sr_id      = var.xen_sr_id[count.index % length(var.xen_sr_id)]
-    name_label = "deb11-k8s-node-${random_uuid.vm_id[count.index].result}.${var.dns_sub_zone}.${substr(lower(var.dns_zone), 0, length(var.dns_zone) - 1)}--system"
+    name_label = "deb11-k8s-worker-${count.index}-${random_uuid.vm_id[count.index].result}.${var.dns_sub_zone}.${substr(lower(var.dns_zone), 0, length(var.dns_zone) - 1)}--system"
     size       = var.vm_disk_size_gb * 1024 * 1024 * 1024 # GB to B
   }
   disk {
     sr_id      = var.xen_large_sr_id[count.index % length(var.xen_large_sr_id)]
-    name_label = "deb11-k8s-node-${random_uuid.vm_id[count.index].result}.${var.dns_sub_zone}.${substr(lower(var.dns_zone), 0, length(var.dns_zone) - 1)}--kubernetes-data"
+    name_label = "deb11-k8s-worker-${count.index}-${random_uuid.vm_id[count.index].result}.${var.dns_sub_zone}.${substr(lower(var.dns_zone), 0, length(var.dns_zone) - 1)}--kubernetes-data"
     size       = var.vm_storage_disk_size_gb * 1024 * 1024 * 1024 # GB to B
   }
   cpus          = var.master_cpu_count
