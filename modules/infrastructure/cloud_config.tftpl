@@ -12,12 +12,16 @@ disable_root: true
 users:
  - name: root
    lock-passwd: true
-# - default #for default user in /etc/cloud/cloud.cfg
  - name: its
+   lock-passwd: true
+   groups: [sudo,admin]
+   gecos: its
+   shell: /bin/bash
+   sudo: ALL=(ALL) NOPASSWD:ALL
+ - name: robot
    groups: [sudo,admin]
    lock-passwd: true
-   gecos: its
-   #passwd: $1$SaltSalt$fe0kz01dUWfKzl83jI7vG/
+   gecos: robot
    shell: /bin/bash
    sudo: ALL=(ALL) NOPASSWD:ALL
    ssh-authorized-keys:
@@ -31,6 +35,8 @@ packages:
   - apt-transport-https
   - ca-certificates
   - curl
+  - gnupg
+  - wget
 no_ssh_fingerprints: false
 ssh_deletekeys: 1
 ssh:
@@ -40,10 +46,9 @@ runcmd:
   - sysctl --system
   - sed -i -e '/^PasswordAuthentication/s/^.*$/PasswordAuthentication no/' /etc/ssh/sshd_config
   - sed -i -e '/^PermitRootLogin/s/^.*$/PermitRootLogin no/' /etc/ssh/sshd_config
-  - sed -i -e '$aAllowUsers its' /etc/ssh/sshd_config
+  - sed -i -e '$aAllowUsers robot' /etc/ssh/sshd_config
   - systemctl restart sshd
-  - /bin/echo > /var/log/cloud-init.log
-  - /bin/echo > /var/log/cloud-init-output.log
+  - touch /etc/cloud/cloud-init.disabled
 write_files:
   - path: /etc/sysctl.d/10-disable-ipv6.conf
     permissions: 0644
@@ -52,26 +57,14 @@ write_files:
       net.ipv6.conf.all.disable_ipv6 = 1
       net.ipv6.conf.default.disable_ipv6 = 1
       net.ipv6.conf.lo.disable_ipv6 = 1
-  - path: /etc/sysctl.d/11-kubernetes.conf
-    permissions: 0644
-    owner: root
-    content: |
-      net.bridge.bridge-nf-call-iptables = 1
-      net.ipv4.ip_forward = 1  
-  - path: /etc/modules-load.d/containerd.conf
-    permissions: 0644
-    owner: root
-    content: |
-      overlay
-      br_netfilter  
 apt:
   sources_list: |
     deb http://deb.debian.org/debian/ $RELEASE main contrib non-free
     deb-src http://deb.debian.org/debian/ $RELEASE main contrib non-free
     deb http://deb.debian.org/debian/ $RELEASE-updates main contrib non-free
     deb-src http://deb.debian.org/debian/ $RELEASE-updates main contrib non-free
-    deb http://deb.debian.org/debian-security $RELEASE/updates main
-    deb-src http://deb.debian.org/debian-security $RELEASE/updates main
+    deb http://deb.debian.org/debian-security $RELEASE-security main
+    deb-src http://deb.debian.org/debian-security $RELEASE-security main
   conf: |
     APT {
       Get {
@@ -79,8 +72,3 @@ apt:
         Fix-Broken "true";
       };
     };
-power_state:
-  delay: '+1'
-  mode: reboot
-  condition: true
-  message: "End cloud_config init"

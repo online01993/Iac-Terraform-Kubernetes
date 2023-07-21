@@ -1,3 +1,31 @@
+variable "master_node_network_dhcp" {
+  default = true
+  type = bool
+}
+variable "worker_node_network_dhcp" {
+  default = true
+  type = bool
+}
+variable "master_node_address_mask" {
+  #default = 10.244.0.
+  type = string
+}
+variable "worker_node_address_mask" {
+  #default = 10.244.0.
+  type = string
+}
+variable "nodes_mask" {
+  #default = 255.255.0.0
+  type = string
+}
+variable "nodes_gateway" {
+  #default = 10.244.0.
+  type = string
+}
+variable "nodes_dns_address" {
+  #default = 10.244.0.1
+  type = string
+}
 variable "node_count" {
   #default = 6
   type = number
@@ -102,13 +130,13 @@ variable "xen_pool_name" {
   type = string
 }
 variable "xen_xoa_url" {
-  type = string
+  type    = string
 }
 variable "xen_xoa_username" {
-  type = string
+  type    = string
 }
 variable "xen_xoa_password" {
-  type      = string
+  type    = string
   sensitive = true
 }
 variable "xen_xoa_insecure" {

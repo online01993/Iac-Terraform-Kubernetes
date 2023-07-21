@@ -1,15 +1,13 @@
-output "nodes_ips" {
-  value = module.infrastructure.nodes_ips
-}
-
 output "nodes" {
-  value = module.infrastructure.nodes
+   value = module.infrastructure.nodes
 }
-
-output "masters_ips" {
-  value = module.infrastructure.masters_ips
-}
-
 output "masters" {
-  value = module.infrastructure.masters
+   value = module.infrastructure.masters
+}
+output "vm_rsa_ssh_key_public" {
+  value = local.vm_rsa_ssh_key_public
+}
+output "vm_rsa_ssh_key_private" {
+  value = local.vm_rsa_ssh_key_private
+  sensitive   = true
 }

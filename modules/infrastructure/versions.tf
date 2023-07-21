@@ -5,13 +5,12 @@ terraform {
       source  = "terra-farm/xenorchestra"
       version = "~> 0.9"
     }
-    rke = {
-      source = "rancher/rke"
-      #version = "1.4.1"
+	tls = {
+      source = "hashicorp/tls"
     }
   }
-}
-# Configure the XCP-NG/Xen Orchestra Provider
+} 
+# Configure the tls Provider
 provider "xenorchestra" {
   # Must be ws or wss
   url      = var.xen_xoa_url      # Or set XOA_URL environment variable
