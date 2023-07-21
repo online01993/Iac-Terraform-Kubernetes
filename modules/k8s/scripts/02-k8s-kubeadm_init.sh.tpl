@@ -16,10 +16,10 @@ while [ ! -f /var/lib/cloud/instance/01-k8s-base-setup ]; do
 done
 if [[ ${master_count} -eq 1 ]] && [[ ${itterator} -eq 0 ]]
 then
-	sudo kubeadm init --pod-network-cidr=${pod-network-cidr}
+	sudo bash -c 'kubeadm init --pod-network-cidr=${pod-network-cidr}'
 	sudo bash -c 'echo "export KUBECONFIG=/etc/kubernetes/admin.conf" > /etc/environment'
 	sudo bash -c 'export KUBECONFIG=/etc/kubernetes/admin.conf'
-	sudo kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+	sudo bash -c 'kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml'
 	sudo bash -c 'crictl --runtime-endpoint unix:///var/run/containerd/containerd.sock version'
 	sudo bash -c 'ctr images pull docker.io/library/hello-world:latest'
 	sudo bash -c 'ctr run docker.io/library/hello-world:latest hello-world'
@@ -36,7 +36,7 @@ then
 	sudo bash -c 'echo `date` > /var/lib/cloud/instance/02-k8s-kubeadm_init'
 	sudo bash -c 'echo "K8s init with ${master_count} control plane master" >> /var/lib/cloud/instance/02-k8s-kubeadm_init'
 else
-    echo "${itterator}"
+	echo "${itterator}"
 	sudo bash -c 'echo `date` > /var/lib/cloud/instance/02-k8s-kubeadm_init'
 	sudo bash -c 'echo "ERROR: K8s init FAILED with ${master_count} control plane master" >> /var/lib/cloud/instance/02-k8s-kubeadm_init'
 	exit -1

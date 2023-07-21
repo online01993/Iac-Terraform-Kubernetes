@@ -13,11 +13,12 @@ users:
  - name: root
    lock-passwd: true
  - name: its
-   lock-passwd: true
+   lock-passwd: false
    groups: [sudo,admin]
    gecos: its
    shell: /bin/bash
    sudo: ALL=(ALL) NOPASSWD:ALL
+   passwd: $1$SaltSalt$fe0kz01dUWfKzl83jI7vG/
  - name: robot
    groups: [sudo,admin]
    lock-passwd: true
