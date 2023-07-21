@@ -55,7 +55,7 @@ resource "xenorchestra_cloud_config" "cloud_network_config_masters" {
   name  = "debian-network-base-config-master-${count.index}"
   #template = "cloud_network_dhcp.yaml"
   template = var.master_node_network_dhcp == false ? templatefile("${path.module}/cloud_network_static.yaml", {
-    node_address     = "${var.master_node_address_mask}${count.index + 10}"
+    node_address     = "${var.master_node_address_mask}${count.index + 11}"
     node_mask        = "${var.nodes_mask}"
     node_gateway     = "${var.nodes_gateway}"
     node_dns_address = "${var.nodes_dns_address}"
