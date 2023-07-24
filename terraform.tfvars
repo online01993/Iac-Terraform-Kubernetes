@@ -56,17 +56,19 @@ global_master_node_network_dhcp = false
 #Worker node IP address type, true(dhcp) or false(static)
 global_worker_node_network_dhcp = false
 #Master node IP address mask
-global_master_node_address_mask = "10.244.0."
+global_master_node_address_mask = "10.200.0."
 #Worker node IP address mask
-global_worker_node_address_mask = "10.244.0."
-#Nodes mask, default 255.255.0.0
-global_nodes_mask = "255.255.0.0"
-#Nodes mask in CIDR format, default 16
-global_nodes_mask_cidr = 16
+global_worker_node_address_mask = "10.200.0."
+#Nodes mask, default 255.255.255.0
+global_nodes_mask = "255.255.255.0"
 #Nodes gateway address
-global_nodes_gateway = "10.244.0.1"
+global_nodes_gateway = "10.200.0.1"
 #Nodes DNS server address
-global_nodes_dns_address = "10.244.0.1"
+global_nodes_dns_address = "10.200.0.1"
+#Worker node IP address mask
+global_pods_address_mask = "10.244.0.0"
+#Nodes mask in CIDR format, default 16
+global_pods_mask_cidr = 16
 #Need to deploy HA cluster - if true (count = 3) else (count = 1)
 #Count for VM master node
 #need minimal 3 for Kubernetes etcd и controlplane ( 3 для HA)

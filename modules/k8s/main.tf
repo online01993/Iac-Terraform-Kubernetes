@@ -65,7 +65,7 @@ resource "terraform_data" "k8s-kubeadm_init_02_resource" {
     content = templatefile("${path.module}/scripts/02-k8s-kubeadm_init.sh.tpl", {
         itterator             = each.value.id
         master_count          = "${var.master_count}"
-        pod-network-cidr      = "${var.master_node_address_mask}0/${var.nodes_mask_cidr}"
+        pod-network-cidr      = "${var.pods_address_mask}/${var.pods_mask_cidr}"
     })
   } 
   provisioner "remote-exec" {
