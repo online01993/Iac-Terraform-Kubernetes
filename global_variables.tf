@@ -31,7 +31,6 @@ variable "global_dns_sub_zone" {}
 variable "global_master_node_address_mask" {}
 variable "global_worker_node_address_mask" {}
 variable "global_nodes_mask" {}
-variable "global_nodes_mask_cidr" {}
 variable "global_nodes_gateway" {}
 variable "global_nodes_dns_address" {}
 variable "global_pods_address_mask" {}
