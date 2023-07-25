@@ -77,7 +77,7 @@ global_master_node_high_availability = false
 #Count for VM worker node
 #need minimal 2 node workers for HA kubernetes data
 #https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/high-availability/
-global_node_count = 3
+global_node_count = 2
 #Size for VM master node system disk size
 global_master_disk_size_gb = 16
 #Size for VM worker node system disk size
