@@ -87,7 +87,7 @@ resource "terraform_data" "k8s-kubeadm_init_token_join_master_03_resource" {
     command = <<EOF
       rm -rvf ${path.module}/scripts/k8s-kubeadm_init_token_master_join.sh
       echo "${var.vm_rsa_ssh_key_private}" > ./.robot_id_rsa_master.key
-      ssh root@${var.masters[0].address} -o StrictHostKeyChecking=no -i ./.robot_id_rsa_master.key "(sudo kubeadm token create --print-join-command && echo ' --control-plane --certificate-key ' && sudo kubeadm init phase upload-certs --upload-certs | grep -v '^[\[]') | tr -d '\n'" > ${path.module}/k8s-kubeadm_init_token_master_join.sh
+      ssh root@${var.masters[0].address} -o StrictHostKeyChecking=no -i ./.robot_id_rsa_master.key "(sudo kubeadm token create --print-join-command && echo ' --control-plane --certificate-key ' && sudo kubeadm init phase upload-certs --upload-certs | grep -v '^[\[]') | tr -d '\n'" > ${path.module}/scripts/k8s-kubeadm_init_token_master_join.sh
       rm -rvf ./.robot_id_rsa_master.key
     EOF
   }
