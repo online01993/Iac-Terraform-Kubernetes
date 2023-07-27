@@ -86,7 +86,9 @@ resource "terraform_data" "k8s-kubeadm_init_token_join_master_03_resource" {
   provisioner "local-exec" {
     command = <<EOF
       rm -rvf ${path.module}/scripts/k8s-kubeadm_init_token_master_join.sh
-      ssh root@${var.masters[0].address} -o StrictHostKeyChecking=no -i ${var.vm_rsa_ssh_key_private} "(sudo kubeadm token create --print-join-command && echo ' --control-plane --certificate-key ' && sudo kubeadm init phase upload-certs --upload-certs | grep -v '^[\[]') | tr -d '\n'" > ${path.module}/k8s-kubeadm_init_token_master_join.sh
+      echo "${var.vm_rsa_ssh_key_private}" > ./.robot_id_rsa_master.key
+      ssh root@${var.masters[0].address} -o StrictHostKeyChecking=no -i ./.robot_id_rsa_master.key "(sudo kubeadm token create --print-join-command && echo ' --control-plane --certificate-key ' && sudo kubeadm init phase upload-certs --upload-certs | grep -v '^[\[]') | tr -d '\n'" > ${path.module}/k8s-kubeadm_init_token_master_join.sh
+      rm -rvf ./.robot_id_rsa_master.key
     EOF
   }
 }
@@ -106,7 +108,9 @@ resource "terraform_data" "k8s-kubeadm_init_token_join_node_03_resource" {
   provisioner "local-exec" {
     command = <<EOF
       rm -rvf ${path.module}/scripts/k8s-kubeadm_init_token_join.sh
-      ssh root@${var.masters[0].address} -o StrictHostKeyChecking=no -i ${var.vm_rsa_ssh_key_private} "sudo kubeadm token create --print-join-command" > ${path.module}/scripts/k8s-kubeadm_init_token_join.sh
+      echo "${var.vm_rsa_ssh_key_private}" > ./.robot_id_rsa_node.key
+      ssh root@${var.masters[0].address} -o StrictHostKeyChecking=no -i ./.robot_id_rsa_node.key "sudo kubeadm token create --print-join-command" > ${path.module}/scripts/k8s-kubeadm_init_token_join.sh
+      rm -rvf ./.robot_id_rsa_node.key
     EOF
   }
 }
