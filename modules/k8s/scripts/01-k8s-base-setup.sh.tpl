@@ -7,7 +7,7 @@ set -o errexit
 #cloud-init-wait
 while [ ! -f /var/lib/cloud/instance/boot-finished ]; do
   echo -e "\033[1;36mWaiting for cloud-init..."
-  sleep 1
+  sleep 10
 done
 sudo bash -c 'cat <<EOF > /etc/sysctl.d/11-kubernetes.conf
 net.bridge.bridge-nf-call-iptables = 1

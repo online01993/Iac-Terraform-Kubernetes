@@ -7,12 +7,12 @@ set -o errexit
 #cloud-init-wait
 while [ ! -f /var/lib/cloud/instance/boot-finished ]; do
   echo -e "\033[1;36mWaiting for cloud-init..."
-  sleep 1
+  sleep 10
 done
 #01-k8s-base-setup-wait
 while [ ! -f /var/lib/cloud/instance/01-k8s-base-setup ]; do
   echo -e "\033[1;36mWaiting for 01-k8s-base-setup..."
-  sleep 1
+  sleep 10
 done
 mkdir -p "$HOME"/.kube
 if [[ ${master_count} -eq 1 ]] && [[ ${itterator} -eq 0 ]]
