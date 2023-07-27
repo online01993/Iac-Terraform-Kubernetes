@@ -155,7 +155,7 @@ resource "terraform_data" "k8s-kubeadm-join_nodes_04_resource" {
 	  host     = each.value.address
     }
   provisioner "file" {
-    destination = "/tmp/01-k8s-base-setup.sh"
+    destination = "/tmp/04-k8s-kubeadm-join_nodes.sh"
     content = templatefile("${path.module}/scripts/04-k8s-kubeadm-join_nodes.sh.tpl", {
         kubeadm-join_string = "${data.local_sensitive_file.kubeadm_token_node_file.content}"        
         itterator = each.value.id
