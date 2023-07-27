@@ -18,7 +18,9 @@ users:
    gecos: its
    shell: /bin/bash
    sudo: ALL=(ALL) NOPASSWD:ALL
-   passwd: $1$SaltSalt$fe0kz01dUWfKzl83jI7vG/
+   #passwd: $1$SaltSalt$fe0kz01dUWfKzl83jI7vG/
+   ssh-authorized-keys:
+    - ${vm_rsa_ssh_key}
  - name: robot
    groups: [sudo,admin]
    lock-passwd: true

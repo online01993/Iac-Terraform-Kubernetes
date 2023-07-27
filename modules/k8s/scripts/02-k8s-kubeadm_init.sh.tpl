@@ -31,11 +31,17 @@ then
 elif [[ ${master_count} -eq 3 ]]
 then
 	echo "${itterator}"
+	sudo bash -c 'crictl --runtime-endpoint unix:///var/run/containerd/containerd.sock version'
+	sudo bash -c 'ctr images pull docker.io/library/hello-world:latest'
+	sudo bash -c 'ctr run docker.io/library/hello-world:latest hello-world'
 	sudo bash -c 'echo `date` > /var/lib/cloud/instance/02-k8s-kubeadm_init'
 	sudo bash -c 'echo "K8s init with 3 control plane master" >> /var/lib/cloud/instance/02-k8s-kubeadm_init'
 elif [[ ${master_count} -gt 3 ]]
 then
 	echo "${itterator}"
+	sudo bash -c 'crictl --runtime-endpoint unix:///var/run/containerd/containerd.sock version'
+	sudo bash -c 'ctr images pull docker.io/library/hello-world:latest'
+	sudo bash -c 'ctr run docker.io/library/hello-world:latest hello-world'
 	sudo bash -c 'echo `date` > /var/lib/cloud/instance/02-k8s-kubeadm_init'
 	sudo bash -c 'echo "K8s init with ${master_count} control plane master" >> /var/lib/cloud/instance/02-k8s-kubeadm_init'
 else

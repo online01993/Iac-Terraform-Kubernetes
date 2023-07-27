@@ -45,3 +45,11 @@ sudo systemctl daemon-reload
 sudo systemctl enable --now containerd
 sudo bash -c 'echo `date` > /var/lib/cloud/instance/01-k8s-base-setup'
 sudo bash -c 'echo "K8s dependencies install" >> /var/lib/cloud/instance/01-k8s-base-setup'
+sudo bash -c 'cat <<EOF >> /var/lib/cloud/instance/01-k8s-base-setup
+Containerd version      -- ${version_containerd}
+Containerd config file  -- /etc/containerd/config.toml
+Containerd service file -- /etc/systemd/system/containerd.service
+Runc version            -- ${version_runc}
+Runc file location      -- /usr/local/sbin/runc
+CNI-pligin version      -- ${version_cni-plugin}
+EOF'
