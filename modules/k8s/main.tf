@@ -91,9 +91,6 @@ resource "terraform_data" "k8s-kubeadm_init_token_join_master_03_resource" {
   }
 }
 data "local_sensitive_file" "kubeadm_token_master_file" {
-  triggers_replace = [
-    terraform_data.k8s-kubeadm_init_token_join_master_03_resource
-  ]
   depends_on = [ 
       terraform_data.k8s-kubeadm_init_token_join_master_03_resource 
   ]
@@ -114,9 +111,6 @@ resource "terraform_data" "k8s-kubeadm_init_token_join_node_03_resource" {
   }
 }
 data "local_sensitive_file" "kubeadm_token_node_file" {
-  triggers_replace = [
-    terraform_data.k8s-kubeadm_init_token_join_node_03_resource
-  ]
   depends_on = [ 
       terraform_data.k8s-kubeadm_init_token_join_node_03_resource 
   ]
