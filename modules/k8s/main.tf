@@ -178,7 +178,7 @@ resource "terraform_data" "k8s-kubeadm-join_nodes_04_resource" {
     inline = [
       "chmod +x /tmp/04-k8s-kubeadm-join_nodes.sh",
       "/tmp/04-k8s-kubeadm-join_nodes.sh",
-      "rm -rf /tmp/04-k8s-kubeadm-join_nodes.sh",
+      #"rm -rf /tmp/04-k8s-kubeadm-join_nodes.sh",
     ]
   }
 }
