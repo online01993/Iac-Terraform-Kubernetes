@@ -22,7 +22,7 @@ then
 	sudo --preserve-env=HOME bash -c 'export KUBECONFIG="$HOME"/.kube/config'
 	sudo --preserve-env=HOME bash -c 'cp -f /etc/kubernetes/admin.conf "$HOME"/.kube/config'
 	sudo chown "$(id -u)":"$(id -g)" "$HOME"/.kube/config
-	kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml &> /tmp/kubectl.log
+	kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 	sudo bash -c 'crictl --runtime-endpoint unix:///var/run/containerd/containerd.sock version'
 	sudo bash -c 'ctr images pull docker.io/library/hello-world:latest'
 	sudo bash -c 'ctr run docker.io/library/hello-world:latest hello-world'
