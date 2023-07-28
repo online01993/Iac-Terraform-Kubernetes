@@ -75,7 +75,7 @@ global_k8s_api_endpoint_ip = "10.200.0.10"
 #Count for VM master node
 #need minimal 3 for Kubernetes etcd и controlplane ( 3 для HA)
 #https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/high-availability/
-global_master_node_high_availability = false
+global_master_node_high_availability = true
 #Count for VM worker node
 #need minimal 2 node workers for HA kubernetes data
 #https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/high-availability/
