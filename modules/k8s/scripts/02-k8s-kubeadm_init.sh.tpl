@@ -21,8 +21,7 @@ then
 	sudo bash -c 'echo "export KUBECONFIG=/etc/kubernetes/admin.conf" > /etc/environment'
 	sudo bash -c 'export KUBECONFIG=/etc/kubernetes/admin.conf'
 	sudo chown "$(id -u)":"$(id -g)" /etc/kubernetes/admin.conf
-	sleep 5
-	kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+	kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml &> /tmp/kubectl.log
 	sudo bash -c 'crictl --runtime-endpoint unix:///var/run/containerd/containerd.sock version'
 	sudo bash -c 'ctr images pull docker.io/library/hello-world:latest'
 	sudo bash -c 'ctr run docker.io/library/hello-world:latest hello-world'
