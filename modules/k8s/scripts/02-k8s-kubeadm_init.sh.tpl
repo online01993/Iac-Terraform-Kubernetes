@@ -14,7 +14,7 @@ while [ ! -f /var/lib/cloud/instance/01-k8s-base-setup ]; do
   echo -e "\033[1;36mWaiting for 01-k8s-base-setup..."
   sleep 10
 done
-if [[ ${master_count} -eq 1 ]] && [[ ${itterator} -eq 0 ]]
+if [[ ([[ ${master_count} -eq 1 ]] && [[ ${itterator} -eq 0 ]]) || ([[ ${master_count} -gt 1 ]] && [[ ${itterator} -eq 0 ]]) ]]
 then
 	mkdir -p "$HOME"/.kube
 	echo "kubeadm init --control-plane-endpoint=${k8s_api_endpoint_ip} --apiserver-advertise-address=${k8s_api_endpoint_ip} --pod-network-cidr=${pod-network-cidr} --upload-certs" > /tmp/temp_kube_init
