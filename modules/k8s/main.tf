@@ -117,6 +117,7 @@ resource "terraform_data" "k8s-kubeadm_init_token_join_node_03_resource" {
       rm -rvf ${path.module}/scripts/k8s-kubeadm_init_token_join.sh
       echo "${var.vm_rsa_ssh_key_private}" > ./.robot_id_rsa_node.key
       ssh robot@${var.masters[0].address} -o StrictHostKeyChecking=no -i ./.robot_id_rsa_node.key "sudo kubeadm token create --print-join-command" > ${path.module}/scripts/k8s-kubeadm_init_token_join.sh
+      bash -c 'ssh robot@${var.masters[0].address} -o StrictHostKeyChecking=no -i ./.robot_id_rsa_node.key "sudo kubeadm token create --print-join-command" > ${path.module}/scripts/k8s-kubeadm_init_token_join.sh' > ./tmp.log
       rm -rvf ./.robot_id_rsa_node.key
     EOF
   }
