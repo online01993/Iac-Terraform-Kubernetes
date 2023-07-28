@@ -66,6 +66,7 @@ resource "terraform_data" "k8s-kubeadm_init_02_resource" {
         itterator             = each.value.id
         master_count          = "${var.master_count}"
         pod-network-cidr      = "${var.pods_address_mask}/${var.pods_mask_cidr}"
+        k8s_api_endpoint_ip   = "${var.k8s_api_endpoint_ip}"
     })
   } 
   provisioner "remote-exec" {
@@ -88,7 +89,7 @@ resource "terraform_data" "k8s-kubeadm_init_token_join_master_03_resource" {
       rm -rvf ${path.module}/scripts/k8s-kubeadm_init_token_master_join.sh
       echo "${var.vm_rsa_ssh_key_private}" > ./.robot_id_rsa_master.key
       chmod 600 ./.robot_id_rsa_master.key
-      ssh robot@${var.masters[0].address} -o StrictHostKeyChecking=no -i ./.robot_id_rsa_master.key "(sudo kubeadm token create --print-join-command && echo ' --control-plane --certificate-key ' && sudo kubeadm init phase upload-certs --upload-certs | grep -v '^[\[]') | tr -d '\n'" > ${path.module}/scripts/k8s-kubeadm_init_token_master_join.sh
+      ssh robot@${var.k8s_api_endpoint_ip} -o StrictHostKeyChecking=no -i ./.robot_id_rsa_master.key "(sudo kubeadm token create --print-join-command && echo ' --control-plane --certificate-key ' && sudo kubeadm init phase upload-certs --upload-certs | grep -v '^[\[]') | tr -d '\n'" > ${path.module}/scripts/k8s-kubeadm_init_token_master_join.sh
       rm -rvf ./.robot_id_rsa_master.key
     EOF
   }
@@ -117,7 +118,7 @@ resource "terraform_data" "k8s-kubeadm_init_token_join_node_03_resource" {
       rm -rvf ${path.module}/scripts/k8s-kubeadm_init_token_join.sh
       echo "${var.vm_rsa_ssh_key_private}" > ./.robot_id_rsa_node.key
       chmod 600 ./.robot_id_rsa_node.key
-      ssh robot@${var.masters[0].address} -o StrictHostKeyChecking=no -i ./.robot_id_rsa_node.key "sudo kubeadm token create --print-join-command" > ${path.module}/scripts/k8s-kubeadm_init_token_join.sh
+      ssh robot@${var.k8s_api_endpoint_ip} -o StrictHostKeyChecking=no -i ./.robot_id_rsa_node.key "sudo kubeadm token create --print-join-command" > ${path.module}/scripts/k8s-kubeadm_init_token_join.sh
       rm -rvf ./.robot_id_rsa_node.key
     EOF
   }

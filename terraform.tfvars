@@ -69,6 +69,8 @@ global_nodes_dns_address = "10.200.0.1"
 global_pods_address_mask = "10.244.0.0"
 #Nodes mask in CIDR format, default 16
 global_pods_mask_cidr = 16
+#IP address endpoint of Kubernetes cluster
+global_k8s_api_endpoint_ip = "10.200.0.10"
 #Need to deploy HA cluster - if true (count = 3) else (count = 1)
 #Count for VM master node
 #need minimal 3 for Kubernetes etcd и controlplane ( 3 для HA)

@@ -45,6 +45,7 @@ variable "global_master_node_high_availability" {
 variable "global_version_containerd" {}
 variable "global_version_runc" {}
 variable "global_version_cni-plugin" {}
+variable "global_k8s_api_endpoint_ip" {}
 locals {
   vm_rsa_ssh_key_public    = module.infrastructure.vm_rsa_ssh_key_public
   vm_rsa_ssh_key_private   = module.infrastructure.vm_rsa_ssh_key_private

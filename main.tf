@@ -44,6 +44,7 @@ module "kubernetes" {
   vm_rsa_ssh_key_public    = local.vm_rsa_ssh_key_public
   vm_rsa_ssh_key_private   = local.vm_rsa_ssh_key_private
   master_count             = var.global_master_node_high_availability == true ? 3 : 1
+  k8s_api_endpoint_ip      = var.global_k8s_api_endpoint_ip
   masters = module.infrastructure.masters
   nodes = module.infrastructure.nodes
   pods_address_mask       = var.global_pods_address_mask

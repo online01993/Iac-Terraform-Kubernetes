@@ -39,3 +39,7 @@ variable "pods_mask_cidr" {
   #default = 16
   type = string
 }
+variable "k8s_api_endpoint_ip" {
+  #default = 16
+  type = string
+}
