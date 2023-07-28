@@ -1,5 +1,5 @@
 #!/bin/bash -xe
-#04-k8s-kubeadm-join_nodes.sh.tpl
+#04-k8s-kubeadm-join_nodes.sh
 
 
 set -o errexit
@@ -14,6 +14,7 @@ while [ ! -f /var/lib/cloud/instance/01-k8s-base-setup ]; do
   echo -e "\033[1;36mWaiting for 01-k8s-base-setup..."
   sleep 10
 done
+touch /tmp/kubeadm_cmd.log
 echo ${kubeadm-join_string} > /tmp/kubeadm_cmd.log
 sudo bash -c '${kubeadm-join_string} &> /tmp/kubeadm.log'
 sudo bash -c 'echo `date` > /var/lib/cloud/instance/04-k8s-kubeadm-join_nodes'
