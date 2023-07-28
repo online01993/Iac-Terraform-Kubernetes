@@ -47,6 +47,7 @@ module "kubernetes" {
   k8s_api_endpoint_ip      = var.global_k8s_api_endpoint_ip
   masters = module.infrastructure.masters
   nodes = module.infrastructure.nodes
+  master_node_address_mask = var.global_master_node_address_mask
   pods_address_mask       = var.global_pods_address_mask
   pods_mask_cidr           = var.global_pods_mask_cidr
   version_containerd = var.global_version_containerd

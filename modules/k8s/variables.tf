@@ -31,6 +31,10 @@ variable "version_runc" {
 variable "version_cni-plugin" {
   type = string
 }
+variable "master_node_address_mask" {
+  #default = 10.244.0.
+  type = string
+}
 variable "pods_address_mask" {
   #default = 10.244.0.
   type = string

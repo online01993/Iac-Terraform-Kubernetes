@@ -14,6 +14,124 @@ while [ ! -f /var/lib/cloud/instance/01-k8s-base-setup ]; do
   echo -e "\033[1;36mWaiting for 01-k8s-base-setup..."
   sleep 10
 done
+
+#Enabling keepalived
+sudo bash -c 'cat <<EOF > /etc/keepalived/keepalived.conf
+# File: /etc/keepalived/keepalived.conf
+
+global_defs {
+    enable_script_security
+    script_user nobody
+}
+
+vrrp_script check_apiserver {
+  script "/etc/keepalived/check_apiserver.sh"
+  interval 3
+}
+
+vrrp_instance VI_1 {
+    state BACKUP
+    interface ens33
+    virtual_router_id 5
+    priority 100
+    advert_int 1
+    nopreempt
+    authentication {
+        auth_type PASS
+        auth_pass ZqSj#f1G
+    }
+    virtual_ipaddress {
+        ${k8s_api_endpoint_ip}
+    }
+    track_script {
+        check_apiserver
+    }
+}
+EOF'
+sudo bash -c 'cat <<EOF > /etc/keepalived/check_apiserver.sh
+#!/bin/sh
+# File: /etc/keepalived/check_apiserver.sh
+
+APISERVER_VIP=${k8s_api_endpoint_ip}
+APISERVER_DEST_PORT=8888
+PROTO=http
+
+errorExit() {
+    echo "*** $*" 1>&2
+    exit 1
+}
+
+curl --silent --max-time 2 --insecure "$PROTO"://localhost:"$APISERVER_DEST_PORT"/ -o /dev/null || errorExit "Error GET "$PROTO"://localhost:"$APISERVER_DEST_PORT"/"
+if ip addr | grep -q "$APISERVER_VIP"; then
+    curl --silent --max-time 2 --insecure "$PROTO"://"$APISERVER_VIP":"$APISERVER_DEST_PORT"/ -o /dev/null || errorExit "Error GET "$PROTO"://"$APISERVER_VIP":"$APISERVER_DEST_PORT"/"
+fi
+EOF'
+sudo bash -c 'chmod +x /etc/keepalived/check_apiserver.sh'
+sudo bash -c 'systemctl enable keepalived'
+sudo bash -c 'systemctl start keepalived'
+
+#Enabling haproxy
+sudo bash -c 'cat <<EOF > /etc/haproxy/haproxy.cfg
+# File: /etc/haproxy/haproxy.cfg
+#---------------------------------------------------------------------
+# Global settings
+#---------------------------------------------------------------------
+global
+    log /dev/log local0
+    log /dev/log local1 notice
+    daemon
+
+#---------------------------------------------------------------------
+# common defaults that all the 'listen' and 'backend' sections will
+# use if not designated in their block
+#---------------------------------------------------------------------
+defaults
+    mode                    http
+    log                     global
+    option                  httplog
+    option                  dontlognull
+    option http-server-close
+    option forwardfor       except 127.0.0.0/8
+    option                  redispatch
+    retries                 1
+    timeout http-request    10s
+    timeout queue           20s
+    timeout connect         5s
+    timeout client          20s
+    timeout server          20s
+    timeout http-keep-alive 10s
+    timeout check           10s
+
+#---------------------------------------------------------------------
+# apiserver frontend which proxys to the control plane nodes
+#---------------------------------------------------------------------
+frontend apiserver
+    bind *:8888
+    mode tcp
+    option tcplog
+    default_backend apiserver
+
+#---------------------------------------------------------------------
+# round robin balancing for apiserver
+#---------------------------------------------------------------------
+backend apiserver
+    option httpchk GET /healthz
+    http-check expect status 200
+    mode tcp
+    option ssl-hello-chk
+    balance     roundrobin
+EOF'
+i=0
+j=10
+while [ $i -le ${master_count} ]
+do
+        ((j=j+1))
+		sudo bash -c 'echo "        server node1 ${master_network_mask}"$j":6443 check" >> /etc/haproxy/haproxy.cfg'
+        ((i++))
+done
+sudo bash -c 'systemctl enable haproxy'
+sudo bash -c 'systemctl restart haproxy'
+#Enabling k8s with kubeadm
 if [[ ${master_count} -eq 1 && ${itterator} -eq 0 ]] || [[ ${master_count} -gt 1 && ${itterator} -eq 0 ]]
 then
 	mkdir -p "$HOME"/.kube
