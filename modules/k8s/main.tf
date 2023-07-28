@@ -127,7 +127,7 @@ resource "terraform_data" "k8s-kubeadm_init_token_join_node_03_resource" {
     EOF
   }
 }
-data "local_sensitive_file" "kubeadm_token_node_file" {
+data "local_file" "kubeadm_token_node_file" {
   depends_on = [ 
       terraform_data.k8s-kubeadm_init_token_join_node_03_resource 
   ]
@@ -170,7 +170,7 @@ resource "terraform_data" "k8s-kubeadm-join_nodes_04_resource" {
   provisioner "file" {
     destination = "/tmp/04-k8s-kubeadm-join_nodes.sh"
     content = templatefile("${path.module}/scripts/04-k8s-kubeadm-join_nodes.sh.tpl", {
-        kubeadm-join_string = "${data.local_sensitive_file.kubeadm_token_node_file.content}"        
+        kubeadm-join_string = "${data.local_file.kubeadm_token_node_file.content}"        
         itterator = each.value.id
     })
   } 
@@ -178,7 +178,7 @@ resource "terraform_data" "k8s-kubeadm-join_nodes_04_resource" {
     inline = [
       "chmod +x /tmp/04-k8s-kubeadm-join_nodes.sh",
       "/tmp/04-k8s-kubeadm-join_nodes.sh",
-      #"rm -rf /tmp/04-k8s-kubeadm-join_nodes.sh",
+      "ls /tmp/04-k8s-kubeadm-join_nodes.sh",
     ]
   }
 }
