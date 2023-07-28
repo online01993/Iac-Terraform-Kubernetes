@@ -18,10 +18,10 @@ if [[ ${master_count} -eq 1 ]] && [[ ${itterator} -eq 0 ]]
 then
 	mkdir -p "$HOME"/.kube
 	sudo bash -c 'kubeadm init --pod-network-cidr=${pod-network-cidr}'
-	sudo bash -c 'echo "export KUBECONFIG="$HOME"/.kube/config" > /etc/environment'
-	sudo bash -c 'export KUBECONFIG="$HOME"/.kube/config'
-	sudo bash -c 'cp -i /etc/kubernetes/admin.conf "$HOME"/.kube/config'
-	sudo bash -c 'chown "$(id -u)":"$(id -g)" "$HOME"/.kube/config'
+	sudo --preserve-env=HOME bash -c 'echo "export KUBECONFIG="$HOME"/.kube/config" > /etc/environment'
+	sudo --preserve-env=HOME bash -c 'export KUBECONFIG="$HOME"/.kube/config'
+	sudo --preserve-env=HOME bash -c 'cp -f /etc/kubernetes/admin.conf "$HOME"/.kube/config'
+	sudo chown "$(id -u)":"$(id -g)" "$HOME"/.kube/config
 	kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml &> /tmp/kubectl.log
 	sudo bash -c 'crictl --runtime-endpoint unix:///var/run/containerd/containerd.sock version'
 	sudo bash -c 'ctr images pull docker.io/library/hello-world:latest'
