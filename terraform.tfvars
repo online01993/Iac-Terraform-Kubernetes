@@ -93,7 +93,7 @@ global_master_cpu_count = 2
 #Count for CPU VM worker node #Kubernetes minimal 2
 global_vm_cpu_count = 2
 #Count for MEM VM master node #Kubernetes minimal 2
-global_master_memory_size_gb = 3
+global_master_memory_size_gb = 2
 #Count for CPU VM worker node #Kubernetes minimal 2
 global_vm_memory_size_gb = 2
 #Lables for VM master node
