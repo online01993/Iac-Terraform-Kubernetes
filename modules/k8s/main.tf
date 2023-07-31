@@ -52,7 +52,7 @@ resource "terraform_data" "k8s-base-setup_01_resource_nodes" {
 resource "random_password" "k8s-vrrp_random_pass_resource" {
   length           = 12
   special          = false
-  number           = true
+  numeric           = true
 }
 resource "terraform_data" "k8s-kubeadm_init_02_resource" {
   depends_on = [
@@ -146,6 +146,10 @@ data "local_sensitive_file" "kubeadm_token_node_file" {
   filename = "${path.module}/scripts/k8s-kubeadm_init_token_join.sh"
 }
 resource "terraform_data" "k8s-kubeadm-join_masters_04_resource" {
+  depends_on = [
+    terraform_data.k8s-kubeadm_init_02_resource
+    local_sensitive_file.kubeadm_token_master_file
+  ]
   #for_each = module.infrastructure.masters
   for_each = { for i in var.masters : i.id => i }
   connection {
@@ -171,6 +175,10 @@ resource "terraform_data" "k8s-kubeadm-join_masters_04_resource" {
   }
 }
 resource "terraform_data" "k8s-kubeadm-join_nodes_04_resource" {
+  depends_on = [
+    terraform_data.k8s-kubeadm_init_02_resource
+    local_sensitive_file.kubeadm_token_node_file
+  ]
   #for_each = module.infrastructure.nodes
   for_each = { for i in var.nodes : i.id => i }
   connection {
