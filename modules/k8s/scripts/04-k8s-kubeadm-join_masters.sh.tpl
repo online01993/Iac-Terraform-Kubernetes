@@ -25,15 +25,15 @@ then
     exit 0
 elif [[ ${master_count} -eq 3 ]] && [[ ${itterator} -gt 0 ]]
 then
-	#wait base init-kubeadm
-	sleep 30
+	#wait base init-kubeadm on first master
+	sleep 10
 	sudo bash -c '${kubeadm-join_string}'
 	sudo bash -c 'echo `date` > /var/lib/cloud/instance/04-k8s-kubeadm-join_masters'
 	sudo bash -c 'echo "K8s adding current node ${master_count} as control plane master" >> /var/lib/cloud/instance/04-k8s-kubeadm-join_masters'
 elif [[ ${master_count} -gt 3 ]]
 then
-    #wait base init-kubeadm
-	sleep 30
+    #wait base init-kubeadm on first master
+	sleep 10
 	sudo bash -c '${kubeadm-join_string}'
 	sudo bash -c 'echo `date` > /var/lib/cloud/instance/04-k8s-kubeadm-join_masters'
 	sudo bash -c 'echo "K8s adding current node ${master_count} as control plane master" >> /var/lib/cloud/instance/04-k8s-kubeadm-join_masters'
