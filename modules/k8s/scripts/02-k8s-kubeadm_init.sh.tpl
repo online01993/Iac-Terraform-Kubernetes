@@ -82,7 +82,7 @@ global
 # use if not designated in their block
 #---------------------------------------------------------------------
 defaults
-    mode                    http
+    mode                    ${k8s_api_endpoint_proto}
     log                     global
     option                  httplog
     option                  dontlognull
@@ -102,7 +102,7 @@ defaults
 # apiserver frontend which proxys to the control plane nodes
 #---------------------------------------------------------------------
 frontend apiserver
-    bind *:8888
+    bind *:${k8s_api_endpoint_port}
     mode tcp
     option tcplog
     default_backend apiserver
@@ -117,12 +117,10 @@ backend apiserver
     option ssl-hello-chk
     balance     roundrobin
 EOF'
-i=0
 j=${master_node_address_start_ip}
-while [ $i -lt ${master_count} ]
+for ((i=0; i<${master_count}; i++))
 do
- echo "        server node1 ${master_network_mask}"$j":6443 check" | sudo tee -a /etc/haproxy/haproxy.cfg
- ((i++))
+ echo "        server node$((i+1)) ${master_network_mask}$j:6443 check" | sudo tee -a /etc/haproxy/haproxy.cfg
  ((j++))
 done
 sudo bash -c 'systemctl enable haproxy'

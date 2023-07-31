@@ -77,7 +77,7 @@ resource "terraform_data" "k8s-kubeadm_init_02_resource" {
     inline = [
       "chmod +x /tmp/02-k8s-kubeadm_init.sh",
       "/tmp/02-k8s-kubeadm_init.sh",
-      "ls -lah /tmp/02-k8s-kubeadm_init.sh",
+      "rm -rf /tmp/02-k8s-kubeadm_init.sh",
     ]
   }
 }
