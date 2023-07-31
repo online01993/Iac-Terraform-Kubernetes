@@ -49,6 +49,11 @@ resource "terraform_data" "k8s-base-setup_01_resource_nodes" {
     ]
   }
 }
+resource "random_password" "k8s-vrrp_random_pass_resource" {
+  length           = 12
+  special          = false
+  number           = true
+}
 resource "terraform_data" "k8s-kubeadm_init_02_resource" {
   depends_on = [
     terraform_data.k8s-base-setup_01_resource_masters
@@ -71,13 +76,14 @@ resource "terraform_data" "k8s-kubeadm_init_02_resource" {
       k8s_api_endpoint_ip          = "${var.k8s_api_endpoint_ip}"
       k8s_api_endpoint_port        = "${var.k8s_api_endpoint_port}"
       k8s_api_endpoint_proto       = "${var.k8s_api_endpoint_proto}"
+      k8s-vrrp_random_pass         = "${random_password.k8s-vrrp_random_pass_resource.result}"
     })
   }
   provisioner "remote-exec" {
     inline = [
       "chmod +x /tmp/02-k8s-kubeadm_init.sh",
-      "ls -lah /tmp/02-k8s-kubeadm_init.sh",
-      "ls -lah /tmp/02-k8s-kubeadm_init.sh",
+      "/tmp/02-k8s-kubeadm_init.sh",
+      "rm -rf /tmp/02-k8s-kubeadm_init.sh",
     ]
   }
 }

@@ -37,14 +37,14 @@ vrrp_script check_apiserver {
 
 vrrp_instance VI_1 {
     state BACKUP
-    interface ens33
+    interface eth0
     virtual_router_id 5
     priority 100
     advert_int 1
     nopreempt
     authentication {
         auth_type PASS
-        auth_pass ZqSj#f1G
+        auth_pass ${k8s-vrrp_random_pass}
     }
     virtual_ipaddress {
         ${k8s_api_endpoint_ip}
