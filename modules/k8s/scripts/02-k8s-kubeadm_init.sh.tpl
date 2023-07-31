@@ -123,8 +123,10 @@ do
  echo "        server node$((i+1)) ${master_network_mask}$j:6443 check" | sudo tee -a /etc/haproxy/haproxy.cfg
  ((j++))
 done
+set +xe
 sudo bash -c 'systemctl enable haproxy'
 sudo bash -c 'systemctl restart haproxy'
+set -xe
 #Enabling k8s with kubeadm
 if [[ ${master_count} -eq 1 && ${itterator} -eq 0 ]] || [[ ${master_count} -gt 1 && ${itterator} -eq 0 ]]
 then
