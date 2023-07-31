@@ -125,8 +125,8 @@ i=0
 j=10
 while [ $i -le ${master_count} ]
 do
-        ((j=j+1))
-		sudo bash -c 'echo "        server node1 ${master_network_mask}"$j":6443 check" >> /etc/haproxy/haproxy.cfg'
+        ((j++))
+		sudo -E bash -c 'echo "        server node1 ${master_network_mask}"$j":6443 check" >> /etc/haproxy/haproxy.cfg'
         ((i++))
 done
 sudo bash -c 'systemctl enable haproxy'
