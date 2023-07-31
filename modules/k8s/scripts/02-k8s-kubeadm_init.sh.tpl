@@ -14,6 +14,12 @@ while [ ! -f /var/lib/cloud/instance/01-k8s-base-setup ]; do
   echo -e "\033[1;36mWaiting for 01-k8s-base-setup..."
   sleep 10
 done
+#Enabling virtual IP environment
+sudo bash -c 'cat <<EOF > /etc/sysctl.d/12-haproxy_allow_virtual_ip.conf
+net.ipv4.ip_nonlocal_bind=1
+EOF'
+sudo chown root:root /etc/sysctl.d/12-haproxy_allow_virtual_ip.conf && sudo chmod 644 /etc/sysctl.d/12-haproxy_allow_virtual_ip.conf
+sudo sysctl --system
 
 #Enabling keepalived
 sudo bash -c 'cat <<EOF > /etc/keepalived/keepalived.conf
