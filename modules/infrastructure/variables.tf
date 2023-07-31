@@ -10,9 +10,17 @@ variable "master_node_address_mask" {
   #default = 10.244.0.
   type = string
 }
+variable "master_node_address_start_ip" {
+  #default = 11
+  type = number
+}
 variable "worker_node_address_mask" {
   #default = 10.244.0.
   type = string
+}
+variable "worker_node_address_start_ip" {
+  #default = 20
+  type = number
 }
 variable "nodes_mask" {
   #default = 255.255.0.0

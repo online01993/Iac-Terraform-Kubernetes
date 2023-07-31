@@ -29,7 +29,9 @@ variable "global_dns_server" {}
 variable "global_dns_zone" {}
 variable "global_dns_sub_zone" {}
 variable "global_master_node_address_mask" {}
+variable "global_master_node_address_start_ip" {}
 variable "global_worker_node_address_mask" {}
+variable "global_worker_node_address_start_ip" {}
 variable "global_nodes_mask" {}
 variable "global_nodes_gateway" {}
 variable "global_nodes_dns_address" {}
@@ -46,6 +48,9 @@ variable "global_version_containerd" {}
 variable "global_version_runc" {}
 variable "global_version_cni-plugin" {}
 variable "global_k8s_api_endpoint_ip" {}
+variable "global_k8s_api_endpoint_port" {}
+variable "global_k8s_api_endpoint_proto" {}
+
 locals {
   vm_rsa_ssh_key_public    = module.infrastructure.vm_rsa_ssh_key_public
   vm_rsa_ssh_key_private   = module.infrastructure.vm_rsa_ssh_key_private

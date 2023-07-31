@@ -57,6 +57,10 @@ global_master_node_network_dhcp = false
 global_worker_node_network_dhcp = false
 #Master node IP address mask
 global_master_node_address_mask = "10.200.0."
+#Master node start IP (for static network configure masters AND configure HAProxy for K8S backends)
+global_master_node_address_start_ip = 11
+#Worker node start IP (for static network configure nodes)
+global_worker_node_address_start_ip = 20
 #Worker node IP address mask
 global_worker_node_address_mask = "10.200.0."
 #Nodes mask, default 255.255.255.0
@@ -69,8 +73,6 @@ global_nodes_dns_address = "10.200.0.1"
 global_pods_address_mask = "10.244.0.0"
 #Nodes mask in CIDR format, default 16
 global_pods_mask_cidr = 16
-#IP address endpoint of Kubernetes cluster
-global_k8s_api_endpoint_ip = "10.200.0.10"
 #Need to deploy HA cluster - if true (count = 3) else (count = 1)
 #Count for VM master node
 #need minimal 3 for Kubernetes etcd и controlplane ( 3 для HA)
@@ -143,3 +145,9 @@ global_version_runc = "1.1.7"
 #CNI network plugin
 #https://github.com/containernetworking/plugins/releases/download
 global_version_cni-plugin = "1.3.0"
+#IP address endpoint of Kubernetes cluster
+global_k8s_api_endpoint_ip = "10.200.0.10"
+#IP PORT endpoint of Kubernetes cluster via VRRP_HAProxy
+global_k8s_api_endpoint_port = "8888"
+#IP PROTO endpoint of Kubernetes cluster via VRRP_HAProxy (http or https)
+global_k8s_api_endpoint_proto = "http"

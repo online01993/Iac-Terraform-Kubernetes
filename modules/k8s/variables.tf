@@ -35,6 +35,10 @@ variable "master_node_address_mask" {
   #default = 10.244.0.
   type = string
 }
+variable "master_node_address_start_ip" {
+  #default = 11
+  type = number
+}
 variable "pods_address_mask" {
   #default = 10.244.0.
   type = string
@@ -45,5 +49,13 @@ variable "pods_mask_cidr" {
 }
 variable "k8s_api_endpoint_ip" {
   #default = 16
+  type = string
+}
+variable "k8s_api_endpoint_port" {
+  #default = 8888
+  type = string
+}
+variable "k8s_api_endpoint_proto" {
+  #default = http
   type = string
 }

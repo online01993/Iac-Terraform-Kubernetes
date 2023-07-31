@@ -52,18 +52,14 @@ sudo bash -c 'cat <<EOF > /etc/keepalived/check_apiserver.sh
 #!/bin/sh
 # File: /etc/keepalived/check_apiserver.sh
 
-APISERVER_VIP=${k8s_api_endpoint_ip}
-APISERVER_DEST_PORT=8888
-PROTO=http
-
 errorExit() {
     echo "*** $*" 1>&2
     exit 1
 }
 
-curl --silent --max-time 2 --insecure "$PROTO"://localhost:"$APISERVER_DEST_PORT"/ -o /dev/null || errorExit "Error GET "$PROTO"://localhost:"$APISERVER_DEST_PORT"/"
-if ip addr | grep -q "$APISERVER_VIP"; then
-    curl --silent --max-time 2 --insecure "$PROTO"://"$APISERVER_VIP":"$APISERVER_DEST_PORT"/ -o /dev/null || errorExit "Error GET "$PROTO"://"$APISERVER_VIP":"$APISERVER_DEST_PORT"/"
+curl --silent --max-time 2 --insecure ${k8s_api_endpoint_proto}://localhost:${k8s_api_endpoint_port}/ -o /dev/null || errorExit "Error GET ${k8s_api_endpoint_proto}://localhost:${k8s_api_endpoint_port}/"
+if ip addr | grep -q "${k8s_api_endpoint_ip}"; then
+    curl --silent --max-time 2 --insecure ${k8s_api_endpoint_proto}://${k8s_api_endpoint_ip}:${k8s_api_endpoint_port}/ -o /dev/null || errorExit "Error GET ${k8s_api_endpoint_proto}://${k8s_api_endpoint_ip}:${k8s_api_endpoint_port}/"
 fi
 EOF'
 sudo bash -c 'chmod +x /etc/keepalived/check_apiserver.sh'
@@ -122,12 +118,12 @@ backend apiserver
     balance     roundrobin
 EOF'
 i=0
-j=10
-while [ $i -le ${master_count} ]
+j=${master_node_address_start_ip}
+while [ $i -lt ${master_count} ]
 do
-        ((j++))
-		sudo -E bash -c 'echo "        server node1 ${master_network_mask}"$j":6443 check" >> /etc/haproxy/haproxy.cfg'
-        ((i++))
+ echo "        server node1 ${master_network_mask}"$j":6443 check" | sudo tee -a /etc/haproxy/haproxy.cfg
+ ((i++))
+ ((j++))
 done
 sudo bash -c 'systemctl enable haproxy'
 sudo bash -c 'systemctl restart haproxy'

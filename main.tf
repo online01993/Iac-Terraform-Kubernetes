@@ -31,7 +31,9 @@ module "infrastructure" {
   dns_zone                 = var.global_dns_zone
   dns_sub_zone             = var.global_dns_sub_zone
   master_node_address_mask = var.global_master_node_address_mask
+  master_node_address_start_ip = var.global_master_node_address_start_ip
   worker_node_address_mask = var.global_worker_node_address_mask
+  worker_node_address_start_ip = var.global_worker_node_address_start_ip
   nodes_mask               = var.global_nodes_mask
   nodes_gateway            = var.global_nodes_gateway
   nodes_dns_address        = var.global_nodes_dns_address
@@ -44,7 +46,10 @@ module "kubernetes" {
   vm_rsa_ssh_key_public    = local.vm_rsa_ssh_key_public
   vm_rsa_ssh_key_private   = local.vm_rsa_ssh_key_private
   master_count             = var.global_master_node_high_availability == true ? 3 : 1
+  master_node_address_start_ip = var.global_master_node_address_start_ip
   k8s_api_endpoint_ip      = var.global_k8s_api_endpoint_ip
+  k8s_api_endpoint_port    = var.global_k8s_api_endpoint_port
+  k8s_api_endpoint_proto   = var.global_k8s_api_endpoint_proto
   masters = module.infrastructure.masters
   nodes = module.infrastructure.nodes
   master_node_address_mask = var.global_master_node_address_mask
