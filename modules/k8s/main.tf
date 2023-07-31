@@ -1,21 +1,21 @@
 #main.tf
 resource "terraform_data" "k8s-base-setup_01_resource_masters" {
   #for_each = module.infrastructure.masters
-  for_each = { for i in var.masters: i.id => i }
+  for_each = { for i in var.masters : i.id => i }
   connection {
-      type     = "ssh"
-      user     = "robot"
-      private_key = "${var.vm_rsa_ssh_key_private}"
-	  host     = each.value.address
-    }
+    type        = "ssh"
+    user        = "robot"
+    private_key = var.vm_rsa_ssh_key_private
+    host        = each.value.address
+  }
   provisioner "file" {
     destination = "/tmp/01-k8s-base-setup.sh"
     content = templatefile("${path.module}/scripts/01-k8s-base-setup.sh.tpl", {
-        version_containerd = "${var.version_containerd}"
-        version_runc = "${var.version_runc}"
-        version_cni-plugin = "${var.version_cni-plugin}"
+      version_containerd = "${var.version_containerd}"
+      version_runc       = "${var.version_runc}"
+      version_cni-plugin = "${var.version_cni-plugin}"
     })
-  } 
+  }
   provisioner "remote-exec" {
     inline = [
       "chmod +x /tmp/01-k8s-base-setup.sh",
@@ -26,21 +26,21 @@ resource "terraform_data" "k8s-base-setup_01_resource_masters" {
 }
 resource "terraform_data" "k8s-base-setup_01_resource_nodes" {
   #for_each = module.infrastructure.nodes
-  for_each = { for i in var.nodes: i.id => i }
+  for_each = { for i in var.nodes : i.id => i }
   connection {
-      type     = "ssh"
-      user     = "robot"
-      private_key = "${var.vm_rsa_ssh_key_private}"
-	  host     = each.value.address
-    }
+    type        = "ssh"
+    user        = "robot"
+    private_key = var.vm_rsa_ssh_key_private
+    host        = each.value.address
+  }
   provisioner "file" {
     destination = "/tmp/01-k8s-base-setup.sh"
     content = templatefile("${path.module}/scripts/01-k8s-base-setup.sh.tpl", {
-        version_containerd = "${var.version_containerd}"
-        version_runc = "${var.version_runc}"
-        version_cni-plugin = "${var.version_cni-plugin}"
+      version_containerd = "${var.version_containerd}"
+      version_runc       = "${var.version_runc}"
+      version_cni-plugin = "${var.version_cni-plugin}"
     })
-  } 
+  }
   provisioner "remote-exec" {
     inline = [
       "chmod +x /tmp/01-k8s-base-setup.sh",
@@ -50,29 +50,29 @@ resource "terraform_data" "k8s-base-setup_01_resource_nodes" {
   }
 }
 resource "terraform_data" "k8s-kubeadm_init_02_resource" {
-  depends_on = [ 
-      terraform_data.k8s-base-setup_01_resource_masters 
+  depends_on = [
+    terraform_data.k8s-base-setup_01_resource_masters
   ]
-  for_each = { for i in var.masters: i.id => i }
+  for_each = { for i in var.masters : i.id => i }
   connection {
-      type     = "ssh"
-      user     = "robot"
-      private_key = "${var.vm_rsa_ssh_key_private}"
-      host     = each.value.address
-    }
+    type        = "ssh"
+    user        = "robot"
+    private_key = var.vm_rsa_ssh_key_private
+    host        = each.value.address
+  }
   provisioner "file" {
     destination = "/tmp/02-k8s-kubeadm_init.sh"
     content = templatefile("${path.module}/scripts/02-k8s-kubeadm_init.sh.tpl", {
-        itterator             = each.value.id
-        master_count          = "${var.master_count}"
-        master_network_mask   = "${var.master_node_address_mask}"
-        master_node_address_start_ip = "${var.master_node_address_start_ip}"
-        pod-network-cidr      = "${var.pods_address_mask}/${var.pods_mask_cidr}"
-        k8s_api_endpoint_ip   = "${var.k8s_api_endpoint_ip}"
-        k8s_api_endpoint_port   = "${var.k8s_api_endpoint_port}"
-        k8s_api_endpoint_proto   = "${var.k8s_api_endpoint_proto}"
+      itterator                    = each.value.id
+      master_count                 = "${var.master_count}"
+      master_network_mask          = "${var.master_node_address_mask}"
+      master_node_address_start_ip = "${var.master_node_address_start_ip}"
+      pod-network-cidr             = "${var.pods_address_mask}/${var.pods_mask_cidr}"
+      k8s_api_endpoint_ip          = "${var.k8s_api_endpoint_ip}"
+      k8s_api_endpoint_port        = "${var.k8s_api_endpoint_port}"
+      k8s_api_endpoint_proto       = "${var.k8s_api_endpoint_proto}"
     })
-  } 
+  }
   provisioner "remote-exec" {
     inline = [
       "chmod +x /tmp/02-k8s-kubeadm_init.sh",
@@ -85,8 +85,8 @@ resource "terraform_data" "k8s-kubeadm_init_token_join_master_03_resource" {
   triggers_replace = [
     terraform_data.k8s-base-setup_01_resource_masters
   ]
-  depends_on = [ 
-      terraform_data.k8s-kubeadm_init_02_resource 
+  depends_on = [
+    terraform_data.k8s-kubeadm_init_02_resource
   ]
   provisioner "local-exec" {
     command = <<EOF
@@ -105,8 +105,8 @@ resource "terraform_data" "k8s-kubeadm_init_token_join_master_03_resource" {
   }
 }
 data "local_sensitive_file" "kubeadm_token_master_file" {
-  depends_on = [ 
-      terraform_data.k8s-kubeadm_init_token_join_master_03_resource 
+  depends_on = [
+    terraform_data.k8s-kubeadm_init_token_join_master_03_resource
   ]
   filename = "${path.module}/scripts/k8s-kubeadm_init_token_master_join.sh"
 }
@@ -114,8 +114,8 @@ resource "terraform_data" "k8s-kubeadm_init_token_join_node_03_resource" {
   triggers_replace = [
     terraform_data.k8s-base-setup_01_resource_nodes
   ]
-  depends_on = [ 
-      terraform_data.k8s-kubeadm_init_02_resource 
+  depends_on = [
+    terraform_data.k8s-kubeadm_init_02_resource
   ]
   provisioner "local-exec" {
     command = <<EOF
@@ -134,28 +134,28 @@ resource "terraform_data" "k8s-kubeadm_init_token_join_node_03_resource" {
   }
 }
 data "local_sensitive_file" "kubeadm_token_node_file" {
-  depends_on = [ 
-      terraform_data.k8s-kubeadm_init_token_join_node_03_resource 
+  depends_on = [
+    terraform_data.k8s-kubeadm_init_token_join_node_03_resource
   ]
   filename = "${path.module}/scripts/k8s-kubeadm_init_token_join.sh"
 }
 resource "terraform_data" "k8s-kubeadm-join_masters_04_resource" {
   #for_each = module.infrastructure.masters
-  for_each = { for i in var.masters: i.id => i }
+  for_each = { for i in var.masters : i.id => i }
   connection {
-      type     = "ssh"
-      user     = "robot"
-      private_key = "${var.vm_rsa_ssh_key_private}"
-	  host     = each.value.address
-    }
+    type        = "ssh"
+    user        = "robot"
+    private_key = var.vm_rsa_ssh_key_private
+    host        = each.value.address
+  }
   provisioner "file" {
     destination = "/tmp/04-k8s-kubeadm-join_masters.sh"
     content = templatefile("${path.module}/scripts/04-k8s-kubeadm-join_masters.sh.tpl", {
-        kubeadm-join_string = "${data.local_sensitive_file.kubeadm_token_master_file.content}"
-        master_count = "${var.master_count}"
-        itterator = each.value.id
+      kubeadm-join_string = "${data.local_sensitive_file.kubeadm_token_master_file.content}"
+      master_count        = "${var.master_count}"
+      itterator           = each.value.id
     })
-  } 
+  }
   provisioner "remote-exec" {
     inline = [
       "chmod +x /tmp/04-k8s-kubeadm-join_masters.sh",
@@ -166,20 +166,20 @@ resource "terraform_data" "k8s-kubeadm-join_masters_04_resource" {
 }
 resource "terraform_data" "k8s-kubeadm-join_nodes_04_resource" {
   #for_each = module.infrastructure.nodes
-  for_each = { for i in var.nodes: i.id => i }
+  for_each = { for i in var.nodes : i.id => i }
   connection {
-      type     = "ssh"
-      user     = "robot"
-      private_key = "${var.vm_rsa_ssh_key_private}"
-	  host     = each.value.address
-    }
+    type        = "ssh"
+    user        = "robot"
+    private_key = var.vm_rsa_ssh_key_private
+    host        = each.value.address
+  }
   provisioner "file" {
     destination = "/tmp/04-k8s-kubeadm-join_nodes.sh"
     content = templatefile("${path.module}/scripts/04-k8s-kubeadm-join_nodes.sh.tpl", {
-        kubeadm-join_string = "${data.local_sensitive_file.kubeadm_token_node_file.content}"        
-        itterator = each.value.id
+      kubeadm-join_string = "${data.local_sensitive_file.kubeadm_token_node_file.content}"
+      itterator           = each.value.id
     })
-  } 
+  }
   provisioner "remote-exec" {
     inline = [
       "chmod +x /tmp/04-k8s-kubeadm-join_nodes.sh",

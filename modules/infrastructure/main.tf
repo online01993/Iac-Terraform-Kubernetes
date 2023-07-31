@@ -1,8 +1,8 @@
 #main.tf
 resource "tls_private_key" "terrafrom_generated_private_key" {
-   algorithm = "RSA"
-   rsa_bits  = 4096
-   provisioner "local-exec" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+  provisioner "local-exec" {
     command = <<EOF
       mkdir -p .ssh-robot-access/
       echo "${tls_private_key.terrafrom_generated_private_key.private_key_openssh}" > .ssh-robot-access/robot_id_rsa.key
@@ -11,7 +11,7 @@ resource "tls_private_key" "terrafrom_generated_private_key" {
       chmod 400 .ssh-robot-access/robot_id_rsa.pub
     EOF
   }
-   provisioner "local-exec" {
+  provisioner "local-exec" {
     when    = destroy
     command = <<EOF
       rm -rvf .ssh-robot-access/

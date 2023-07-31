@@ -52,6 +52,6 @@ variable "global_k8s_api_endpoint_port" {}
 variable "global_k8s_api_endpoint_proto" {}
 
 locals {
-  vm_rsa_ssh_key_public    = module.infrastructure.vm_rsa_ssh_key_public
-  vm_rsa_ssh_key_private   = module.infrastructure.vm_rsa_ssh_key_private
+  vm_rsa_ssh_key_public  = module.infrastructure.vm_rsa_ssh_key_public
+  vm_rsa_ssh_key_private = module.infrastructure.vm_rsa_ssh_key_private
 }
