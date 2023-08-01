@@ -129,16 +129,14 @@ do
  echo "        server node$((i+1)) ${master_network_mask}$j:6443 check" | sudo tee -a /etc/haproxy/haproxy.cfg
  ((j++))
 done
-set +xe
-sudo bash -c 'systemctl enable haproxy'
-sudo bash -c 'systemctl restart haproxy'
-set -xe
-#wait some time to running haproxy and keepalived
-sleep 10
 #Enabling k8s with kubeadm
 if [[ ${master_count} -eq 1 && ${itterator} -eq 0 ]] || [[ ${master_count} -gt 1 && ${itterator} -eq 0 ]]
 then
 	mkdir -p "$HOME"/.kube
+    set +xe
+    sudo bash -c 'systemctl enable haproxy'
+    sudo bash -c 'systemctl restart haproxy'
+    set -xe
 	sudo bash -c 'kubeadm init --control-plane-endpoint=${k8s_api_endpoint_ip} --apiserver-advertise-address=${k8s_api_endpoint_ip} --pod-network-cidr=${pod-network-cidr} --upload-certs > /tmp/kubeadm_init.log 2>&1'
 	sudo --preserve-env=HOME bash -c 'echo "export KUBECONFIG="$HOME"/.kube/config" > /etc/environment'
 	sudo --preserve-env=HOME bash -c 'export KUBECONFIG="$HOME"/.kube/config'
