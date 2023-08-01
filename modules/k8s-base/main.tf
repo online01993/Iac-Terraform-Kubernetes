@@ -87,6 +87,33 @@ resource "terraform_data" "k8s-kubeadm_init_02_resource" {
     ]
   }
 }
+resource "terraform_data" "k8s-kubeadm_init_02_config_get_resource" {
+  
+  depends_on = [
+    terraform_data.k8s-kubeadm_init_02_resource
+  ]
+  provisioner "local-exec" {
+    command = <<EOF
+      rm -rvf ${path.module}/scripts/k8s-kubeadm_init_02_config_file.conf
+      echo "${var.vm_rsa_ssh_key_private}" > ./.robot_id_rsa_master_config_file.key
+      chmod 600 ./.robot_id_rsa_master_config_file.key
+      ssh robot@${var.masters[0].address} -o StrictHostKeyChecking=no -i ./.robot_id_rsa_master_config_file.key "cat $HOME/.kube/config" > ${path.module}/scripts/k8s-kubeadm_init_02_config_file.conf
+      rm -rvf ./.robot_id_rsa_master_config_file.key
+    EOF
+  }
+  provisioner "local-exec" {
+    when    = destroy
+    command = <<EOF
+      rm -rvf ${path.module}/scripts/k8s-kubeadm_init_02_config_file.conf
+    EOF
+  }
+}
+data "local_sensitive_file" "k8s-kubeadm_init_02_config_file" {
+  depends_on = [
+    terraform_data.k8s-kubeadm_init_02_config_get_resource
+  ]
+  filename = "${path.module}/scripts/k8s-kubeadm_init_02_config_file.conf"
+}
 resource "terraform_data" "k8s-kubeadm_init_token_join_master_03_resource" {
   triggers_replace = [
     terraform_data.k8s-base-setup_01_resource_masters

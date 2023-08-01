@@ -40,9 +40,9 @@ module "infrastructure" {
   master_node_network_dhcp     = var.global_master_node_network_dhcp
   worker_node_network_dhcp     = var.global_worker_node_network_dhcp
 }
-module "kubernetes" {
+module "kubernetes-base" {
   depends_on                   = [module.infrastructure]
-  source                       = "./modules/k8s"
+  source                       = "./modules/k8s-base"
   vm_rsa_ssh_key_public        = local.vm_rsa_ssh_key_public
   vm_rsa_ssh_key_private       = local.vm_rsa_ssh_key_private
   master_count                 = var.global_master_node_high_availability == true ? 3 : 1
@@ -59,3 +59,13 @@ module "kubernetes" {
   version_runc                 = var.global_version_runc
   version_cni-plugin           = var.global_version_cni-plugin
 }
+module "kubernetes-services" {
+  depends_on                   = [module.kubernetes-base]
+  source                       = "./modules/k8s-services"
+  k8s_cni_hairpinMode          = var.global_k8s_cni_hairpinMode
+  k8s_cni_isDefaultGateway     = var.global_k8s_cni_isDefaultGateway
+  k8s_cni_Backend_Type         = var.global_k8s_cni_Backend_Type
+  k8s-url                      = module.kubernetes-base.k8s-url
+  k8s-endpont                  = module.kubernetes-base.k8s-endpont
+  k8s-admin_file               = module.kubernetes-base.k8s-admin_file
+}  

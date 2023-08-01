@@ -151,3 +151,6 @@ global_k8s_api_endpoint_ip = "10.200.0.10"
 global_k8s_api_endpoint_port = "8888"
 #IP PROTO endpoint of Kubernetes cluster via VRRP_HAProxy (http or https)
 global_k8s_api_endpoint_proto = "http"
+global_k8s_cni_hairpinMode = true
+global_k8s_cni_isDefaultGateway = true
+global_k8s_cni_Backend_Type = "vxlan"
