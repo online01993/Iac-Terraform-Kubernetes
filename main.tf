@@ -67,4 +67,5 @@ module "kubernetes-services" {
   k8s-url                      = module.kubernetes-base.k8s-url
   k8s-endpont                  = module.kubernetes-base.k8s-endpont
   k8s-admin_file               = module.kubernetes-base.k8s-admin_file
+  pods_mask_cidr               = "${var.global_pods_address_mask}/${var.global_pods_mask_cidr}"
 }  
