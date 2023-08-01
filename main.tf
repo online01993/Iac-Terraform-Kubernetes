@@ -60,7 +60,6 @@ module "kubernetes-base" {
   version_cni-plugin           = var.global_version_cni-plugin
 }
 module "kubernetes-services" {
-  depends_on                   = [module.kubernetes-base]
   source                       = "./modules/k8s-services"
   k8s_cni_hairpinMode          = var.global_k8s_cni_hairpinMode
   k8s_cni_isDefaultGateway     = var.global_k8s_cni_isDefaultGateway
