@@ -25,6 +25,6 @@ provider "kubectl" {
   host                    = var.k8s-url
   #cluster_ca_certificate = base64decode(var.eks_cluster_ca)
   #token                  = data.aws_eks_cluster_auth.main.token
-  load_config_file        = true
+  #load_config_file        = true
   config_path             = var.k8s-admin_file
 }
