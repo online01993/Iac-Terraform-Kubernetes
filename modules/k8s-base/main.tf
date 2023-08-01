@@ -97,7 +97,7 @@ resource "terraform_data" "k8s-kubeadm_init_02_config_get_resource" {
       rm -rvf ${path.module}/scripts/k8s-kubeadm_init_02_config_file.conf
       echo "${var.vm_rsa_ssh_key_private}" > ./.robot_id_rsa_master_config_file.key
       chmod 600 ./.robot_id_rsa_master_config_file.key
-      ssh robot@${var.masters[0].address} -o StrictHostKeyChecking=no -i ./.robot_id_rsa_master_config_file.key "cat $HOME/.kube/config" > ${path.module}/scripts/k8s-kubeadm_init_02_config_file.conf
+      ssh robot@${var.masters[0].address} -o StrictHostKeyChecking=no -i ./.robot_id_rsa_master_config_file.key "cat /home/robot/.kube/config" > ${path.module}/scripts/k8s-kubeadm_init_02_config_file.conf
       rm -rvf ./.robot_id_rsa_master_config_file.key
     EOF
   }
