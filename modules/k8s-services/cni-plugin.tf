@@ -19,7 +19,6 @@ metadata:
   labels:
     k8s-app: flannel
     pod-security.kubernetes.io/enforce: privileged
----
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
