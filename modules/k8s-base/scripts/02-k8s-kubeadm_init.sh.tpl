@@ -137,7 +137,7 @@ then
     sudo bash -c 'systemctl enable haproxy'
     sudo bash -c 'systemctl restart haproxy'
     set -xe
-	sudo bash -c 'kubeadm init --control-plane-endpoint=${k8s_api_endpoint_ip} --pod-network-cidr=${pod-network-cidr} --upload-certs > /tmp/kubeadm_init.log 2>&1'
+	sudo bash -c 'kubeadm init --control-plane-endpoint="${k8s_api_endpoint_ip}:${k8s_api_endpoint_port}" --pod-network-cidr=${pod-network-cidr} --upload-certs > /tmp/kubeadm_init.log 2>&1'
 	sudo --preserve-env=HOME bash -c 'echo "export KUBECONFIG="$HOME"/.kube/config" > /etc/environment'
 	sudo --preserve-env=HOME bash -c 'export KUBECONFIG="$HOME"/.kube/config'
 	sudo --preserve-env=HOME bash -c 'cp -f /etc/kubernetes/admin.conf "$HOME"/.kube/config'
