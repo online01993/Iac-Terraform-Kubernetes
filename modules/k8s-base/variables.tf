@@ -55,7 +55,3 @@ variable "k8s_api_endpoint_port" {
   #default = 8888
   type = string
 }
-variable "k8s_api_endpoint_proto" {
-  #default = http
-  type = string
-}

@@ -75,7 +75,6 @@ resource "terraform_data" "k8s-kubeadm_init_02_resource" {
       pod-network-cidr             = "${var.pods_address_mask}/${var.pods_mask_cidr}"
       k8s_api_endpoint_ip          = "${var.k8s_api_endpoint_ip}"
       k8s_api_endpoint_port        = "${var.k8s_api_endpoint_port}"
-      k8s_api_endpoint_proto       = "${var.k8s_api_endpoint_proto}"
       k8s-vrrp_random_pass         = "${random_password.k8s-vrrp_random_pass_resource.result}"
     })
   }

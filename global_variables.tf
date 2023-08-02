@@ -49,7 +49,6 @@ variable "global_version_runc" {}
 variable "global_version_cni-plugin" {}
 variable "global_k8s_api_endpoint_ip" {}
 variable "global_k8s_api_endpoint_port" {}
-variable "global_k8s_api_endpoint_proto" {}
 variable "global_k8s_cni_hairpinMode" {}
 variable "global_k8s_cni_isDefaultGateway" {}
 variable "global_k8s_cni_Backend_Type" {}

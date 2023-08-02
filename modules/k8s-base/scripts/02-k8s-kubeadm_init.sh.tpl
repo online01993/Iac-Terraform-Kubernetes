@@ -63,9 +63,9 @@ errorExit() {
     exit 1
 }
 
-curl --silent --max-time 2 --insecure ${k8s_api_endpoint_proto}://localhost:${k8s_api_endpoint_port}/ -o /dev/null || errorExit "Error GET ${k8s_api_endpoint_proto}://localhost:${k8s_api_endpoint_port}/"
+curl --silent --max-time 2 --insecure https://localhost:${k8s_api_endpoint_port}/ -o /dev/null || errorExit "Error GET https://localhost:${k8s_api_endpoint_port}/"
 if ip addr | grep -q "${k8s_api_endpoint_ip}"; then
-    curl --silent --max-time 2 --insecure ${k8s_api_endpoint_proto}://${k8s_api_endpoint_ip}:${k8s_api_endpoint_port}/ -o /dev/null || errorExit "Error GET ${k8s_api_endpoint_proto}://${k8s_api_endpoint_ip}:${k8s_api_endpoint_port}/"
+    curl --silent --max-time 2 --insecure https://${k8s_api_endpoint_ip}:${k8s_api_endpoint_port}/ -o /dev/null || errorExit "Error GET https://${k8s_api_endpoint_ip}:${k8s_api_endpoint_port}/"
 fi
 EOF'
 sudo bash -c 'chmod +x /etc/keepalived/check_apiserver.sh'
@@ -88,7 +88,7 @@ global
 # use if not designated in their block
 #---------------------------------------------------------------------
 defaults
-    mode                    ${k8s_api_endpoint_proto}
+    mode                    http
     log                     global
     option                  httplog
     option                  dontlognull
@@ -137,7 +137,7 @@ then
     sudo bash -c 'systemctl enable haproxy'
     sudo bash -c 'systemctl restart haproxy'
     set -xe
-	sudo bash -c 'kubeadm init --control-plane-endpoint=${k8s_api_endpoint_ip} --apiserver-advertise-address=${k8s_api_endpoint_ip} --pod-network-cidr=${pod-network-cidr} --upload-certs > /tmp/kubeadm_init.log 2>&1'
+	sudo bash -c 'kubeadm init --control-plane-endpoint=${k8s_api_endpoint_ip} --pod-network-cidr=${pod-network-cidr} --upload-certs > /tmp/kubeadm_init.log 2>&1'
 	sudo --preserve-env=HOME bash -c 'echo "export KUBECONFIG="$HOME"/.kube/config" > /etc/environment'
 	sudo --preserve-env=HOME bash -c 'export KUBECONFIG="$HOME"/.kube/config'
 	sudo --preserve-env=HOME bash -c 'cp -f /etc/kubernetes/admin.conf "$HOME"/.kube/config'

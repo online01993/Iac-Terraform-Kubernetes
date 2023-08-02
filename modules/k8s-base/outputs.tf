@@ -1,5 +1,5 @@
 output "k8s-url" {
-  value = "${var.k8s_api_endpoint_proto}://${var.k8s_api_endpoint_ip}:${var.k8s_api_endpoint_port}"
+  value = "https://${var.k8s_api_endpoint_ip}:${var.k8s_api_endpoint_port}"
 }
 output "k8s-endpont" {
   value = "${var.k8s_api_endpoint_ip}"

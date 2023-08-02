@@ -49,7 +49,6 @@ module "kubernetes-base" {
   master_node_address_start_ip = var.global_master_node_address_start_ip
   k8s_api_endpoint_ip          = var.global_k8s_api_endpoint_ip
   k8s_api_endpoint_port        = var.global_k8s_api_endpoint_port
-  k8s_api_endpoint_proto       = var.global_k8s_api_endpoint_proto
   masters                      = module.infrastructure.masters
   nodes                        = module.infrastructure.nodes
   master_node_address_mask     = var.global_master_node_address_mask
