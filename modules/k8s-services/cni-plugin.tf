@@ -11,7 +11,6 @@
 
 resource "kubectl_manifest" "k8s_cni_plugin" {
  yaml_body = <<YAML
----
 kind: Namespace
 apiVersion: v1
 metadata:
@@ -53,7 +52,6 @@ rules:
   verbs:
   - list
   - watch
----
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
@@ -68,7 +66,6 @@ subjects:
 - kind: ServiceAccount
   name: flannel
   namespace: kube-flannel
----
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -76,7 +73,6 @@ metadata:
     k8s-app: flannel
   name: flannel
   namespace: kube-flannel
----
 kind: ConfigMap
 apiVersion: v1
 metadata:
@@ -114,7 +110,6 @@ data:
         "Type": "vxlan"
       }
     }
----
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
