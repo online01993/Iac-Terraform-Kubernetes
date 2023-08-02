@@ -14,15 +14,16 @@ terraform {
 
 provider "kubernetes" {
   # Configuration options
-  host                    = var.k8s-url
-  config_path             = var.k8s-admin_file
+  #host                    = var.k8s-url
+  #config_path             = var.k8s-admin_file
   #config_path            = "~/.kube/config"
   #client_certificate     = file("~/.kube/client-cert.pem")
   #client_key             = file("~/.kube/client-key.pem")
   #cluster_ca_certificate = file("~/.kube/cluster-ca-cert.pem")
 }
 provider "kubectl" {
-  host                    = var.k8s-url
+  #host                    = var.k8s-url
+  host                    = "https://10.200.0.10:6443"
   #cluster_ca_certificate = base64decode(var.eks_cluster_ca)
   #token                  = data.aws_eks_cluster_auth.main.token
   load_config_file        = false
