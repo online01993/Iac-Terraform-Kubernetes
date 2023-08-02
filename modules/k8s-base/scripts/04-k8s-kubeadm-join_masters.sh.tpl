@@ -47,7 +47,7 @@ then
 	sudo bash -c 'echo "K8s adding current node ${master_count} as control plane master" >> /var/lib/cloud/instance/04-k8s-kubeadm-join_masters'
 elif [[ ${master_count} -gt 3 ]] && [[ ${itterator} -gt 0 ]]
 then
-	sudo bash -c '${kubeadm-join_string}'
+	sudo bash -c '${kubeadm-join_string} > /var/lib/cloud/instance/04-k8s-kubeadm-join_masters.log 2>&1'
 	mkdir -p "$HOME"/.kube
 	sudo --preserve-env=HOME bash -c 'echo "export KUBECONFIG="$HOME"/.kube/config" > /etc/environment'
 	sudo --preserve-env=HOME bash -c 'export KUBECONFIG="$HOME"/.kube/config'
@@ -61,7 +61,7 @@ then
      sudo bash -c 'systemctl restart haproxy'
      set -xe
     else
-	 sudo bash -c 'echo `date` > /var/lib/cloud/instance/04-k8s-kubeadm-join_masters > /var/lib/cloud/instance/04-k8s-kubeadm-join_masters.log 2>&1'
+	 sudo bash -c 'echo `date` > /var/lib/cloud/instance/04-k8s-kubeadm-join_masters'
 	 sudo bash -c 'echo "ERROR: K8s adding FAILED with ${master_count} control plane master - /etc/haproxy/haproxy.cfg or /etc/keepalived/keepalived.conf NOT FOUND!!!" >> /var/lib/cloud/instance/04-k8s-kubeadm-join_masters'
 	 exit -1
     fi
