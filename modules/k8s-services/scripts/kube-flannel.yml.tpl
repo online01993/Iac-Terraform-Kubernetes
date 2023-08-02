@@ -6,7 +6,6 @@ metadata:
   labels:
     k8s-app: flannel
     pod-security.kubernetes.io/enforce: privileged
----
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
@@ -41,7 +40,6 @@ rules:
   verbs:
   - list
   - watch
----
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
@@ -56,7 +54,6 @@ subjects:
 - kind: ServiceAccount
   name: flannel
   namespace: kube-flannel
----
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -64,7 +61,6 @@ metadata:
     k8s-app: flannel
   name: flannel
   namespace: kube-flannel
----
 kind: ConfigMap
 apiVersion: v1
 metadata:
@@ -102,7 +98,6 @@ data:
         "Type": "${cni_Backend_Type}"
       }
     }
----
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
