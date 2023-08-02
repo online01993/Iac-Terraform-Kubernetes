@@ -63,9 +63,9 @@ errorExit() {
     exit 1
 }
 
-curl --silent --max-time 2 --insecure https://localhost:${k8s_api_endpoint_port}/ -o /dev/null || errorExit "Error GET https://localhost:${k8s_api_endpoint_port}/"
+curl --silent --max-time 2 --insecure http://localhost:${k8s_api_endpoint_port}/ -o /dev/null || errorExit "Error GET http://localhost:${k8s_api_endpoint_port}/"
 if ip addr | grep -q "${k8s_api_endpoint_ip}"; then
-    curl --silent --max-time 2 --insecure https://${k8s_api_endpoint_ip}:${k8s_api_endpoint_port}/ -o /dev/null || errorExit "Error GET https://${k8s_api_endpoint_ip}:${k8s_api_endpoint_port}/"
+    curl --silent --max-time 2 --insecure http://${k8s_api_endpoint_ip}:${k8s_api_endpoint_port}/ -o /dev/null || errorExit "Error GET http://${k8s_api_endpoint_ip}:${k8s_api_endpoint_port}/"
 fi
 EOF'
 sudo bash -c 'chmod +x /etc/keepalived/check_apiserver.sh'
