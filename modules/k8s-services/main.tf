@@ -5,13 +5,11 @@ resource "kubernetes_token_request_v1" "k8s_kube-token-default_resource" {
     name      = "default"
   }
   spec {
+    expiration_seconds = "8760h"
     audiences = [
       "api",
       "vault",
       "factors"
     ]
-  }
-  arguments {
-    expiration_seconds = "8760h"
   }
 }  
