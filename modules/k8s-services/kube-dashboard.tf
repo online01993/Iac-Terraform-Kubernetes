@@ -4,7 +4,7 @@ data "kubectl_path_documents" "k8s_kube-dashboard_yaml_file" {
  pattern                       = "${path.module}/scripts/kube-dashboard.yml.tpl"
  vars                          = {
   kube-dashboard_nodePort      = "${var.kube-dashboard_nodePort}"
-  #k8s-url                      = "${var.k8s-url}"
+  k8s-url                      = "${var.k8s-url}"
  }  
 }
 resource "kubectl_manifest" "k8s_kube-dashboard" {
