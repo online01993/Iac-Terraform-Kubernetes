@@ -63,11 +63,11 @@ module "kubernetes-services" {
   k8s_cni_hairpinMode            = var.global_k8s_cni_hairpinMode
   k8s_cni_isDefaultGateway       = var.global_k8s_cni_isDefaultGateway
   k8s_cni_Backend_Type           = var.global_k8s_cni_Backend_Type
-  k8s-url                        = module.kubernetes-base.k8s-url
-  k8s-endpont                    = module.kubernetes-base.k8s-endpont
-  k8s-admin_file                 = module.kubernetes-base.k8s-admin_file
-  k8s-client-key-data            = module.kubernetes-base.k8s-client-key-data
-  k8s-client-certificate-data    = module.kubernetes-base.k8s-client-certificate-data
-  k8s-certificate-authority-data = module.kubernetes-base.k8s-certificate-authority-data
+  k8s-url                        = local.k8s-url
+  k8s-endpont                    = local.k8s-endpont
+  k8s-admin_file                 = local.k8s-admin_file
+  k8s-client-key-data            = local.k8s-client-key-data
+  k8s-client-certificate-data    = local.k8s-client-certificate-data
+  k8s-certificate-authority-data = local.k8s-certificate-authority-data
   pods_mask_cidr                 = "${var.global_pods_address_mask}/${var.global_pods_mask_cidr}"
 }  
