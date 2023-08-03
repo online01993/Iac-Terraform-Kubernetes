@@ -5,7 +5,7 @@ resource "kubernetes_token_request_v1" "k8s_kube-token-default_resource" {
     name      = "default"
   }
   spec {
-    expiration_seconds = "8760h"
+    expiration_seconds = 0
     audiences = [
       "api",
       "vault",
