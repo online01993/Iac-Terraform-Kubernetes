@@ -1,5 +1,5 @@
 Вариация IaC кластера на базе несколкьх продуктов:
-- Teraform
+- Terraform
 - Kubernetes
 - Xcp-NG
 - XenOrchestra
