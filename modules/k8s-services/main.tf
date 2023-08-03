@@ -20,12 +20,12 @@ resource "kubernetes_cluster_role_binding" "example" {
   }
   subject {
     kind      = "User"
-    name      = kubernetes_service_account_v1.metadata.0.k8sadmin.name
+    name      = kubernetes_service_account_v1.k8sadmin.metadata.0.name
     api_group = "rbac.authorization.k8s.io"
   }
   subject {
     kind      = "ServiceAccount"
-    name      = kubernetes_service_account_v1.metadata.0.k8sadmin.name
+    name      = kubernetes_service_account_v1.k8sadmin.metadata.0.name
     namespace = "kube-system"
   }
   subject {
@@ -37,7 +37,7 @@ resource "kubernetes_cluster_role_binding" "example" {
 resource "kubernetes_token_request_v1" "k8s_kube-token-k8sadmin_resource" {
  depends_on                    = [ kubectl_manifest.k8s_cni_plugin ]
  metadata {
-    name  = kubernetes_service_account_v1.metadata.0.k8sadmin.name
+    name  = kubernetes_service_account_v1.k8sadmin.metadata.0.name
   }
   spec {
     #5 years
