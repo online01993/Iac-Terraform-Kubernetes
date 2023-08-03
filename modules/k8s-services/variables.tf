@@ -28,3 +28,18 @@ variable "k8s-admin_file" {
   type = string
   sensitive   = true
 }
+variable "k8s-client-certificate-data" {
+  #default = ""
+  type = string
+  sensitive   = true
+}
+variable "k8s-client-key-data" {
+  #default = ""
+  type = string
+  sensitive   = true
+}
+variable "k8s-certificate-authority-data" {
+  #default = ""
+  type = string
+  sensitive   = true
+}

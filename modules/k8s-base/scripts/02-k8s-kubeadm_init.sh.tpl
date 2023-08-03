@@ -24,6 +24,7 @@ sudo sysctl --system
 #Enabling keepalived
 sudo bash -c 'cat <<EOF > /etc/keepalived/keepalived.conf
 # File: /etc/keepalived/keepalived.conf
+# https://github.com/kubernetes/kubeadm/blob/main/docs/ha-considerations.md#options-for-software-load-balancing
 
 global_defs {
     enable_script_security
@@ -57,24 +58,23 @@ EOF'
 sudo bash -c 'cat <<EOF > /etc/keepalived/check_apiserver.sh
 #!/bin/sh
 # File: /etc/keepalived/check_apiserver.sh
+# https://github.com/kubernetes/kubeadm/blob/main/docs/ha-considerations.md#options-for-software-load-balancing
 
 errorExit() {
     echo "*** $*" 1>&2
     exit 1
 }
 
-curl --silent --max-time 2 --insecure http://localhost:${k8s_api_endpoint_port}/ -o /dev/null || errorExit "Error GET http://localhost:${k8s_api_endpoint_port}/"
+curl --silent --max-time 2 --insecure https://localhost:${k8s_api_endpoint_port}/ -o /dev/null || errorExit "Error GET https://localhost:${k8s_api_endpoint_port}/"
 if ip addr | grep -q "${k8s_api_endpoint_ip}"; then
-    curl --silent --max-time 2 --insecure http://${k8s_api_endpoint_ip}:${k8s_api_endpoint_port}/ -o /dev/null || errorExit "Error GET http://${k8s_api_endpoint_ip}:${k8s_api_endpoint_port}/"
+    curl --silent --max-time 2 --insecure https://${k8s_api_endpoint_ip}:${k8s_api_endpoint_port}/ -o /dev/null || errorExit "Error GET https://${k8s_api_endpoint_ip}:${k8s_api_endpoint_port}/"
 fi
 EOF'
-sudo bash -c 'chmod +x /etc/keepalived/check_apiserver.sh'
-sudo bash -c 'systemctl enable keepalived'
-sudo bash -c 'systemctl start keepalived'
 
 #Enabling haproxy
 sudo bash -c 'cat <<EOF > /etc/haproxy/haproxy.cfg
 # File: /etc/haproxy/haproxy.cfg
+# https://github.com/kubernetes/kubeadm/blob/main/docs/ha-considerations.md#options-for-software-load-balancing
 #---------------------------------------------------------------------
 # Global settings
 #---------------------------------------------------------------------
@@ -133,6 +133,11 @@ done
 if [[ ${master_count} -eq 1 && ${itterator} -eq 0 ]] || [[ ${master_count} -gt 1 && ${itterator} -eq 0 ]]
 then
 	mkdir -p "$HOME"/.kube
+    sudo bash -c 'sed -i "/    state BACKUP/ s/.*/    state MASTER/" /etc/keepalived/keepalived.conf'
+    sudo sed -i "/    priority 100/ s/.*/    priority ((100-${itterator}))/" /etc/keepalived/keepalived.conf
+    sudo bash -c 'chmod +x /etc/keepalived/check_apiserver.sh'
+    sudo bash -c 'systemctl enable keepalived'
+    sudo bash -c 'systemctl start keepalived'
     set +xe
     sudo bash -c 'systemctl enable haproxy'
     sudo bash -c 'systemctl restart haproxy'
@@ -150,6 +155,10 @@ then
 elif [[ ${master_count} -eq 3 ]] && [[ ${itterator} -gt 0 ]]
 then
 	echo "${itterator}"
+    sudo sed -i "/    priority 100/ s/.*/    priority ((100-${itterator}))/" /etc/keepalived/keepalived.conf
+    sudo bash -c 'chmod +x /etc/keepalived/check_apiserver.sh'
+    sudo bash -c 'systemctl enable keepalived'
+    sudo bash -c 'systemctl start keepalived'
 	sudo bash -c 'crictl --runtime-endpoint unix:///var/run/containerd/containerd.sock version'
 	sudo bash -c 'ctr images pull docker.io/library/hello-world:latest'
 	sudo bash -c 'ctr run docker.io/library/hello-world:latest hello-world'
@@ -158,6 +167,10 @@ then
 elif [[ ${master_count} -gt 3 ]] && [[ ${itterator} -gt 0 ]]
 then
 	echo "${itterator}"
+    sudo sed -i "/    priority 100/ s/.*/    priority ((100-${itterator}))/" /etc/keepalived/keepalived.conf
+    sudo bash -c 'chmod +x /etc/keepalived/check_apiserver.sh'
+    sudo bash -c 'systemctl enable keepalived'
+    sudo bash -c 'systemctl start keepalived'
 	sudo bash -c 'crictl --runtime-endpoint unix:///var/run/containerd/containerd.sock version'
 	sudo bash -c 'ctr images pull docker.io/library/hello-world:latest'
 	sudo bash -c 'ctr run docker.io/library/hello-world:latest hello-world'

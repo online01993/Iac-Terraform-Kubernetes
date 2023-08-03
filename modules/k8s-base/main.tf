@@ -113,6 +113,81 @@ data "local_sensitive_file" "k8s-kubeadm_init_02_config_file" {
   ]
   filename = "${path.module}/scripts/k8s-kubeadm_init_02_config_file.conf"
 }
+resource "terraform_data" "k8s-kubeadm_init_02_config_get_client-key-data_resource" {
+  
+  depends_on = [
+    local_sensitive_file.k8s-kubeadm_init_02_config_file
+  ]
+  provisioner "local-exec" {
+    command = <<EOF
+      rm -rvf ${path.module}/scripts/k8s-kubeadm_init_02_config_get_client-key-data_file
+      cat ${path.module}/scripts/k8s-kubeadm_init_02_config_file.conf | grep client-key-data | sed 's/^\s*client-key-data: //' > ${path.module}/scripts/k8s-kubeadm_init_02_config_get_client-key-data_file
+      chmod 600 ${path.module}/scripts/k8s-kubeadm_init_02_config_get_client-key-data_file
+    EOF
+  }
+  provisioner "local-exec" {
+    when    = destroy
+    command = <<EOF
+      rm -rvf ${path.module}/scripts/k8s-kubeadm_init_02_config_get_client-key-data_file
+    EOF
+  }
+}
+data "local_sensitive_file" "k8s-kubeadm_init_02_config_get_client-key-data_file" {
+  depends_on = [
+    terraform_data.k8s-kubeadm_init_02_config_get_client-key-data_resource
+  ]
+  filename = "${path.module}/scripts/k8s-kubeadm_init_02_config_get_client-key-data_file"
+}
+resource "terraform_data" "k8s-kubeadm_init_02_config_get_client-certificate-data_resource" {
+  
+  depends_on = [
+    local_sensitive_file.k8s-kubeadm_init_02_config_file
+  ]
+  provisioner "local-exec" {
+    command = <<EOF
+      rm -rvf ${path.module}/scripts/k8s-kubeadm_init_02_config_get_client-certificate-data_file
+      cat ${path.module}/scripts/k8s-kubeadm_init_02_config_file.conf | grep client-certificate-data | sed 's/^\s*client-certificate-data: //' > ${path.module}/scripts/k8s-kubeadm_init_02_config_get_client-certificate-data_file
+      chmod 600 ${path.module}/scripts/k8s-kubeadm_init_02_config_get_client-certificate-data_file
+    EOF
+  }
+  provisioner "local-exec" {
+    when    = destroy
+    command = <<EOF
+      rm -rvf ${path.module}/scripts/k8s-kubeadm_init_02_config_get_client-certificate-data_file
+    EOF
+  }
+}
+data "local_sensitive_file" "k8s-kubeadm_init_02_config_get_client-certificate-data_file" {
+  depends_on = [
+    terraform_data.k8s-kubeadm_init_02_config_get_client-certificate-data_resource
+  ]
+  filename = "${path.module}/scripts/k8s-kubeadm_init_02_config_get_client-certificate-data_file"
+}
+resource "terraform_data" "k8s-kubeadm_init_02_config_get_certificate-authority-data_resource" {
+  
+  depends_on = [
+    local_sensitive_file.k8s-kubeadm_init_02_config_file
+  ]
+  provisioner "local-exec" {
+    command = <<EOF
+      rm -rvf ${path.module}/scripts/k8s-kubeadm_init_02_config_get_certificate-authority-data_file
+      cat ${path.module}/scripts/k8s-kubeadm_init_02_config_file.conf | grep certificate-authority-data | sed 's/^\s*certificate-authority-data: //' > ${path.module}/scripts/k8s-kubeadm_init_02_config_get_certificate-authority-data_file
+      chmod 600 ${path.module}/scripts/k8s-kubeadm_init_02_config_get_certificate-authority-data_file
+    EOF
+  }
+  provisioner "local-exec" {
+    when    = destroy
+    command = <<EOF
+      rm -rvf ${path.module}/scripts/k8s-kubeadm_init_02_config_get_certificate-authority-data_file
+    EOF
+  }
+}
+data "local_sensitive_file" "k8s-kubeadm_init_02_config_get_certificate-authority-data_file" {
+  depends_on = [
+    terraform_data.k8s-kubeadm_init_02_config_get_certificate-authority-data_resource
+  ]
+  filename = "${path.module}/scripts/k8s-kubeadm_init_02_config_get_certificate-authority-data_file"
+}
 resource "terraform_data" "k8s-kubeadm_init_token_join_master_03_resource" {
   triggers_replace = [
     terraform_data.k8s-base-setup_01_resource_masters
