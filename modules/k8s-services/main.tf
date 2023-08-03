@@ -3,7 +3,7 @@ resource "kubernetes_service_account_v1" "k8sadmin" {
   depends_on                   = [ kubectl_manifest.k8s_cni_plugin ]
   metadata {
     name = "k8sadmin"    
-    namespace = "default"
+    #namespace = "default"
   }
 }
 resource "kubernetes_cluster_role_binding" "k8sadmin_role_bindings" {
