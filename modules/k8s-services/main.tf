@@ -6,7 +6,7 @@ resource "kubernetes_token_request_v1" "k8s_kube-token-default_resource" {
   }
   spec {
     audiences = [
-      "https://kubernetes.default.svc.cluster.local"
+      "https://10.200.0.10:30100"
     ]
   }
 }  
