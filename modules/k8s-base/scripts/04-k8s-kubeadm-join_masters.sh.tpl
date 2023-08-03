@@ -26,10 +26,12 @@ then
 elif [[ ${master_count} -eq 3 ]] && [[ ${itterator} -gt 0 ]]
 then
     sudo bash -c 'touch /var/lib/cloud/instance/04-k8s-kubeadm-join_masters.log'
+	set +xe
 	while [[ "$(grep -c "This node has joined the cluster and a new control plane instance was created:" /var/lib/cloud/instance/04-k8s-kubeadm-join_masters.log)" -eq 0 ]]; do
      sudo bash -c '${kubeadm-join_string} > /var/lib/cloud/instance/04-k8s-kubeadm-join_masters.log 2>&1'
      sleep 3
     done
+    set -xe
 	mkdir -p "$HOME"/.kube
 	sudo --preserve-env=HOME bash -c 'echo "export KUBECONFIG="$HOME"/.kube/config" > /etc/environment'
 	sudo --preserve-env=HOME bash -c 'export KUBECONFIG="$HOME"/.kube/config'
@@ -52,10 +54,12 @@ then
 elif [[ ${master_count} -gt 3 ]] && [[ ${itterator} -gt 0 ]]
 then
 	sudo bash -c 'touch /var/lib/cloud/instance/04-k8s-kubeadm-join_masters.log'
+	set +xe
 	while [[ "$(grep -c "This node has joined the cluster and a new control plane instance was created:" /var/lib/cloud/instance/04-k8s-kubeadm-join_masters.log)" -eq 0 ]]; do
      sudo bash -c '${kubeadm-join_string} > /var/lib/cloud/instance/04-k8s-kubeadm-join_masters.log 2>&1'
      sleep 3
     done
+    set -xe
 	mkdir -p "$HOME"/.kube
 	sudo --preserve-env=HOME bash -c 'echo "export KUBECONFIG="$HOME"/.kube/config" > /etc/environment'
 	sudo --preserve-env=HOME bash -c 'export KUBECONFIG="$HOME"/.kube/config'
