@@ -25,8 +25,11 @@ then
     exit 0
 elif [[ ${master_count} -eq 3 ]] && [[ ${itterator} -gt 0 ]]
 then
-    sleep 10
-	sudo bash -c '${kubeadm-join_string} > /var/lib/cloud/instance/04-k8s-kubeadm-join_masters.log 2>&1'
+    sudo bash -c 'touch /var/lib/cloud/instance/04-k8s-kubeadm-join_masters.log'
+	while [[ "$(grep -c "This node has joined the cluster and a new control plane instance was created:" /var/lib/cloud/instance/04-k8s-kubeadm-join_masters.log)" -eq 0 ]]; do
+     sudo bash -c '${kubeadm-join_string} > /var/lib/cloud/instance/04-k8s-kubeadm-join_masters.log 2>&1'
+     sleep 3
+    done
 	mkdir -p "$HOME"/.kube
 	sudo --preserve-env=HOME bash -c 'echo "export KUBECONFIG="$HOME"/.kube/config" > /etc/environment'
 	sudo --preserve-env=HOME bash -c 'export KUBECONFIG="$HOME"/.kube/config'
@@ -48,8 +51,11 @@ then
 	sudo bash -c 'echo "K8s adding current node ${master_count} as control plane master" >> /var/lib/cloud/instance/04-k8s-kubeadm-join_masters'
 elif [[ ${master_count} -gt 3 ]] && [[ ${itterator} -gt 0 ]]
 then
-	sleep 10
-	sudo bash -c '${kubeadm-join_string} > /var/lib/cloud/instance/04-k8s-kubeadm-join_masters.log 2>&1'
+	sudo bash -c 'touch /var/lib/cloud/instance/04-k8s-kubeadm-join_masters.log'
+	while [[ "$(grep -c "This node has joined the cluster and a new control plane instance was created:" /var/lib/cloud/instance/04-k8s-kubeadm-join_masters.log)" -eq 0 ]]; do
+     sudo bash -c '${kubeadm-join_string} > /var/lib/cloud/instance/04-k8s-kubeadm-join_masters.log 2>&1'
+     sleep 3
+    done
 	mkdir -p "$HOME"/.kube
 	sudo --preserve-env=HOME bash -c 'echo "export KUBECONFIG="$HOME"/.kube/config" > /etc/environment'
 	sudo --preserve-env=HOME bash -c 'export KUBECONFIG="$HOME"/.kube/config'
