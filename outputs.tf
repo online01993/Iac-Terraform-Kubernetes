@@ -19,7 +19,7 @@ output "k8s-endpont" {
   value     = local.k8s-endpont
 }
 output "k8s_kube-token-k8sadmin" {
-  value     = local.k8s_kube-token-default
+  value     = local.k8s_kube-token-k8sadmin
   sensitive = false
 }
 output "k8s-admin_file" {
