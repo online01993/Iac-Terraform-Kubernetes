@@ -46,8 +46,8 @@ resource "kubernetes_token_request_v1" "k8s_kube-token-k8sadmin_resource" {
     audiences = [
       "api",
       "vault",
-      "factors",
-      "https://kubernetes.default.svc.cluster.local"
+      "factors"
+      #"https://kubernetes.default.svc.cluster.local"
     ]
   }
 }  
