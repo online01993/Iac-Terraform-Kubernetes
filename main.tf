@@ -69,5 +69,6 @@ module "kubernetes-services" {
   k8s-client-key-data            = local.k8s-client-key-data
   k8s-client-certificate-data    = local.k8s-client-certificate-data
   k8s-certificate-authority-data = local.k8s-certificate-authority-data
+  kube-dashboard_nodePort        = var.global_kube-dashboard_nodePort
   pods_mask_cidr                 = "${var.global_pods_address_mask}/${var.global_pods_mask_cidr}"
 }  

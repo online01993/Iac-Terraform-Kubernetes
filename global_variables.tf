@@ -52,6 +52,7 @@ variable "global_k8s_api_endpoint_port" {}
 variable "global_k8s_cni_hairpinMode" {}
 variable "global_k8s_cni_isDefaultGateway" {}
 variable "global_k8s_cni_Backend_Type" {}
+variable "global_kube-dashboard_nodePort" {}
 
 
 locals {
@@ -63,4 +64,5 @@ locals {
   k8s-client-key-data            = module.kubernetes-base.k8s-client-key-data
   k8s-client-certificate-data    = module.kubernetes-base.k8s-client-certificate-data
   k8s-certificate-authority-data = module.kubernetes-base.k8s-certificate-authority-data
+  k8s_kube-token-default         = module.kubernetes-services.k8s_kube-token-default
 }

@@ -155,3 +155,5 @@ global_k8s_cni_hairpinMode = true
 global_k8s_cni_isDefaultGateway = true
 #Backend type for CNI pod network
 global_k8s_cni_Backend_Type = "vxlan"
+#NodePort for Kube-dashboard
+global_kube-dashboard_nodePort = 30100

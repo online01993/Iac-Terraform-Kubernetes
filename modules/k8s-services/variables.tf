@@ -19,6 +19,10 @@ variable "k8s-url" {
   #default = ""
   type = string
 }
+variable "kube-dashboard_nodePort" {
+  default = 30100
+  type = number
+}
 variable "k8s-endpont" {
   #default = ""
   type = string
