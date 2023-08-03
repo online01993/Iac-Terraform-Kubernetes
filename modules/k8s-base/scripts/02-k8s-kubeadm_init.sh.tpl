@@ -134,7 +134,7 @@ if [[ ${master_count} -eq 1 && ${itterator} -eq 0 ]] || [[ ${master_count} -gt 1
 then
 	mkdir -p "$HOME"/.kube
     sudo bash -c 'sed -i "/    state BACKUP/ s/.*/    state MASTER/" /etc/keepalived/keepalived.conf'
-    sudo sed -i "/    priority 100/ s/.*/    priority ((100-${itterator}))/" /etc/keepalived/keepalived.conf
+    sudo sed -i "/    priority 100/ s/.*/    priority $((100-${itterator}))/" /etc/keepalived/keepalived.conf
     sudo bash -c 'chmod +x /etc/keepalived/check_apiserver.sh'
     sudo bash -c 'systemctl enable keepalived'
     sudo bash -c 'systemctl start keepalived'
@@ -155,7 +155,7 @@ then
 elif [[ ${master_count} -eq 3 ]] && [[ ${itterator} -gt 0 ]]
 then
 	echo "${itterator}"
-    sudo sed -i "/    priority 100/ s/.*/    priority ((100-${itterator}))/" /etc/keepalived/keepalived.conf
+    sudo sed -i "/    priority 100/ s/.*/    priority $((100-${itterator}))/" /etc/keepalived/keepalived.conf
     sudo bash -c 'chmod +x /etc/keepalived/check_apiserver.sh'
     sudo bash -c 'systemctl enable keepalived'
     sudo bash -c 'systemctl start keepalived'
@@ -167,7 +167,7 @@ then
 elif [[ ${master_count} -gt 3 ]] && [[ ${itterator} -gt 0 ]]
 then
 	echo "${itterator}"
-    sudo sed -i "/    priority 100/ s/.*/    priority ((100-${itterator}))/" /etc/keepalived/keepalived.conf
+    sudo sed -i "/    priority 100/ s/.*/    priority $((100-${itterator}))/" /etc/keepalived/keepalived.conf
     sudo bash -c 'chmod +x /etc/keepalived/check_apiserver.sh'
     sudo bash -c 'systemctl enable keepalived'
     sudo bash -c 'systemctl start keepalived'
