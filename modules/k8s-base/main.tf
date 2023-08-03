@@ -114,9 +114,8 @@ data "local_sensitive_file" "k8s-kubeadm_init_02_config_file" {
   filename = "${path.module}/scripts/k8s-kubeadm_init_02_config_file.conf"
 }
 resource "terraform_data" "k8s-kubeadm_init_02_config_get_client-key-data_resource" {
-  
   depends_on = [
-    local_sensitive_file.k8s-kubeadm_init_02_config_file
+    data.local_sensitive_file.k8s-kubeadm_init_02_config_file
   ]
   provisioner "local-exec" {
     command = <<EOF
@@ -139,9 +138,8 @@ data "local_sensitive_file" "k8s-kubeadm_init_02_config_get_client-key-data_file
   filename = "${path.module}/scripts/k8s-kubeadm_init_02_config_get_client-key-data_file"
 }
 resource "terraform_data" "k8s-kubeadm_init_02_config_get_client-certificate-data_resource" {
-  
   depends_on = [
-    local_sensitive_file.k8s-kubeadm_init_02_config_file
+    data.local_sensitive_file.k8s-kubeadm_init_02_config_file
   ]
   provisioner "local-exec" {
     command = <<EOF
@@ -164,9 +162,8 @@ data "local_sensitive_file" "k8s-kubeadm_init_02_config_get_client-certificate-d
   filename = "${path.module}/scripts/k8s-kubeadm_init_02_config_get_client-certificate-data_file"
 }
 resource "terraform_data" "k8s-kubeadm_init_02_config_get_certificate-authority-data_resource" {
-  
   depends_on = [
-    local_sensitive_file.k8s-kubeadm_init_02_config_file
+    data.local_sensitive_file.k8s-kubeadm_init_02_config_file
   ]
   provisioner "local-exec" {
     command = <<EOF
