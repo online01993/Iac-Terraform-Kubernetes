@@ -11,7 +11,7 @@ resource "kubernetes_cluster_role_binding" "example" {
     kubernetes_service_account_v1.k8sadmin
   ]
   metadata {
-    name = "terraform-admin-cluster"
+    name = "k8sadmin"
   }
   role_ref {
     api_group = "rbac.authorization.k8s.io"
@@ -20,7 +20,7 @@ resource "kubernetes_cluster_role_binding" "example" {
   }
   subject {
     kind      = "User"
-    name      = kubernetes_service_account_v1.k8sadmin.metadata.0.name
+    name      = "Admin"
     api_group = "rbac.authorization.k8s.io"
   }
   subject {
