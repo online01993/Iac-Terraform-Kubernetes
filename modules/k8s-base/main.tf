@@ -87,7 +87,6 @@ resource "terraform_data" "k8s-kubeadm_init_02_resource" {
   }
 }
 resource "terraform_data" "k8s-kubeadm_init_02_config_get_resource" {
-  
   depends_on = [
     terraform_data.k8s-kubeadm_init_02_resource
   ]
@@ -98,12 +97,6 @@ resource "terraform_data" "k8s-kubeadm_init_02_config_get_resource" {
       chmod 600 ./.robot_id_rsa_master_config_file.key
       ssh robot@${var.masters[0].address} -o StrictHostKeyChecking=no -i ./.robot_id_rsa_master_config_file.key "cat /home/robot/.kube/config" > ${path.module}/scripts/k8s-kubeadm_init_02_config_file.conf
       rm -rvf ./.robot_id_rsa_master_config_file.key
-    EOF
-  }
-  provisioner "local-exec" {
-    when    = destroy
-    command = <<EOF
-      rm -rvf ${path.module}/scripts/k8s-kubeadm_init_02_config_file.conf
     EOF
   }
 }
@@ -124,12 +117,6 @@ resource "terraform_data" "k8s-kubeadm_init_02_config_get_client-key-data_resour
       chmod 600 ${path.module}/scripts/k8s-kubeadm_init_02_config_get_client-key-data_file
     EOF
   }
-  provisioner "local-exec" {
-    when    = destroy
-    command = <<EOF
-      rm -rvf ${path.module}/scripts/k8s-kubeadm_init_02_config_get_client-key-data_file
-    EOF
-  }
 }
 data "local_sensitive_file" "k8s-kubeadm_init_02_config_get_client-key-data_file" {
   depends_on = [
@@ -148,12 +135,6 @@ resource "terraform_data" "k8s-kubeadm_init_02_config_get_client-certificate-dat
       chmod 600 ${path.module}/scripts/k8s-kubeadm_init_02_config_get_client-certificate-data_file
     EOF
   }
-  provisioner "local-exec" {
-    when    = destroy
-    command = <<EOF
-      rm -rvf ${path.module}/scripts/k8s-kubeadm_init_02_config_get_client-certificate-data_file
-    EOF
-  }
 }
 data "local_sensitive_file" "k8s-kubeadm_init_02_config_get_client-certificate-data_file" {
   depends_on = [
@@ -170,12 +151,6 @@ resource "terraform_data" "k8s-kubeadm_init_02_config_get_certificate-authority-
       rm -rvf ${path.module}/scripts/k8s-kubeadm_init_02_config_get_certificate-authority-data_file
       cat ${path.module}/scripts/k8s-kubeadm_init_02_config_file.conf | grep certificate-authority-data | sed 's/^\s*certificate-authority-data: //' > ${path.module}/scripts/k8s-kubeadm_init_02_config_get_certificate-authority-data_file
       chmod 600 ${path.module}/scripts/k8s-kubeadm_init_02_config_get_certificate-authority-data_file
-    EOF
-  }
-  provisioner "local-exec" {
-    when    = destroy
-    command = <<EOF
-      rm -rvf ${path.module}/scripts/k8s-kubeadm_init_02_config_get_certificate-authority-data_file
     EOF
   }
 }
