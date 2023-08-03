@@ -1,8 +1,8 @@
 #main.tf
 resource "tls_private_key" "terrafrom_generated_private_key" {
-   algorithm = "RSA"
-   rsa_bits  = 4096
-   provisioner "local-exec" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+  provisioner "local-exec" {
     command = <<EOF
       mkdir -p .ssh-robot-access/
       echo "${tls_private_key.terrafrom_generated_private_key.private_key_openssh}" > .ssh-robot-access/robot_id_rsa.key
@@ -11,7 +11,7 @@ resource "tls_private_key" "terrafrom_generated_private_key" {
       chmod 400 .ssh-robot-access/robot_id_rsa.pub
     EOF
   }
-   provisioner "local-exec" {
+  provisioner "local-exec" {
     when    = destroy
     command = <<EOF
       rm -rvf .ssh-robot-access/
@@ -55,7 +55,7 @@ resource "xenorchestra_cloud_config" "cloud_network_config_masters" {
   name  = "debian-network-base-config-master-${count.index}"
   #template = "cloud_network_dhcp.yaml"
   template = var.master_node_network_dhcp == false ? templatefile("${path.module}/cloud_network_static.yaml", {
-    node_address     = "${var.master_node_address_mask}${count.index + 11}"
+    node_address     = "${var.master_node_address_mask}${count.index + var.master_node_address_start_ip}"
     node_mask        = "${var.nodes_mask}"
     node_gateway     = "${var.nodes_gateway}"
     node_dns_address = "${var.nodes_dns_address}"
@@ -78,7 +78,7 @@ resource "xenorchestra_cloud_config" "cloud_network_config_workers" {
   name  = "debian-network-base-config-node-${count.index}"
   #template = "cloud_network_dhcp.yaml"
   template = var.worker_node_network_dhcp == false ? templatefile("${path.module}/cloud_network_static.yaml", {
-    node_address     = "${var.worker_node_address_mask}${count.index + 20}"
+    node_address     = "${var.worker_node_address_mask}${count.index + var.worker_node_address_start_ip}"
     node_mask        = "${var.nodes_mask}"
     node_gateway     = "${var.nodes_gateway}"
     node_dns_address = "${var.nodes_dns_address}"

@@ -29,7 +29,9 @@ variable "global_dns_server" {}
 variable "global_dns_zone" {}
 variable "global_dns_sub_zone" {}
 variable "global_master_node_address_mask" {}
+variable "global_master_node_address_start_ip" {}
 variable "global_worker_node_address_mask" {}
+variable "global_worker_node_address_start_ip" {}
 variable "global_nodes_mask" {}
 variable "global_nodes_gateway" {}
 variable "global_nodes_dns_address" {}
@@ -45,7 +47,22 @@ variable "global_master_node_high_availability" {
 variable "global_version_containerd" {}
 variable "global_version_runc" {}
 variable "global_version_cni-plugin" {}
+variable "global_k8s_api_endpoint_ip" {}
+variable "global_k8s_api_endpoint_port" {}
+variable "global_k8s_cni_hairpinMode" {}
+variable "global_k8s_cni_isDefaultGateway" {}
+variable "global_k8s_cni_Backend_Type" {}
+variable "global_kube-dashboard_nodePort" {}
+
+
 locals {
-  vm_rsa_ssh_key_public    = module.infrastructure.vm_rsa_ssh_key_public
-  vm_rsa_ssh_key_private   = module.infrastructure.vm_rsa_ssh_key_private
+  vm_rsa_ssh_key_public          = module.infrastructure.vm_rsa_ssh_key_public
+  vm_rsa_ssh_key_private         = module.infrastructure.vm_rsa_ssh_key_private
+  k8s-url                        = module.kubernetes-base.k8s-url
+  k8s-endpont                    = module.kubernetes-base.k8s-endpont
+  k8s-admin_file                 = module.kubernetes-base.k8s-admin_file
+  k8s-client-key-data            = module.kubernetes-base.k8s-client-key-data
+  k8s-client-certificate-data    = module.kubernetes-base.k8s-client-certificate-data
+  k8s-certificate-authority-data = module.kubernetes-base.k8s-certificate-authority-data
+  k8s_kube-token-k8sadmin        = module.kubernetes-services.k8s_kube-token-k8sadmin
 }

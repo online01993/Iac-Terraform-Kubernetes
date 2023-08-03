@@ -1,18 +1,26 @@
 variable "master_node_network_dhcp" {
   default = true
-  type = bool
+  type    = bool
 }
 variable "worker_node_network_dhcp" {
   default = true
-  type = bool
+  type    = bool
 }
 variable "master_node_address_mask" {
   #default = 10.244.0.
   type = string
 }
+variable "master_node_address_start_ip" {
+  #default = 11
+  type = number
+}
 variable "worker_node_address_mask" {
   #default = 10.244.0.
   type = string
+}
+variable "worker_node_address_start_ip" {
+  #default = 20
+  type = number
 }
 variable "nodes_mask" {
   #default = 255.255.0.0
@@ -130,13 +138,13 @@ variable "xen_pool_name" {
   type = string
 }
 variable "xen_xoa_url" {
-  type    = string
+  type = string
 }
 variable "xen_xoa_username" {
-  type    = string
+  type = string
 }
 variable "xen_xoa_password" {
-  type    = string
+  type      = string
   sensitive = true
 }
 variable "xen_xoa_insecure" {

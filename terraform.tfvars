@@ -57,6 +57,10 @@ global_master_node_network_dhcp = false
 global_worker_node_network_dhcp = false
 #Master node IP address mask
 global_master_node_address_mask = "10.200.0."
+#Master node start IP (for static network configure masters AND configure HAProxy for K8S backends)
+global_master_node_address_start_ip = 11
+#Worker node start IP (for static network configure nodes)
+global_worker_node_address_start_ip = 20
 #Worker node IP address mask
 global_worker_node_address_mask = "10.200.0."
 #Nodes mask, default 255.255.255.0
@@ -73,7 +77,7 @@ global_pods_mask_cidr = 16
 #Count for VM master node
 #need minimal 3 for Kubernetes etcd и controlplane ( 3 для HA)
 #https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/high-availability/
-global_master_node_high_availability = false
+global_master_node_high_availability = true
 #Count for VM worker node
 #need minimal 2 node workers for HA kubernetes data
 #https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/high-availability/
@@ -141,3 +145,15 @@ global_version_runc = "1.1.7"
 #CNI network plugin
 #https://github.com/containernetworking/plugins/releases/download
 global_version_cni-plugin = "1.3.0"
+#IP address endpoint of Kubernetes cluster
+global_k8s_api_endpoint_ip = "10.200.0.10"
+#IP PORT endpoint of Kubernetes cluster via VRRP_HAProxy
+global_k8s_api_endpoint_port = "8888"
+#Make NAT for CNI pod network
+global_k8s_cni_hairpinMode = true
+#Make default gateway for CNI pod network
+global_k8s_cni_isDefaultGateway = true
+#Backend type for CNI pod network
+global_k8s_cni_Backend_Type = "vxlan"
+#NodePort for Kube-dashboard
+global_kube-dashboard_nodePort = 30100
