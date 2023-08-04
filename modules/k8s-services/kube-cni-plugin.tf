@@ -11,7 +11,7 @@
  } 
 }*/
 data "kubectl_file_documents" "k8s_cni_plugin_yaml_file" {
-    content = templatefile("${path.module}/scripts/kube-flannel.yml.tpl". {
+    content = templatefile("${path.module}/scripts/kube-flannel.yml.tpl", {
         pod-network-cidr             = "${var.pods_mask_cidr}"
         cni_hairpinMode              = "${var.k8s_cni_hairpinMode}"
         cni_isDefaultGateway         = "${var.k8s_cni_isDefaultGateway}"
