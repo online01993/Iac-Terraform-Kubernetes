@@ -13,8 +13,12 @@ resource "kubectl_manifest" "k8s_cni_plugin" {
  depends_on                    = [
     data.kubectl_path_documents.k8s_cni_plugin_yaml_file
  ]
- for_each                      = tomap(data.kubectl_path_documents.k8s_cni_plugin_yaml_file.documents)
- yaml_body                     = each.value  
+ #for_each                      = toset(data.kubectl_path_documents.k8s_cni_plugin_yaml_file.documents)
+ #yaml_body                     = each.value  
  #count                         = length(data.kubectl_path_documents.k8s_cni_plugin_yaml_file.documents)
  #yaml_body                     = element(data.kubectl_path_documents.k8s_cni_plugin_yaml_file.documents, count.index)
+  for key in keys(data.kubectl_path_documents.k8s_cni_plugin_yaml_file.documents) : {
+        name  = key
+        yaml_body = lookup(data.kubectl_path_documents.k8s_cni_plugin_yaml_file.documents, key)
+    }
 }
