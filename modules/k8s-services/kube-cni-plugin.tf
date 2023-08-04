@@ -26,11 +26,8 @@ resource "kubectl_manifest" "k8s_cni_plugin" {
  ]
  #for_each                      = toset(data.kubectl_path_documents.k8s_cni_plugin_yaml_file.documents)
  #yaml_body                     = each.value
- #count                         = length(data.kubectl_path_documents.k8s_cni_plugin_yaml_file.documents)
- #yaml_body                     = element(data.kubectl_path_documents.k8s_cni_plugin_yaml_file.documents, count.index)
- for_each                      = tomap([
- "yaml" = data.kubectl_file_documents.k8s_cni_plugin_yaml_file.manifests
- ]
- )
- yaml_body                     = each.value.yaml
+ count                         = length(data.kubectl_path_documents.k8s_cni_plugin_yaml_file.documents)
+ yaml_body                     = element(data.kubectl_path_documents.k8s_cni_plugin_yaml_file.documents, count.index)
+ #for_each                      = {for i in toset([data.kubectl_file_documents.k8s_cni_plugin_yaml_file[i].manifests])}
+ #yaml_body                     = each.value.yaml
 }
