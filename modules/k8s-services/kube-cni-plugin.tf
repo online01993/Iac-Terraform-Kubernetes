@@ -2,6 +2,7 @@
 #kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 data "kubectl_path_documents" "k8s_cni_plugin_yaml_file" {
  pattern                       = "${path.module}/scripts/kube-flannel.yml.tpl"
+ force_new                     = true
  vars                          = {
   pod-network-cidr             = "${var.pods_mask_cidr}"
   cni_hairpinMode              = "${var.k8s_cni_hairpinMode}"
@@ -13,8 +14,7 @@ resource "kubectl_manifest" "k8s_cni_plugin" {
  depends_on                    = [
     data.kubectl_path_documents.k8s_cni_plugin_yaml_file
  ]
- #for_each                      = toset(data.kubectl_path_documents.k8s_cni_plugin_yaml_file.documents)
- for_each                      = length(data.kubectl_path_documents.k8s_cni_plugin_yaml_file.documents)
+ for_each                      = toset(data.kubectl_path_documents.k8s_cni_plugin_yaml_file.documents)
  yaml_body                     = each.value  
  #count                         = length(data.kubectl_path_documents.k8s_cni_plugin_yaml_file.documents)
  #yaml_body                     = element(data.kubectl_path_documents.k8s_cni_plugin_yaml_file.documents, count.index)
