@@ -8,13 +8,12 @@ data "kubectl_path_documents" "k8s_cni_plugin_yaml_file" {
   cni_isDefaultGateway         = "${var.k8s_cni_isDefaultGateway}"
   cni_Backend_Type             = "${var.k8s_cni_Backend_Type}"
  } 
- force_new                     = true 
 }
 resource "kubectl_manifest" "k8s_cni_plugin" {
  depends_on                    = [
     data.kubectl_path_documents.k8s_cni_plugin_yaml_file
  ]
- for_each                      = toset(data.kubectl_path_documents.k8s_cni_plugin_yaml_file.documents)
+ for_each                      = toset(data.kubectl_path_documents.k8s_cni_plugin_yaml_file.manifests)
  yaml_body                     = each.value  
  #count                         = length(data.kubectl_path_documents.k8s_cni_plugin_yaml_file.documents)
  #yaml_body                     = element(data.kubectl_path_documents.k8s_cni_plugin_yaml_file.documents, count.index)
