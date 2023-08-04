@@ -1,6 +1,9 @@
 #kube-acl.tf
 resource "kubernetes_service_account_v1" "k8sadmin" {
-  depends_on                   = [ kubectl_manifest.k8s_cni_plugin ]
+  depends_on                   = [ 
+    #kubectl_manifest.k8s_cni_plugin 
+    kubernetes_manifest.daemonset_kube_flannel_kube_flannel_ds
+    ]
   metadata {
     name = "k8sadmin"    
     namespace = "default"
