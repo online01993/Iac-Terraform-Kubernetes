@@ -1,14 +1,14 @@
 #cni-plugin.tf
 #kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 data "kubectl_path_documents" "k8s_cni_plugin_yaml_file" {
- force_new                     = true
  pattern                       = "${path.module}/scripts/kube-flannel.yml.tpl"
  vars                          = {
   pod-network-cidr             = "${var.pods_mask_cidr}"
   cni_hairpinMode              = "${var.k8s_cni_hairpinMode}"
   cni_isDefaultGateway         = "${var.k8s_cni_isDefaultGateway}"
   cni_Backend_Type             = "${var.k8s_cni_Backend_Type}"
- }  
+ } 
+ force_new                     = true 
 }
 resource "kubectl_manifest" "k8s_cni_plugin" {
  depends_on                    = [
