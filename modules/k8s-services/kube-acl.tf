@@ -8,7 +8,8 @@ resource "kubernetes_service_account_v1" "k8sadmin" {
 }
 resource "kubernetes_cluster_role_binding" "k8sadmin_role_bindings" {
   depends_on                   = [ 
-    kubectl_manifest.k8s_cni_plugin,
+    #kubectl_manifest.k8s_cni_plugin,
+    kubernetes_manifest.daemonset_kube_flannel_kube_flannel_ds,
     kubernetes_service_account_v1.k8sadmin
   ]
   metadata {

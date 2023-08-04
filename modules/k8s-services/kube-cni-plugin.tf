@@ -171,8 +171,8 @@ resource "kubernetes_manifest" "configmap_kube_flannel_kube_flannel_cfg" {
           {
             "type": "flannel",
             "delegate": {
-              "hairpinMode": "${var.cni_hairpinMode}",
-              "isDefaultGateway": "${var.cni_isDefaultGateway}"
+              "hairpinMode": "${var.k8s_cni_hairpinMode}",
+              "isDefaultGateway": "${var.k8s_cni_isDefaultGateway}"
             }
           },
           {
@@ -187,9 +187,9 @@ resource "kubernetes_manifest" "configmap_kube_flannel_kube_flannel_cfg" {
       EOT
       "net-conf.json" = <<-EOT
       {
-        "Network": "${var.pod-network-cidr}",
+        "Network": "${var.pods_mask_cidr}",
         "Backend": {
-          "Type": "${var.cni_Backend_Type}"
+          "Type": "${var.k8s_cni_Backend_Type}"
         }
       }
       EOT
