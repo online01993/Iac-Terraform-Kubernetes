@@ -16,7 +16,7 @@ provider "kubernetes" {
   insecure                = true
   client_certificate      = base64decode(var.k8s-client-certificate-data)
   client_key              = base64decode(var.k8s-client-key-data)
-  #cluster_ca_certificate  = base64decode(var.k8s-certificate-authority-data)
+  cluster_ca_certificate  = base64decode(var.k8s-certificate-authority-data)
 }
 provider "kubectl" {
   host                    = var.k8s-url
@@ -24,5 +24,5 @@ provider "kubectl" {
   insecure                = true
   client_certificate      = base64decode(var.k8s-client-certificate-data)
   client_key              = base64decode(var.k8s-client-key-data)
-  #cluster_ca_certificate  = base64decode(var.k8s-certificate-authority-data)
+  cluster_ca_certificate  = base64decode(var.k8s-certificate-authority-data)
 }
