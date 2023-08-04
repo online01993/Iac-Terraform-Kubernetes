@@ -8,8 +8,9 @@ locals {
         cni_Backend_Type             = "${var.k8s_cni_Backend_Type}"  
     })
   crds_split_doc  = split("---", file("${path.module}/scripts/kube-flannel.yml.tpl"))
+  #crds_valid_yaml = [for doc in local.crds_split_doc : doc if try(yamldecode(doc).metadata.name, "") != ""]
   crds_valid_yaml = [for doc in local.crds_split_doc : doc if try(yamldecode(doc).metadata.name, "") != ""]
-  crds_dict       = { for doc in local.crds_valid_yaml : yamldecode(doc).metadata.name => doc }
+  crds_dict       = { for doc in toset(keys(local.crds_valid_yaml)) : yamldecode(doc).metadata.name => doc }
 }
 resource "kubectl_manifest" "k8s_cni_plugin" {
   for_each  = local.crds_dict
