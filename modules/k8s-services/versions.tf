@@ -13,7 +13,7 @@ terraform {
 }
 provider "kubernetes" {
   host                    = var.k8s-url
-  insecure                = true
+  insecure                = false
   client_certificate      = base64decode(var.k8s-client-certificate-data)
   client_key              = base64decode(var.k8s-client-key-data)
   cluster_ca_certificate  = base64decode(var.k8s-certificate-authority-data)
@@ -21,7 +21,7 @@ provider "kubernetes" {
 provider "kubectl" {
   host                    = var.k8s-url
   load_config_file        = false
-  insecure                = true
+  insecure                = false
   client_certificate      = base64decode(var.k8s-client-certificate-data)
   client_key              = base64decode(var.k8s-client-key-data)
   cluster_ca_certificate  = base64decode(var.k8s-certificate-authority-data)
