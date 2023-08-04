@@ -23,7 +23,7 @@ resource "kubectl_manifest" "k8s_cni_plugin" {
     data.kubectl_path_documents.k8s_cni_plugin_yaml_file,
     kubectl_manifest.k8s_cni_plugin
  ]
- for_each                      = tomap(data.kubectl_path_documents.k8s_cni_plugin_yaml_file.documents)
+ for_each                      = toset(data.kubectl_path_documents.k8s_cni_plugin_yaml_file.documents)
  #for_each = { for i in local.values : i.id => i }
  yaml_body                     = each.value.yaml
  #count                         = length(data.kubectl_path_documents.k8s_cni_plugin_yaml_file.documents)
