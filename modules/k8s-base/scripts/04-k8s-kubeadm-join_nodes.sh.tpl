@@ -17,5 +17,5 @@ done
 #wait base init-kubeadm on first master
 sleep 10
 sudo bash -c '${kubeadm-join_string} > /var/lib/cloud/instance/04-k8s-kubeadm-join_nodes 2>&1'
-sudo bash -c 'echo `date` >> /var/lib/cloud/instance/04-k8s-kubeadm-join_nodes'
-sudo bash -c 'echo "K8s adding current node ${itterator} to cluster" >> /var/lib/cloud/instance/04-k8s-kubeadm-join_nodes'
+#sudo bash -c 'echo `date` >> /var/lib/cloud/instance/04-k8s-kubeadm-join_nodes'
+#sudo bash -c 'echo "K8s adding current node ${itterator} to cluster" >> /var/lib/cloud/instance/04-k8s-kubeadm-join_nodes'
