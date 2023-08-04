@@ -3,7 +3,7 @@
 #  required_providers {
 # }
 #} 
-terraform {
+/*terraform {
   required_providers {
     kubectl = {
       source = "gavinbunney/kubectl"
@@ -29,4 +29,4 @@ provider "kubectl" {
   client_certificate      = base64decode(local.k8s-client-certificate-data)
   client_key              = base64decode(local.k8s-client-key-data)
   #cluster_ca_certificate  = base64decode(var.k8s-certificate-authority-data)
-}
+}*/

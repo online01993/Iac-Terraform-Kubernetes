@@ -60,7 +60,7 @@ module "kubernetes-base" {
 }
 module "kubernetes-services" {
   source                         = "./modules/k8s-services"
-  depends_on                     = [module.kubernetes-base]
+  #depends_on                     = [module.kubernetes-base]
   module_depends_on              = module.kubernetes-base.module_complete
   k8s_cni_hairpinMode            = var.global_k8s_cni_hairpinMode
   k8s_cni_isDefaultGateway       = var.global_k8s_cni_isDefaultGateway
