@@ -43,8 +43,8 @@ module "infrastructure" {
 module "kubernetes-base" {
   depends_on                     = [module.infrastructure]
   source                         = "./modules/k8s-base"
-  vm_rsa_ssh_key_public          = local.vm_rsa_ssh_key_public
-  vm_rsa_ssh_key_private         = local.vm_rsa_ssh_key_private
+  vm_rsa_ssh_key_public          = module.infrastructure.vm_rsa_ssh_key_public
+  vm_rsa_ssh_key_private         = module.infrastructure.vm_rsa_ssh_key_private
   master_count                   = var.global_master_node_high_availability == true ? 3 : 1
   master_node_address_start_ip   = var.global_master_node_address_start_ip
   k8s_api_endpoint_ip            = var.global_k8s_api_endpoint_ip
@@ -65,12 +65,12 @@ module "kubernetes-services" {
   k8s_cni_hairpinMode            = var.global_k8s_cni_hairpinMode
   k8s_cni_isDefaultGateway       = var.global_k8s_cni_isDefaultGateway
   k8s_cni_Backend_Type           = var.global_k8s_cni_Backend_Type
-  k8s-url                        = local.k8s-url
-  k8s-endpont                    = local.k8s-endpont
-  k8s-admin_file                 = local.k8s-admin_file
-  k8s-client-key-data            = local.k8s-client-key-data
-  k8s-client-certificate-data    = local.k8s-client-certificate-data
-  k8s-certificate-authority-data = local.k8s-certificate-authority-data
+  k8s-url                        = module.kubernetes-base.k8s-url
+  k8s-endpont                    = module.kubernetes-base.k8s-endpont
+  k8s-admin_file                 = module.kubernetes-base.k8s-admin_file
+  k8s-client-key-data            = module.kubernetes-base.k8s-client-key-data
+  k8s-client-certificate-data    = module.kubernetes-base.k8s-client-certificate-data
+  k8s-certificate-authority-data = module.kubernetes-base.k8s-certificate-authority-data
   kube-dashboard_nodePort        = var.global_kube-dashboard_nodePort
   pods_mask_cidr                 = "${var.global_pods_address_mask}/${var.global_pods_mask_cidr}"
 }  

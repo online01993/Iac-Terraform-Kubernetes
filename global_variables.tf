@@ -53,16 +53,3 @@ variable "global_k8s_cni_hairpinMode" {}
 variable "global_k8s_cni_isDefaultGateway" {}
 variable "global_k8s_cni_Backend_Type" {}
 variable "global_kube-dashboard_nodePort" {}
-
-
-locals {
-  vm_rsa_ssh_key_public          = module.infrastructure.vm_rsa_ssh_key_public
-  vm_rsa_ssh_key_private         = module.infrastructure.vm_rsa_ssh_key_private
-  k8s-url                        = module.kubernetes-base.k8s-url
-  k8s-endpont                    = module.kubernetes-base.k8s-endpont
-  k8s-admin_file                 = module.kubernetes-base.k8s-admin_file
-  k8s-client-key-data            = module.kubernetes-base.k8s-client-key-data
-  k8s-client-certificate-data    = module.kubernetes-base.k8s-client-certificate-data
-  k8s-certificate-authority-data = module.kubernetes-base.k8s-certificate-authority-data
-  k8s_kube-token-k8sadmin        = module.kubernetes-services.k8s_kube-token-k8sadmin
-}
