@@ -22,7 +22,7 @@ data "kubectl_file_documents" "k8s_cni_plugin_yaml_file" {
 resource "kubectl_manifest" "k8s_cni_plugin" {
  depends_on                    = [
     #data.kubectl_path_documents.k8s_cni_plugin_yaml_file
-    data.kubectl_file_documents.k8s_cni_plugin_yaml_file
+    #data.kubectl_file_documents.k8s_cni_plugin_yaml_file
  ]
  for_each                      = data.kubectl_path_documents.k8s_cni_plugin_yaml_file.documents
  yaml_body                     = each.value
