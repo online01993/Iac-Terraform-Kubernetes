@@ -1,8 +1,9 @@
 #variables.tf
-locals { 
- module_depends_on = var.module_depends_on
-  # the value doesn't matter; we're just using this variable
+variable "module_depends_on" { 
+ # the value doesn't matter; we're just using this variable
   # to propagate dependencies.
+  type    = any
+  #default = []
 }
 variable "k8s_cni_hairpinMode" {
   default = true
