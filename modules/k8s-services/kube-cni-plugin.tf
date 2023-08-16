@@ -14,7 +14,7 @@ locals {
     for doc in local.crds_split_doc : 
     {
       "id"  = doc
-      "doc" = (yamldecode(doc).metadata.name)
+      "doc" = (yamldecode(doc).metadata)
     }
     ]
   #crds_dict       = { for doc in toset(local.crds_valid_yaml) : yamldecode(doc).metadata.name => doc }
@@ -22,7 +22,7 @@ locals {
 }
 resource "kubectl_manifest" "k8s_cni_plugin" {
   for_each  = local.crds_dict
-  yaml_body = each.value
+  yaml_body = each.value.doc
 }
 /*data "kubectl_path_documents" "k8s_cni_plugin_yaml_file" {
  pattern                       = "${path.module}/scripts/kube-flannel.yml.tpl"
