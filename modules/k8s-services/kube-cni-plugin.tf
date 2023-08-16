@@ -16,11 +16,9 @@ locals {
     }
     #if try(yamldecode(i).metadata.name, "") != ""
   ]
-  #crds_dict       = { for doc in toset(local.crds_valid_yaml) : yamldecode(doc).metadata.name => doc }
   crds_dict       = { for i in toset(local.crds_valid_yaml) : i.id => i }
 }
 resource "kubectl_manifest" "k8s_cni_plugin" {
   for_each  = local.crds_dict
-  #for_each  = { for i in toset(local.crds_valid_yaml) : i.id => i }
   yaml_body = each.value.doc
 }
