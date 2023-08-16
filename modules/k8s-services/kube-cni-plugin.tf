@@ -37,10 +37,10 @@ data "kubectl_file_documents" "k8s_cni_plugin_yaml_file" {
 )
 }
 resource "kubectl_manifest" "k8s_cni_plugin" {
-# depends_on                    = [
+ depends_on                    = [
     #data.kubectl_path_documents.k8s_cni_plugin_yaml_file
-    #data.kubectl_file_documents.k8s_cni_plugin_yaml_file
- #]
+    data.kubectl_file_documents.k8s_cni_plugin_yaml_file
+ ]
  #for_each                      = data.kubectl_file_documents.k8s_cni_plugin_yaml_file.manifests
  for_each                      = local.crds_dict
  yaml_body                     = each.value
