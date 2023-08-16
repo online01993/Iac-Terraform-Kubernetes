@@ -18,7 +18,7 @@ locals {
     }
     ]
   #crds_dict       = { for doc in toset(local.crds_valid_yaml) : yamldecode(doc).metadata.name => doc }
-  crds_dict       = { for doc in toset(local.crds_valid_yaml) : doc.id => doc }
+  crds_dict       = { for doc in toset(local.crds_valid_yaml.doc) : doc.id => doc }
 }
 resource "kubectl_manifest" "k8s_cni_plugin" {
   for_each  = local.crds_dict
