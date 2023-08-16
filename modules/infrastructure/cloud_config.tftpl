@@ -69,6 +69,14 @@ apt:
     deb http://deb.debian.org/debian-security $RELEASE-security main
     deb-src http://deb.debian.org/debian-security $RELEASE-security main
   conf: |
+    Acquire {
+      Retries "60";
+    };
+    DPkg {
+      Lock {
+        Timeout "60";
+      };
+    };
     APT {
       Get {
         Assume-Yes "true";
