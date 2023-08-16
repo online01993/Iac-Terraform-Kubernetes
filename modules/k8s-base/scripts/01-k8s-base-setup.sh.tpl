@@ -10,7 +10,7 @@ while [ ! -f /var/lib/cloud/instance/boot-finished ]; do
   sleep 10
 done
 sudo bash -c 'apt get update'
-sudo bash -c 'apt get upgrade'
+sudo bash -c 'apt get upgrade -y'
 sudo bash -c 'cat <<EOF > /etc/sysctl.d/11-kubernetes.conf
 net.bridge.bridge-nf-call-iptables = 1
 net.ipv4.ip_forward = 1
