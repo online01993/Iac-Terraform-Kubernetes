@@ -40,7 +40,7 @@ resource "kubectl_manifest" "k8s_cni_plugin" {
     #data.kubectl_file_documents.k8s_cni_plugin_yaml_file
  #]
  #for_each                      = toset(data.kubectl_path_documents.k8s_cni_plugin_yaml_file.documents)
- for_each                      = { for doc in toset(data.kubectl_path_documents.k8s_cni_plugin_yaml_file.documents) : yamldecode(doc).metadata.name => doc }
+ for_each                      = { for doc in toset([for doc in data.kubectl_path_documents.k8s_cni_plugin_yaml_file.documents : doc if try(yamldecode(doc).metadata.name, "") != ""]) : yamldecode(doc).metadata.name => doc }
  yaml_body                     = each.value
  #count      = length(data.kubectl_path_documents.k8s_cni_plugin_yaml_file.documents)
  #yaml_body  = element(data.kubectl_path_documents.k8s_cni_plugin_yaml_file.documents, count.index)
