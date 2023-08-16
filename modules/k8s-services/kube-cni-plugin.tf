@@ -10,7 +10,7 @@ locals {
   crds_split_doc  = split("---", local.crds_rendered_content)
   #crds_valid_yaml = [for doc in local.crds_split_doc : doc if try(yamldecode(doc).metadata.name, "") != ""]
   crds_valid_yaml = [
-    for i in local.crds_split_doc : 
+    for i in range(length(local.crds_split_doc)) : 
     {
       "id" = i
       "doc" = local.crds_split_doc[i]      
@@ -21,6 +21,6 @@ locals {
   crds_dict       = { for i in toset(local.crds_valid_yaml) : i.id => i }
 }
 resource "kubectl_manifest" "k8s_cni_plugin" {
-  for_each  = local.crds_dict
+  for_each  = toset(local.crds_dict)
   yaml_body = each.value.doc
 }
