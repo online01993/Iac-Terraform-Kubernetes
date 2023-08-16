@@ -9,8 +9,9 @@ locals {
     })*/
   crds_rendered_content = data.kubectl_file_documents.k8s_cni_plugin_yaml_file.manifests
   #crds_split_doc  = split("---", file("${path.module}/scripts/kube-flannel.yml.tpl"))
-  crds_split_doc  = split("---", local.crds_rendered_content)
-  crds_valid_yaml = [for doc in local.crds_split_doc : doc if try(yamldecode(doc).metadata.name, "") != ""]
+  #crds_split_doc  = split("---", local.crds_rendered_content)
+  #crds_valid_yaml = [for doc in local.crds_split_doc : doc if try(yamldecode(doc).metadata.name, "") != ""]
+  crds_valid_yaml = [for doc in local.crds_rendered_content : doc if try(yamldecode(doc).metadata.name, "") != ""]
   crds_dict       = { for doc in toset(local.crds_valid_yaml) : yamldecode(doc).metadata.name => doc }
 }
 /*resource "kubectl_manifest" "k8s_cni_plugin" {
