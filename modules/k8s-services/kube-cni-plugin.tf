@@ -16,7 +16,7 @@ resource "kubectl_manifest" "k8s_cni_plugin" {
   for_each  = local.crds_dict
   yaml_body = each.value
 }
-data "kubectl_path_documents" "k8s_cni_plugin_yaml_file" {
+/*data "kubectl_path_documents" "k8s_cni_plugin_yaml_file" {
  pattern                       = "${path.module}/scripts/kube-flannel.yml.tpl"
  vars                          = {
   pod-network-cidr             = "${var.pods_mask_cidr}"
@@ -43,4 +43,4 @@ resource "kubectl_manifest" "k8s_cni_plugin" {
  #yaml_body                     = each.value
  count      = length(data.kubectl_path_documents.k8s_cni_plugin_yaml_file.documents)
  yaml_body  = element(data.kubectl_path_documents.k8s_cni_plugin_yaml_file.documents, count.index)
-}
+}*/
