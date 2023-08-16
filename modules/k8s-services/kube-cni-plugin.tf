@@ -15,7 +15,7 @@ locals {
 resource "kubectl_manifest" "k8s_cni_plugin" {
   for_each  = local.crds_dict
   yaml_body = each.value
-} */
+}
 /*data "kubectl_path_documents" "k8s_cni_plugin_yaml_file" {
  pattern                       = "${path.module}/scripts/kube-flannel.yml.tpl"
  vars                          = {
