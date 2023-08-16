@@ -14,7 +14,7 @@ locals {
     for doc in local.crds_split_doc : 
     {
       "id"  = doc
-      "doc" = if try(yamldecode(doc).metadata.name, "") != ""
+      "doc" = (yamldecode(doc).metadata.name, "")
     }
     ]
   #crds_dict       = { for doc in toset(local.crds_valid_yaml) : yamldecode(doc).metadata.name => doc }
