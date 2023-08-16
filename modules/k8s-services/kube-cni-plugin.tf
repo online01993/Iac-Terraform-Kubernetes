@@ -39,8 +39,8 @@ resource "kubectl_manifest" "k8s_cni_plugin" {
     #data.kubectl_path_documents.k8s_cni_plugin_yaml_file
     #data.kubectl_file_documents.k8s_cni_plugin_yaml_file
  #]
- for_each                      = data.kubectl_path_documents.k8s_cni_plugin_yaml_file.documents
- yaml_body                     = lookup(each.value, "manifest", null)
+ for_each                      = lookup(data.kubectl_path_documents.k8s_cni_plugin_yaml_file.documents, "manifest", null)
+ yaml_body                     = each.value
  #count      = length(data.kubectl_path_documents.k8s_cni_plugin_yaml_file.documents)
  #yaml_body  = element(data.kubectl_path_documents.k8s_cni_plugin_yaml_file.documents, count.index)
 }
