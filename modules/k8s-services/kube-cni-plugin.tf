@@ -43,4 +43,4 @@ resource "kubectl_manifest" "k8s_cni_plugin" {
  #yaml_body                     = each.value
  count      = length(data.kubectl_path_documents.k8s_cni_plugin_yaml_file.documents)
  yaml_body  = element(data.kubectl_path_documents.k8s_cni_plugin_yaml_file.documents, count.index)
-}
+}*/
