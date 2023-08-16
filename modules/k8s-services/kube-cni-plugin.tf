@@ -7,22 +7,16 @@ locals {
         cni_isDefaultGateway         = "${var.k8s_cni_isDefaultGateway}"
         cni_Backend_Type             = "${var.k8s_cni_Backend_Type}"  
     })
+  yaml_rg = yamldecode(local.crds_rendered_content)
   #crds_split_doc  = split("---", file("${path.module}/scripts/kube-flannel.yml.tpl"))
   crds_split_doc  = split("---", local.crds_rendered_content)
-  #crds_valid_yaml = [for doc in local.crds_split_doc : doc if try(yamldecode(doc).metadata.name, "") != ""]
-  crds_valid_yaml = [
-    for doc in local.crds_split_doc : 
-    {
-      "id"  = doc
-      "doc" = (yamldecode(doc).metadata)
-    }
-    ]
+  crds_valid_yaml = [for doc in local.crds_split_doc : doc if try(yamldecode(doc).metadata.name, "") != ""]
   #crds_dict       = { for doc in toset(local.crds_valid_yaml) : yamldecode(doc).metadata.name => doc }
-  crds_dict       = { for doc in toset(local.crds_valid_yaml) : doc.id => doc }
 }
 resource "kubectl_manifest" "k8s_cni_plugin" {
-  for_each  = local.crds_dict
-  yaml_body = each.value.doc
+  #for_each  = local.crds_dict
+  for_each  = local.yaml_rg
+  yaml_body = each.value
 }
 /*data "kubectl_path_documents" "k8s_cni_plugin_yaml_file" {
  pattern                       = "${path.module}/scripts/kube-flannel.yml.tpl"
