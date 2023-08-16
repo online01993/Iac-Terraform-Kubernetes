@@ -1,8 +1,7 @@
 #kube-acl.tf
 resource "kubernetes_service_account_v1" "k8sadmin" {
   depends_on                   = [ 
-    #kubectl_manifest.k8s_cni_plugin 
-    kubernetes_manifest.daemonset_kube_flannel_kube_flannel_ds
+    kubectl_manifest.k8s_cni_plugin
     ]
   metadata {
     name = "k8sadmin"    
@@ -11,8 +10,7 @@ resource "kubernetes_service_account_v1" "k8sadmin" {
 }
 resource "kubernetes_cluster_role_binding" "k8sadmin_role_bindings" {
   depends_on                   = [ 
-    #kubectl_manifest.k8s_cni_plugin,
-    kubernetes_manifest.daemonset_kube_flannel_kube_flannel_ds,
+    kubectl_manifest.k8s_cni_plugin,
     kubernetes_service_account_v1.k8sadmin
   ]
   metadata {
@@ -41,8 +39,7 @@ resource "kubernetes_cluster_role_binding" "k8sadmin_role_bindings" {
 }
 resource "kubernetes_token_request_v1" "k8s_kube-token-k8sadmin_resource" {
  depends_on                    = [ 
-   #kubectl_manifest.k8s_cni_plugin,
-   kubernetes_manifest.daemonset_kube_flannel_kube_flannel_ds,
+   kubectl_manifest.k8s_cni_plugin,
    kubernetes_service_account_v1.k8sadmin 
  ]
  metadata {

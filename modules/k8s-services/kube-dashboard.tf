@@ -9,8 +9,7 @@ data "kubectl_path_documents" "k8s_kube-dashboard_yaml_file" {
 resource "kubectl_manifest" "k8s_kube-dashboard" {
  depends_on                    = [
     data.kubectl_path_documents.k8s_kube-dashboard_yaml_file,
-    #kubectl_manifest.k8s_cni_plugin
-    kubernetes_manifest.daemonset_kube_flannel_kube_flannel_ds
+    kubectl_manifest.k8s_cni_plugin
  ]
  for_each                      = toset(data.kubectl_path_documents.k8s_kube-dashboard_yaml_file.documents)
  yaml_body                     = each.value  
