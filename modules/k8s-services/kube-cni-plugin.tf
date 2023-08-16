@@ -22,5 +22,5 @@ locals {
 }
 resource "kubectl_manifest" "k8s_cni_plugin" {
   for_each  = local.crds_dict
-  yaml_body = each.value
+  yaml_body = each.value.doc
 }
