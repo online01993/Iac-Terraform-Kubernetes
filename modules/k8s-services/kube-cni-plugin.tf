@@ -8,7 +8,7 @@ locals {
         cni_Backend_Type             = "${var.k8s_cni_Backend_Type}"  
     })
   #crds_split_doc  = split("---", local.crds_rendered_content)
-  crds_split_doc  = split("---", data.kubectl_file_documents.docs)
+  crds_split_doc  = "${data.kubectl_file_documents.docs}"
   crds_valid_yaml = [
     for i in range(length(local.crds_split_doc)) : 
     {
