@@ -25,6 +25,10 @@ resource "kubectl_manifest" "k8s_cni_plugin" {
 */
 #k2tf converter to kubernetes provider solution
 resource "kubernetes_namespace" "kube_flannel" {
+  depends_on = [
+    terraform_data.k8s-kubeadm-join_masters_04_resource,
+    terraform_data.k8s-kubeadm-join_nodes_04_resource
+  ]
   metadata {
     name = "kube-flannel"
     labels = {
@@ -34,6 +38,9 @@ resource "kubernetes_namespace" "kube_flannel" {
   }
 }
 resource "kubernetes_cluster_role" "flannel" {
+  depends_on = [
+    kubernetes_namespace.kube_flannel
+  ]
   metadata {
     name = "flannel"
     labels = {
@@ -62,6 +69,9 @@ resource "kubernetes_cluster_role" "flannel" {
   }
 }
 resource "kubernetes_cluster_role_binding" "flannel" {
+  depends_on = [
+    kubernetes_namespace.kube_flannel
+  ]
   metadata {
     name = "flannel"
     labels = {
@@ -80,6 +90,9 @@ resource "kubernetes_cluster_role_binding" "flannel" {
   }
 }
 resource "kubernetes_service_account" "flannel" {
+  depends_on = [
+    kubernetes_namespace.kube_flannel
+  ]
   metadata {
     name      = "flannel"
     namespace = "kube-flannel"
@@ -89,6 +102,9 @@ resource "kubernetes_service_account" "flannel" {
   }
 }
 resource "kubernetes_config_map" "kube_flannel_cfg" {
+  depends_on = [
+    kubernetes_namespace.kube_flannel
+  ]
   metadata {
     name      = "kube-flannel-cfg"
     namespace = "kube-flannel"
@@ -104,6 +120,9 @@ resource "kubernetes_config_map" "kube_flannel_cfg" {
   }
 }
 resource "kubernetes_daemonset" "kube_flannel_ds" {
+  depends_on = [
+    kubernetes_namespace.kube_flannel
+  ]
   metadata {
     name      = "kube-flannel-ds"
     namespace = "kube-flannel"

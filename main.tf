@@ -52,8 +52,9 @@ module "kubernetes-base" {
   masters                      = module.infrastructure.masters
   nodes                        = module.infrastructure.nodes
   master_node_address_mask     = var.global_master_node_address_mask
-  pods_address_mask            = var.global_pods_address_mask
-  pods_mask_cidr               = var.global_pods_mask_cidr
+  #pods_address_mask            = var.global_pods_address_mask
+  #pods_mask_cidr               = var.global_pods_mask_cidr
+  pods_mask_cidr               = "${var.global_pods_address_mask}/${var.global_pods_mask_cidr}"
   version_containerd           = var.global_version_containerd
   version_runc                 = var.global_version_runc
   version_cni-plugin           = var.global_version_cni-plugin
@@ -71,5 +72,5 @@ module "kubernetes-services" {
   k8s-client-certificate-data    = module.kubernetes-base.k8s-client-certificate-data
   k8s-certificate-authority-data = module.kubernetes-base.k8s-certificate-authority-data
   kube-dashboard_nodePort        = var.global_kube-dashboard_nodePort
-  pods_mask_cidr                 = "${var.global_pods_address_mask}/${var.global_pods_mask_cidr}"
+  #pods_mask_cidr                 = "${var.global_pods_address_mask}/${var.global_pods_mask_cidr}"
 }  
