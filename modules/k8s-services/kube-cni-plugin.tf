@@ -27,16 +27,16 @@ resource "kubectl_manifest" "k8s_cni_plugin" {
 resource "kubectl_manifest" "k8s_kube-dashboard" {
   for_each = {
     for i in toset([
-      for i in range(length(split("---", templatefile("${path.module}/scripts/kube-flannel.yml.tpl", {
+      for index, i in (split("---", templatefile("${path.module}/scripts/kube-flannel.yml.tpl", {
         pod-network-cidr     = "${var.pods_mask_cidr}"
         cni_hairpinMode      = "${var.k8s_cni_hairpinMode}"
         cni_isDefaultGateway = "${var.k8s_cni_isDefaultGateway}"
         cni_Backend_Type     = "${var.k8s_cni_Backend_Type}"
         })
-      ))) :
+      )) :
       {
-        "id"  = i
-        "doc" = each.value[i]
+        "id"  = index
+        "doc" = i
       }
       #if try(yamldecode(i).metadata.name, "") != ""
     ])
