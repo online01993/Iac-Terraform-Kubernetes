@@ -36,7 +36,7 @@ resource "kubectl_manifest" "k8s_kube-dashboard" {
       ))) :
       {
         "id"  = i
-        "doc" = local.crds_split_doc_1[i]
+        "doc" = local.crds_split_doc[i]
       }
       #if try(yamldecode(i).metadata.name, "") != ""
     ])
