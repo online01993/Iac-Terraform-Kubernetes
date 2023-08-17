@@ -1,6 +1,6 @@
 #kube-dashboard.tf
 #https://adamtheautomator.com/kubernetes-dashboard/
-/*
+
 ##kubectl provider solution
 resource "kubectl_manifest" "k8s_kube-dashboard" {
   depends_on = [
@@ -8,13 +8,14 @@ resource "kubectl_manifest" "k8s_kube-dashboard" {
   ]
   for_each = {
     for i in toset([
-      for i in range(length(split("---", templatefile("${path.module}/scripts/kube-dashboard.yml.tpl", {
+      #for i in range(length(split("---", templatefile("${path.module}/scripts/kube-dashboard.yml.tpl", {
+      for index, i in (split("---", templatefile("${path.module}/scripts/kube-dashboard.yml.tpl", {
         kube-dashboard_nodePort = "${var.kube-dashboard_nodePort}"
         })
-      ))) :
+      )) :
       {
-        "id"  = i
-        "doc" = local.crds_split_doc_1[i]
+        "id"  = index
+        "doc" = i
       }
       #if try(yamldecode(i).metadata.name, "") != ""
     ])
@@ -22,7 +23,7 @@ resource "kubectl_manifest" "k8s_kube-dashboard" {
   }
   yaml_body = each.value.doc
 }
-*/
+
 /*
 #k2tf converter to kubernetes provider solution
 resource "kubernetes_namespace" "kubernetes_dashboard" {
