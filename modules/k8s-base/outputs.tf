@@ -20,3 +20,6 @@ output "k8s-certificate-authority-data" {
   value     = data.local_sensitive_file.k8s-kubeadm_init_02_config_get_certificate-authority-data_file.content
   sensitive = true
 }
+output "k8s_kube-token-k8sadmin" {
+  value = nonsensitive(kubernetes_token_request_v1.k8s_kube-token-k8sadmin_resource.token)
+}
