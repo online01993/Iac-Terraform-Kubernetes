@@ -1,6 +1,6 @@
 #kube-dashboard.tf
 #https://adamtheautomator.com/kubernetes-dashboard/
-locals {
+/*locals {
   crds_rendered_content_1 = templatefile("${path.module}/scripts/kube-dashboard.yml.tpl", {
         kube-dashboard_nodePort      = "${var.kube-dashboard_nodePort}"
     })
@@ -21,4 +21,4 @@ resource "kubectl_manifest" "k8s_kube-dashboard" {
  ]
  for_each  = local.crds_dict_1
  yaml_body = each.value.doc  
-}
+}*/
