@@ -39,12 +39,12 @@ variable "master_node_address_start_ip" {
   #default = 11
   type = number
 }
-variable "pods_address_mask" {
+/*variable "pods_address_mask" {
   #default = 10.244.0.
   type = string
-}
+}*/
 variable "pods_mask_cidr" {
-  #default = 16
+  #default = ""
   type = string
 }
 variable "k8s_api_endpoint_ip" {
