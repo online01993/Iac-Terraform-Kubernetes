@@ -1,20 +1,21 @@
 #kube-acl.tf
 resource "kubernetes_service_account_v1" "k8sadmin" {
-  /*depends_on = [
-    kubectl_manifest.k8s_cni_plugin
-  ]*/
+  depends_on = [
+    terraform_data.k8s-kubeadm-join_masters_04_resource,
+    terraform_data.k8s-kubeadm-join_nodes_04_resource
+  ]
   metadata {
     name      = "k8sadmin"
     namespace = "default"
   }
 }
-resource "kubernetes_cluster_role_binding" "k8sadmin_role_bindings" {
+resource "kubernetes_cluster_role_binding" "k8sadmin_cluster_role_bindings" {
   depends_on = [
     #kubectl_manifest.k8s_cni_plugin,
     kubernetes_service_account_v1.k8sadmin
   ]
   metadata {
-    name = "k8sadmin_role_bindings"
+    name = "k8sadmin_cluster_role_bindings"
   }
   role_ref {
     api_group = "rbac.authorization.k8s.io"
@@ -40,7 +41,8 @@ resource "kubernetes_cluster_role_binding" "k8sadmin_role_bindings" {
 resource "kubernetes_token_request_v1" "k8s_kube-token-k8sadmin_resource" {
   depends_on = [
     #kubectl_manifest.k8s_cni_plugin,
-    kubernetes_service_account_v1.k8sadmin
+    kubernetes_service_account_v1.k8sadmin,
+    kubernetes_cluster_role_binding.k8sadmin_cluster_role_bindings
   ]
   metadata {
     name = kubernetes_service_account_v1.k8sadmin.metadata.0.name
@@ -55,4 +57,4 @@ resource "kubernetes_token_request_v1" "k8s_kube-token-k8sadmin_resource" {
       "https://kubernetes.default.svc.cluster.local"
     ]
   }
-}  
+}

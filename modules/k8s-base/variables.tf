@@ -39,10 +39,6 @@ variable "master_node_address_start_ip" {
   #default = 11
   type = number
 }
-/*variable "pods_address_mask" {
-  #default = 10.244.0.
-  type = string
-}*/
 variable "k8s_cni_hairpinMode" {
   default = true
   type    = bool

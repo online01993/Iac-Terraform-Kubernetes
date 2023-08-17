@@ -1,8 +1,7 @@
 #cni-plugin.tf
 #kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
-/*
 ##kubectl provider solution
-resource "kubectl_manifest" "k8s_cni_plugin" {
+/*resource "kubectl_manifest" "k8s_cni_plugin" {
   for_each = {
     for i in toset([
       for index, i in (split("---", templatefile("${path.module}/scripts/kube-flannel.yml.tpl", {
@@ -21,8 +20,7 @@ resource "kubectl_manifest" "k8s_cni_plugin" {
     : i.id => i
   }
   yaml_body = each.value.doc
-}
-*/
+}*/
 #k2tf converter to kubernetes provider solution
 resource "kubernetes_namespace" "kube_flannel" {
   depends_on = [
@@ -37,9 +35,22 @@ resource "kubernetes_namespace" "kube_flannel" {
     }
   }
 }
-resource "kubernetes_cluster_role" "flannel" {
+resource "kubernetes_service_account" "flannel" {
   depends_on = [
     kubernetes_namespace.kube_flannel
+  ]
+  metadata {
+    name      = "flannel"
+    namespace = "kube-flannel"
+    labels = {
+      k8s-app = "flannel"
+    }
+  }
+}
+resource "kubernetes_cluster_role" "flannel" {
+  depends_on = [
+    kubernetes_namespace.kube_flannel,
+    kubernetes_service_account.flannel
   ]
   metadata {
     name = "flannel"
@@ -70,7 +81,9 @@ resource "kubernetes_cluster_role" "flannel" {
 }
 resource "kubernetes_cluster_role_binding" "flannel" {
   depends_on = [
-    kubernetes_namespace.kube_flannel
+    kubernetes_namespace.kube_flannel,
+    kubernetes_service_account.flannel,
+    kubernetes_cluster_role.flannel
   ]
   metadata {
     name = "flannel"
@@ -89,21 +102,10 @@ resource "kubernetes_cluster_role_binding" "flannel" {
     name      = "flannel"
   }
 }
-resource "kubernetes_service_account" "flannel" {
-  depends_on = [
-    kubernetes_namespace.kube_flannel
-  ]
-  metadata {
-    name      = "flannel"
-    namespace = "kube-flannel"
-    labels = {
-      k8s-app = "flannel"
-    }
-  }
-}
 resource "kubernetes_config_map" "kube_flannel_cfg" {
   depends_on = [
-    kubernetes_namespace.kube_flannel
+    kubernetes_namespace.kube_flannel,
+    kubernetes_service_account.flannel
   ]
   metadata {
     name      = "kube-flannel-cfg"
@@ -121,7 +123,10 @@ resource "kubernetes_config_map" "kube_flannel_cfg" {
 }
 resource "kubernetes_daemonset" "kube_flannel_ds" {
   depends_on = [
-    kubernetes_namespace.kube_flannel
+    kubernetes_namespace.kube_flannel,
+    kubernetes_service_account.flannel,
+    kubernetes_cluster_role_binding.flannel,
+    kubernetes_config_map.kube_flannel_cfg
   ]
   metadata {
     name      = "kube-flannel-ds"
