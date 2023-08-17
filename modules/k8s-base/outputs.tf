@@ -1,7 +1,7 @@
-output "k8s-url" {
+output "k8s-api-endpont-url" {
   value = "https://${var.k8s_api_endpoint_ip}:${var.k8s_api_endpoint_port}"
 }
-output "k8s-endpont" {
+output "k8s-endpont-ip" {
   value = var.k8s_api_endpoint_ip
 }
 output "k8s-admin_file" {

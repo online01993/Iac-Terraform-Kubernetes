@@ -12,11 +12,11 @@ output "vm_rsa_ssh_key_private" {
   value     = module.infrastructure.vm_rsa_ssh_key_private
   sensitive = true
 }
-output "k8s-url" {
-  value = module.kubernetes-base.k8s-url
+output "k8s-api-endpont-url" {
+  value = module.kubernetes-base.k8s-api-endpont-url
 }
-output "k8s-endpont" {
-  value = module.kubernetes-base.k8s-endpont
+output "k8s-endpont-ip" {
+  value = module.kubernetes-base.k8s-endpont-ip
 }
 output "k8s_kube-token-k8sadmin" {
   value     = module.kubernetes-base.k8s_kube-token-k8sadmin
