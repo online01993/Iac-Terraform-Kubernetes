@@ -2,20 +2,20 @@
 terraform {
   required_providers {
     xenorchestra = {
-      source  = "${var.global_provider_xenorchestra_source}"
-      version = "${var.global_provider_xenorchestra_version}"
+      source  = var.global_provider_xenorchestra_source
+      version = var.global_provider_xenorchestra_version
     }
     tls = {
-      source  = "${var.global_provider_tls_source}"
-      version = "${var.global_provider_tls_version}"
+      source  = var.global_provider_tls_source
+      version = var.global_provider_tls_version
     }
     kubectl = {
-      source  = "${var.global_provider_kubectl_source}"
-      version = "${var.global_provider_kubectl_version}"
+      source  = var.global_provider_kubectl_source
+      version = var.global_provider_kubectl_version
     }
     kubernetes = {
-      source  = "${var.global_provider_kubernetes_source}"
-      version = "${var.global_provider_kubernetes_version}"
+      source  = var.global_provider_kubernetes_source
+      version = var.global_provider_kubernetes_version
     }
   }
 }
