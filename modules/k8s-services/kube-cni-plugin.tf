@@ -22,7 +22,7 @@ resource "kubectl_manifest" "k8s_cni_plugin" {
   for_each  = local.crds_dict
   yaml_body = each.value.doc
 }
-
+*/
 ##kubectl provider solution
 resource "kubectl_manifest" "k8s_kube-dashboard" {
   for_each = {
@@ -43,4 +43,4 @@ resource "kubectl_manifest" "k8s_kube-dashboard" {
     : i.id => i
   }
   yaml_body = each.value.doc
-}*/
+}
