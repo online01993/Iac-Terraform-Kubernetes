@@ -43,6 +43,18 @@ variable "master_node_address_start_ip" {
   #default = 10.244.0.
   type = string
 }*/
+variable "k8s_cni_hairpinMode" {
+  default = true
+  type    = bool
+}
+variable "k8s_cni_isDefaultGateway" {
+  default = true
+  type    = bool
+}
+variable "k8s_cni_Backend_Type" {
+  default = "vxlan"
+  type    = string
+}
 variable "pods_mask_cidr" {
   #default = ""
   type = string

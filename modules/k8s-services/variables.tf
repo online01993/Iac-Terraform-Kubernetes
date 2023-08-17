@@ -1,5 +1,5 @@
 #variables.tf
-variable "k8s_cni_hairpinMode" {
+/*variable "k8s_cni_hairpinMode" {
   default = true
   type    = bool
 }
@@ -10,7 +10,7 @@ variable "k8s_cni_isDefaultGateway" {
 variable "k8s_cni_Backend_Type" {
   default = "vxlan"
   type    = string
-}
+}*/
 /*variable "pods_mask_cidr" {
   #default = ""
   type = string
