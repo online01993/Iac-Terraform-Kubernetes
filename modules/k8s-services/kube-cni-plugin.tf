@@ -1,6 +1,6 @@
 #cni-plugin.tf
 #kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
-locals {
+/*locals {
   crds_rendered_content = templatefile("${path.module}/scripts/kube-flannel.yml.tpl", {
     pod-network-cidr     = "${var.pods_mask_cidr}"
     cni_hairpinMode      = "${var.k8s_cni_hairpinMode}"
@@ -22,3 +22,25 @@ resource "kubectl_manifest" "k8s_cni_plugin" {
   for_each  = local.crds_dict
   yaml_body = each.value.doc
 }
+
+##kubectl provider solution
+resource "kubectl_manifest" "k8s_kube-dashboard" {
+  for_each = {
+    for i in toset([
+      for i in range(length(split("---", templatefile("${path.module}/scripts/kube-flannel.yml.tpl", {
+        pod-network-cidr     = "${var.pods_mask_cidr}"
+        cni_hairpinMode      = "${var.k8s_cni_hairpinMode}"
+        cni_isDefaultGateway = "${var.k8s_cni_isDefaultGateway}"
+        cni_Backend_Type     = "${var.k8s_cni_Backend_Type}"
+        })
+      ))) :
+      {
+        "id"  = i
+        "doc" = local.crds_split_doc_1[i]
+      }
+      #if try(yamldecode(i).metadata.name, "") != ""
+    ])
+    : i.id => i
+  }
+  yaml_body = each.value.doc
+}*/
