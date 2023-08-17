@@ -5,7 +5,7 @@ output "masters" {
   value = module.infrastructure.masters
 }
 output "vm_rsa_ssh_key_public" {
-  value = module.infrastructure.vm_rsa_ssh_key_public
+  value     = module.infrastructure.vm_rsa_ssh_key_public
   sensitive = true
 }
 output "vm_rsa_ssh_key_private" {
@@ -13,10 +13,10 @@ output "vm_rsa_ssh_key_private" {
   sensitive = true
 }
 output "k8s-url" {
-  value     = module.kubernetes-base.k8s-url
+  value = module.kubernetes-base.k8s-url
 }
 output "k8s-endpont" {
-  value     = module.kubernetes-base.k8s-endpont
+  value = module.kubernetes-base.k8s-endpont
 }
 output "k8s_kube-token-k8sadmin" {
   value     = module.kubernetes-services.k8s_kube-token-k8sadmin

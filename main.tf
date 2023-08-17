@@ -41,22 +41,22 @@ module "infrastructure" {
   worker_node_network_dhcp     = var.global_worker_node_network_dhcp
 }
 module "kubernetes-base" {
-  depends_on                     = [module.infrastructure]
-  source                         = "./modules/k8s-base"
-  vm_rsa_ssh_key_public          = module.infrastructure.vm_rsa_ssh_key_public
-  vm_rsa_ssh_key_private         = module.infrastructure.vm_rsa_ssh_key_private
-  master_count                   = var.global_master_node_high_availability == true ? 3 : 1
-  master_node_address_start_ip   = var.global_master_node_address_start_ip
-  k8s_api_endpoint_ip            = var.global_k8s_api_endpoint_ip
-  k8s_api_endpoint_port          = var.global_k8s_api_endpoint_port
-  masters                        = module.infrastructure.masters
-  nodes                          = module.infrastructure.nodes
-  master_node_address_mask       = var.global_master_node_address_mask
-  pods_address_mask              = var.global_pods_address_mask
-  pods_mask_cidr                 = var.global_pods_mask_cidr
-  version_containerd             = var.global_version_containerd
-  version_runc                   = var.global_version_runc
-  version_cni-plugin             = var.global_version_cni-plugin
+  depends_on                   = [module.infrastructure]
+  source                       = "./modules/k8s-base"
+  vm_rsa_ssh_key_public        = module.infrastructure.vm_rsa_ssh_key_public
+  vm_rsa_ssh_key_private       = module.infrastructure.vm_rsa_ssh_key_private
+  master_count                 = var.global_master_node_high_availability == true ? 3 : 1
+  master_node_address_start_ip = var.global_master_node_address_start_ip
+  k8s_api_endpoint_ip          = var.global_k8s_api_endpoint_ip
+  k8s_api_endpoint_port        = var.global_k8s_api_endpoint_port
+  masters                      = module.infrastructure.masters
+  nodes                        = module.infrastructure.nodes
+  master_node_address_mask     = var.global_master_node_address_mask
+  pods_address_mask            = var.global_pods_address_mask
+  pods_mask_cidr               = var.global_pods_mask_cidr
+  version_containerd           = var.global_version_containerd
+  version_runc                 = var.global_version_runc
+  version_cni-plugin           = var.global_version_cni-plugin
 }
 module "kubernetes-services" {
   source                         = "./modules/k8s-services"

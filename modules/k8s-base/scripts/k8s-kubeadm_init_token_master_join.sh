@@ -1,0 +1,1 @@
+kubeadm join 10.200.0.10:8888 --token tbznr4.bfj2kvkgp1l7fpk8 --discovery-token-ca-cert-hash sha256:16e4d9f30acaefbbc67e3912385b44931295faac1be8d128312ed4f8e8fcad3e  --control-plane --certificate-key 4fb8a03b41dd26820a538bdb2ad76bd7e7602aa650be7bb71ffcd806b11673ea

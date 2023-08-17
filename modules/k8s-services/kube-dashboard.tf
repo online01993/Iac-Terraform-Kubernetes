@@ -4,39 +4,39 @@
 ##kubectl provider solution
 locals {
   crds_rendered_content_1 = templatefile("${path.module}/scripts/kube-dashboard.yml.tpl", {
-        kube-dashboard_nodePort      = "${var.kube-dashboard_nodePort}"
-    })
-  crds_split_doc_1  = split("---", local.crds_rendered_content_1)
+    kube-dashboard_nodePort = "${var.kube-dashboard_nodePort}"
+  })
+  crds_split_doc_1 = split("---", local.crds_rendered_content_1)
   crds_valid_yaml_1 = [
-    for i in range(length(local.crds_split_doc_1)) : 
+    for i in range(length(local.crds_split_doc_1)) :
     {
-      "id" = i
-      "doc" = local.crds_split_doc_1[i]      
+      "id"  = i
+      "doc" = local.crds_split_doc_1[i]
     }
     #if try(yamldecode(i).metadata.name, "") != ""
   ]
   #crds_dict_1       = { for i in toset(local.crds_valid_yaml_1) : i.id => i }
 }
 resource "kubectl_manifest" "k8s_kube-dashboard" {
-depends_on                    = [
- kubectl_manifest.k8s_cni_plugin
-]
-#for_each  = local.crds_dict_1
-for_each  = { 
-   for i in toset([
-    for i in range(length(split("---", templatefile("${path.module}/scripts/kube-dashboard.yml.tpl", {
-        kube-dashboard_nodePort      = "${var.kube-dashboard_nodePort}"
+  depends_on = [
+    kubectl_manifest.k8s_cni_plugin
+  ]
+  #for_each  = local.crds_dict_1
+  for_each = {
+    for i in toset([
+      for i in range(length(split("---", templatefile("${path.module}/scripts/kube-dashboard.yml.tpl", {
+        kube-dashboard_nodePort = "${var.kube-dashboard_nodePort}"
         })
-    ))) : 
-    {
-      "id" = i
-      "doc" = local.crds_split_doc_1[i]      
-    }
-    #if try(yamldecode(i).metadata.name, "") != ""
-   ])
-   : i.id => i 
-}
-yaml_body = each.value.doc  
+      ))) :
+      {
+        "id"  = i
+        "doc" = local.crds_split_doc_1[i]
+      }
+      #if try(yamldecode(i).metadata.name, "") != ""
+    ])
+    : i.id => i
+  }
+  yaml_body = each.value.doc
 }
 
 /*

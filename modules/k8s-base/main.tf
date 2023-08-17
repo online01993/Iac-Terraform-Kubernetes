@@ -50,9 +50,9 @@ resource "terraform_data" "k8s-base-setup_01_resource_nodes" {
   }
 }
 resource "random_password" "k8s-vrrp_random_pass_resource" {
-  length           = 12
-  special          = false
-  numeric           = true
+  length  = 12
+  special = false
+  numeric = true
 }
 resource "terraform_data" "k8s-kubeadm_init_02_resource" {
   depends_on = [

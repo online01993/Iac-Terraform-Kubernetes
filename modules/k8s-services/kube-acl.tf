@@ -1,15 +1,15 @@
 #kube-acl.tf
 resource "kubernetes_service_account_v1" "k8sadmin" {
-  depends_on                   = [ 
+  depends_on = [
     kubectl_manifest.k8s_cni_plugin
-    ]
+  ]
   metadata {
-    name = "k8sadmin"    
+    name      = "k8sadmin"
     namespace = "default"
   }
 }
 resource "kubernetes_cluster_role_binding" "k8sadmin_role_bindings" {
-  depends_on                   = [ 
+  depends_on = [
     kubectl_manifest.k8s_cni_plugin,
     kubernetes_service_account_v1.k8sadmin
   ]
@@ -38,12 +38,12 @@ resource "kubernetes_cluster_role_binding" "k8sadmin_role_bindings" {
   }
 }
 resource "kubernetes_token_request_v1" "k8s_kube-token-k8sadmin_resource" {
- depends_on                    = [ 
-   kubectl_manifest.k8s_cni_plugin,
-   kubernetes_service_account_v1.k8sadmin 
- ]
- metadata {
-    name  = kubernetes_service_account_v1.k8sadmin.metadata.0.name
+  depends_on = [
+    kubectl_manifest.k8s_cni_plugin,
+    kubernetes_service_account_v1.k8sadmin
+  ]
+  metadata {
+    name = kubernetes_service_account_v1.k8sadmin.metadata.0.name
   }
   spec {
     #5 years
