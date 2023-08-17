@@ -36,7 +36,7 @@ resource "kubectl_manifest" "k8s_kube-dashboard" {
       ))) :
       {
         "id"  = i
-        "doc" = self[i]
+        "doc" = each.value[i]
       }
       #if try(yamldecode(i).metadata.name, "") != ""
     ])
