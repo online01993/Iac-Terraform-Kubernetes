@@ -1,23 +1,10 @@
+#
 # MAIN FILE TO VARIABLES SET
 #
-# Providers settings
+
 #
-#Xenorchestra provider version
-global_provider_xenorchestra_version = "0.24.2"
-#Xenorchestra provider source
-global_provider_xenorchestra_source = "terra-farm/xenorchestra"
-#TLS provider version
-global_provider_tls_version = "~> 0.9"
-#TLS provider source
-global_provider_tls_source = "hashicorp/tls"
-#Kubectl provider version
-global_provider_kubectl_version = "1.14.0"
-#Kubectl provider source
-global_provider_kubectl_source = "gavinbunney/kubectl"
-#Kubernetes provider version
-global_provider_kubernetes_version = "2.22.0"
-#Kubernetes provider source
-global_provider_kubernetes_source = "hashicorp/kubernetes"
+# XO XCP-ng settings
+#
 #Address to connect XO orhestra for xen mgmt
 global_xen_xoa_url = "ws://10.1.84.212"
 #XO orhestra login username
@@ -26,10 +13,6 @@ global_xen_xoa_username = "admin"
 global_xen_xoa_password = "nt[yjkjubz"
 #XO use secure ssl false|true
 global_xen_xoa_insecure = true
-
-#
-# XO XCP-ng settings
-#
 #XO xcp-ng/xenserver pool
 global_xen_pool_name = "xcp-ng-homepool"
 #Network for VM

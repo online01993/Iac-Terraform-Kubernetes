@@ -1,13 +1,5 @@
 #this file need to link varribles from root main.tf to modules in sub-dir
 #https://discuss.hashicorp.com/t/trying-to-understand-input-variables-tfvars-variables-tf/22324/4
-variable "global_provider_xenorchestra_version" {}
-variable "global_provider_xenorchestra_source" {}
-variable "global_provider_tls_version" {}
-variable "global_provider_tls_source" {}
-variable "global_provider_kubectl_version" {}
-variable "global_provider_kubectl_source" {}
-variable "global_provider_kubernetes_version" {}
-variable "global_provider_kubernetes_source" {}
 variable "global_master_cpu_count" {}
 variable "global_xen_network_name" {}
 variable "global_xen_vm_template_name" {}
