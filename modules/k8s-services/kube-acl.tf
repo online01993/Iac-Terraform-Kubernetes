@@ -1,5 +1,5 @@
 #kube-acl.tf
-resource "kubernetes_service_account_v1" "k8sadmin" {
+/*resource "kubernetes_service_account_v1" "k8sadmin" {
   depends_on = [
     kubectl_manifest.k8s_cni_plugin
   ]
@@ -56,3 +56,4 @@ resource "kubernetes_token_request_v1" "k8s_kube-token-k8sadmin_resource" {
     ]
   }
 }  
+*/
