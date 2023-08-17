@@ -24,7 +24,7 @@ resource "kubectl_manifest" "k8s_cni_plugin" {
 }
 */
 ##kubectl provider solution
-/*resource "kubectl_manifest" "k8s_cni_plugin" {
+resource "kubectl_manifest" "k8s_cni_plugin" {
   for_each = {
     for i in toset([
       for index, i in (split("---", templatefile("${path.module}/scripts/kube-flannel.yml.tpl", {
@@ -43,4 +43,4 @@ resource "kubectl_manifest" "k8s_cni_plugin" {
     : i.id => i
   }
   yaml_body = each.value.doc
-}*/
+}
