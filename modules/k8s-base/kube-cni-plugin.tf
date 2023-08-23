@@ -147,7 +147,6 @@ resource "kubernetes_daemonset" "kube_flannel_ds" {
       metadata {
         labels = {
           app = "flannel"
-
           tier = "node"
         }
       }
