@@ -1776,8 +1776,8 @@ resource "kubernetes_deployment" "piraeus_operator_controller_manager" {
             period_seconds        = 10
           }
           security_context {
-            read_only_root_filesystem = true
-            allowPrivilegeEscalation  = false
+            read_only_root_filesystem  = true
+            allow_privilege_escalation = false
           }
         }
         termination_grace_period_seconds = 10
@@ -1879,8 +1879,8 @@ resource "kubernetes_deployment" "piraeus_operator_gencert" {
             period_seconds        = 10
           }
           security_context {
-            read_only_root_filesystem = true
-            allowPrivilegeEscalation  = false
+            read_only_root_filesystem  = true
+            allow_privilege_escalation = false
           }
         }
         termination_grace_period_seconds = 10
