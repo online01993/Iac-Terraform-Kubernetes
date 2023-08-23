@@ -1993,7 +1993,9 @@ resource "kubectl_manifest" "linstorcluster_piraeus_datastore" {
     kubectl_manifest.CRD_linstorsatellites_piraeus_io,
     kubernetes_config_map.piraeus_operator_image_config,
     kubernetes_service.piraeus_operator_webhook_service,
-    kubernetes_validating_webhook_configuration.piraeus_operator_validating_webhook_configuration
+    kubernetes_validating_webhook_configuration.piraeus_operator_validating_webhook_configuration,
+    kubernetes_deployment.piraeus_operator_controller_manager,
+    kubernetes_deployment.piraeus_operator_gencert
   ]
   server_side_apply = true
   yaml_body = <<YAML
