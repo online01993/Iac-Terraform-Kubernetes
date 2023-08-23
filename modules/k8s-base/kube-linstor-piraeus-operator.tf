@@ -1980,3 +1980,22 @@ resource "kubernetes_validating_webhook_configuration" "piraeus_operator_validat
     admission_review_versions = ["v1"]
   }
 }
+resource "kubectl_manifest" "linstorcluster_piraeus_datastore" {
+  depends_on = [
+    kubernetes_namespace.piraeus_datastore,
+    kubectl_manifest.CRD_linstorclusters_piraeus_io,
+    kubectl_manifest.CRD_linstornodeconnections_piraeus_io,
+    kubectl_manifest.CRD_linstorsatelliteconfigurations_piraeus_io,
+    kubectl_manifest.CRD_linstorsatellites_piraeus_io,
+    kubernetes_config_map.piraeus_operator_image_config,
+    kubernetes_service.piraeus_operator_webhook_service,
+    kubernetes_validating_webhook_configuration.piraeus_operator_validating_webhook_configuration
+  ]
+  yaml_body = <<YAML
+apiVersion: piraeus.io/v1
+kind: LinstorCluster
+metadata:
+  name: linstorcluster
+spec: {}
+YAML
+}
