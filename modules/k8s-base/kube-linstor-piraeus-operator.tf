@@ -1777,6 +1777,7 @@ resource "kubernetes_deployment" "piraeus_operator_controller_manager" {
           }
           security_context {
             read_only_root_filesystem = true
+            allowPrivilegeEscalation  = false
           }
         }
         termination_grace_period_seconds = 10
@@ -1858,7 +1859,6 @@ resource "kubernetes_deployment" "piraeus_operator_gencert" {
             }
             requests = {
               cpu = "5m"
-
               memory = "32Mi"
             }
           }
@@ -1880,6 +1880,7 @@ resource "kubernetes_deployment" "piraeus_operator_gencert" {
           }
           security_context {
             read_only_root_filesystem = true
+            allowPrivilegeEscalation  = false
           }
         }
         termination_grace_period_seconds = 10
