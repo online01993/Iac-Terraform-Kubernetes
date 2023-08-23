@@ -1915,6 +1915,8 @@ resource "kubernetes_validating_webhook_configuration" "piraeus_operator_validat
     rule {
       operations = ["CREATE", "UPDATE"]
       resources    = ["linstorclusters"]
+      api_versions = ["v1"]
+      api_groups   = ["piraeus.io"]
     }
     failure_policy            = "Fail"
     side_effects              = "None"
@@ -1931,7 +1933,9 @@ resource "kubernetes_validating_webhook_configuration" "piraeus_operator_validat
     }
     rule {
       operations = ["CREATE", "UPDATE"]
-      resources    = ["linstornodeconnections"]
+      resources    = ["linstornodeconnections"]   
+      api_versions = ["v1"]
+      api_groups   = ["piraeus.io"]
     }
     failure_policy            = "Fail"
     side_effects              = "None"
@@ -1949,6 +1953,8 @@ resource "kubernetes_validating_webhook_configuration" "piraeus_operator_validat
     rule {
       operations = ["CREATE", "UPDATE"]
       resources    = ["linstorsatellites"]
+      api_versions = ["v1"]
+      api_groups   = ["piraeus.io"]
     }
     failure_policy            = "Fail"
     side_effects              = "None"
@@ -1966,6 +1972,8 @@ resource "kubernetes_validating_webhook_configuration" "piraeus_operator_validat
     rule {
       operations = ["CREATE", "UPDATE"]
       resources    = ["linstorsatelliteconfigurations"]
+      api_versions = ["v1"]
+      api_groups   = ["piraeus.io"]
     }
     failure_policy            = "Fail"
     side_effects              = "None"
