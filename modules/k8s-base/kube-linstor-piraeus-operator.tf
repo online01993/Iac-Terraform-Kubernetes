@@ -1217,7 +1217,7 @@ resource "kubernetes_service_account" "piraeus_operator_controller_manager" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
     kubectl_manifest.CRD_linstorclusters_piraeus_io,
-    kubectl_manifest.CRD_linstornodeconnections_piraeus_io
+    kubectl_manifest.CRD_linstornodeconnections_piraeus_io,
     kubectl_manifest.CRD_linstorsatelliteconfigurations_piraeus_io,
     kubectl_manifest.CRD_linstorsatellites_piraeus_io
   ]
@@ -1233,7 +1233,7 @@ resource "kubernetes_service_account" "piraeus_operator_gencert" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
     kubectl_manifest.CRD_linstorclusters_piraeus_io,
-    kubectl_manifest.CRD_linstornodeconnections_piraeus_io
+    kubectl_manifest.CRD_linstornodeconnections_piraeus_io,
     kubectl_manifest.CRD_linstorsatelliteconfigurations_piraeus_io,
     kubectl_manifest.CRD_linstorsatellites_piraeus_io
   ]
@@ -1249,7 +1249,7 @@ resource "kubernetes_role" "piraeus_operator_gencert" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
     kubectl_manifest.CRD_linstorclusters_piraeus_io,
-    kubectl_manifest.CRD_linstornodeconnections_piraeus_io
+    kubectl_manifest.CRD_linstornodeconnections_piraeus_io,
     kubectl_manifest.CRD_linstorsatelliteconfigurations_piraeus_io,
     kubectl_manifest.CRD_linstorsatellites_piraeus_io
   ]
@@ -1270,7 +1270,7 @@ resource "kubernetes_role" "piraeus_operator_leader_election_role" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
     kubectl_manifest.CRD_linstorclusters_piraeus_io,
-    kubectl_manifest.CRD_linstornodeconnections_piraeus_io
+    kubectl_manifest.CRD_linstornodeconnections_piraeus_io,
     kubectl_manifest.CRD_linstorsatelliteconfigurations_piraeus_io,
     kubectl_manifest.CRD_linstorsatellites_piraeus_io
   ]
@@ -1301,7 +1301,7 @@ resource "kubernetes_cluster_role" "piraeus_operator_controller_manager" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
     kubectl_manifest.CRD_linstorclusters_piraeus_io,
-    kubectl_manifest.CRD_linstornodeconnections_piraeus_io
+    kubectl_manifest.CRD_linstornodeconnections_piraeus_io,
     kubectl_manifest.CRD_linstorsatelliteconfigurations_piraeus_io,
     kubectl_manifest.CRD_linstorsatellites_piraeus_io
   ]
@@ -1497,7 +1497,7 @@ resource "kubernetes_cluster_role" "piraeus-operator-gencert" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
     kubectl_manifest.CRD_linstorclusters_piraeus_io,
-    kubectl_manifest.CRD_linstornodeconnections_piraeus_io
+    kubectl_manifest.CRD_linstornodeconnections_piraeus_io,
     kubectl_manifest.CRD_linstorsatelliteconfigurations_piraeus_io,
     kubectl_manifest.CRD_linstorsatellites_piraeus_io
   ]
@@ -1518,7 +1518,7 @@ resource "kubernetes_role_binding" "piraeus_operator_gencert" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
     kubectl_manifest.CRD_linstorclusters_piraeus_io,
-    kubectl_manifest.CRD_linstornodeconnections_piraeus_io
+    kubectl_manifest.CRD_linstornodeconnections_piraeus_io,
     kubectl_manifest.CRD_linstorsatelliteconfigurations_piraeus_io,
     kubectl_manifest.CRD_linstorsatellites_piraeus_io,
     kubernetes_role.piraeus_operator_gencert
@@ -1546,7 +1546,7 @@ resource "kubernetes_role_binding" "piraeus_operator_leader_election_rolebinding
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
     kubectl_manifest.CRD_linstorclusters_piraeus_io,
-    kubectl_manifest.CRD_linstornodeconnections_piraeus_io
+    kubectl_manifest.CRD_linstornodeconnections_piraeus_io,
     kubectl_manifest.CRD_linstorsatelliteconfigurations_piraeus_io,
     kubectl_manifest.CRD_linstorsatellites_piraeus_io,
     kubernetes_role.piraeus_operator_leader_election_role
@@ -1578,7 +1578,7 @@ resource "kubernetes_cluster_role_binding" "piraeus_operator_gencert" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
     kubectl_manifest.CRD_linstorclusters_piraeus_io,
-    kubectl_manifest.CRD_linstornodeconnections_piraeus_io
+    kubectl_manifest.CRD_linstornodeconnections_piraeus_io,
     kubectl_manifest.CRD_linstorsatelliteconfigurations_piraeus_io,
     kubectl_manifest.CRD_linstorsatellites_piraeus_io,
     kubernetes_cluster_role.piraeus-operator-gencert
@@ -1604,7 +1604,7 @@ resource "kubernetes_cluster_role_binding" "piraeus_operator_manager_rolebinding
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
     kubectl_manifest.CRD_linstorclusters_piraeus_io,
-    kubectl_manifest.CRD_linstornodeconnections_piraeus_io
+    kubectl_manifest.CRD_linstornodeconnections_piraeus_io,
     kubectl_manifest.CRD_linstorsatelliteconfigurations_piraeus_io,
     kubectl_manifest.CRD_linstorsatellites_piraeus_io,
     kubernetes_cluster_role.piraeus_operator_controller_manager
@@ -1630,7 +1630,7 @@ resource "kubernetes_config_map" "piraeus_operator_image_config" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
     kubectl_manifest.CRD_linstorclusters_piraeus_io,
-    kubectl_manifest.CRD_linstornodeconnections_piraeus_io
+    kubectl_manifest.CRD_linstornodeconnections_piraeus_io,
     kubectl_manifest.CRD_linstorsatelliteconfigurations_piraeus_io,
     kubectl_manifest.CRD_linstorsatellites_piraeus_io
   ]
@@ -1650,7 +1650,7 @@ resource "kubernetes_service" "piraeus_operator_webhook_service" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
     kubectl_manifest.CRD_linstorclusters_piraeus_io,
-    kubectl_manifest.CRD_linstornodeconnections_piraeus_io
+    kubectl_manifest.CRD_linstornodeconnections_piraeus_io,
     kubectl_manifest.CRD_linstorsatelliteconfigurations_piraeus_io,
     kubectl_manifest.CRD_linstorsatellites_piraeus_io
   ]
@@ -1677,7 +1677,7 @@ resource "kubernetes_deployment" "piraeus_operator_controller_manager" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
     kubectl_manifest.CRD_linstorclusters_piraeus_io,
-    kubectl_manifest.CRD_linstornodeconnections_piraeus_io
+    kubectl_manifest.CRD_linstornodeconnections_piraeus_io,
     kubectl_manifest.CRD_linstorsatelliteconfigurations_piraeus_io,
     kubectl_manifest.CRD_linstorsatellites_piraeus_io,
     kubernetes_config_map.piraeus_operator_image_config,
@@ -1788,7 +1788,7 @@ resource "kubernetes_deployment" "piraeus_operator_gencert" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
     kubectl_manifest.CRD_linstorclusters_piraeus_io,
-    kubectl_manifest.CRD_linstornodeconnections_piraeus_io
+    kubectl_manifest.CRD_linstornodeconnections_piraeus_io,
     kubectl_manifest.CRD_linstorsatelliteconfigurations_piraeus_io,
     kubectl_manifest.CRD_linstorsatellites_piraeus_io,
     kubernetes_config_map.piraeus_operator_image_config,
@@ -1891,7 +1891,7 @@ resource "kubernetes_validating_webhook_configuration" "piraeus_operator_validat
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
     kubectl_manifest.CRD_linstorclusters_piraeus_io,
-    kubectl_manifest.CRD_linstornodeconnections_piraeus_io
+    kubectl_manifest.CRD_linstornodeconnections_piraeus_io,
     kubectl_manifest.CRD_linstorsatelliteconfigurations_piraeus_io,
     kubectl_manifest.CRD_linstorsatellites_piraeus_io,
     kubernetes_config_map.piraeus_operator_image_config,
