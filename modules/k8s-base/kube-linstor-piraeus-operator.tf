@@ -20,6 +20,7 @@ resource "kubectl_manifest" "CRD_linstorclusters_piraeus_io" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore
   ]
+  server_side_apply = true
   yaml_body = <<YAML
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -316,6 +317,7 @@ resource "kubectl_manifest" "CRD_linstornodeconnections_piraeus_io" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore
   ]
+  server_side_apply = true
   yaml_body = <<YAML
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -531,6 +533,7 @@ resource "kubectl_manifest" "CRD_linstorsatelliteconfigurations_piraeus_io" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore
   ]
+  server_side_apply = true
   yaml_body = <<YAML
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -863,6 +866,7 @@ resource "kubectl_manifest" "CRD_linstorsatellites_piraeus_io" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore
   ]
+  server_side_apply = true
   yaml_body = <<YAML
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -1991,6 +1995,7 @@ resource "kubectl_manifest" "linstorcluster_piraeus_datastore" {
     kubernetes_service.piraeus_operator_webhook_service,
     kubernetes_validating_webhook_configuration.piraeus_operator_validating_webhook_configuration
   ]
+  server_side_apply = true
   yaml_body = <<YAML
 apiVersion: piraeus.io/v1
 kind: LinstorCluster
