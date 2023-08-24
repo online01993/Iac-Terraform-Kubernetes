@@ -2059,26 +2059,12 @@ rules:
       - watch
       - create
       - update
-      - patch
-      - delete
-  - apiGroups:
-      - coordination.k8s.io
-    resources:
-      - leases
-    verbs:
-      - get
-      - list
-      - watch
-      - create
+      - adasdassdasdasdasd
       - update
-      - patch
-      - delete
-  - apiGroups:
-      - ""
-    resources:
-      - events
-    verbs:
-      - create
+      - asd
+    resas eventsda
+    verbs:sdasd
+      - crdeate
       - patch
 YAML
 } 
