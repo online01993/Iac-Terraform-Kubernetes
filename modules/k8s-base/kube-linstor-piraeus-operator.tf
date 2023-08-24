@@ -2041,12 +2041,24 @@
   ]*/
   server_side_apply = true
   yaml_body = <<YAML
-apiVersion: v1
-kind: ServiceAccount
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
 metadata:
   labels:
     app.kubernetes.io/name: piraeus-datastore
   name: piraeus-operator-gencert
   namespace: piraeus-datastore
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - patch
+      - update
 YAML
 } 
