@@ -4266,7 +4266,7 @@ webhooks:
     sideEffects: None
 YAML
 }
-# resource "kubectl_manifest" "linstorcluster_piraeus_datastore" {
+resource "kubectl_manifest" "linstorcluster_piraeus_datastore" {
 #   depends_on = [
 #     kubernetes_namespace.piraeus_datastore,
 #     kubectl_manifest.CRD_linstorclusters_piraeus_io,
@@ -4279,12 +4279,12 @@ YAML
 #     kubernetes_deployment.piraeus_operator_controller_manager,
 #     kubernetes_deployment.piraeus_operator_gencert
 #   ]
-#   server_side_apply = true
-#   yaml_body = <<YAML
-# apiVersion: piraeus.io/v1
-# kind: LinstorCluster
-# metadata:
-#   name: linstorcluster
-# spec: {}
-# YAML
-# }
+  server_side_apply = true
+  yaml_body = <<YAML
+apiVersion: piraeus.io/v1
+kind: LinstorCluster
+metadata:
+  name: linstorcluster
+spec: {}
+YAML
+}
