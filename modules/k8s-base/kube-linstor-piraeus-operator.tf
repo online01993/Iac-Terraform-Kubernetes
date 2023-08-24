@@ -4007,92 +4007,92 @@ spec:
     app.kubernetes.io/name: piraeus-datastore
 YAML
 }
-resource "kubectl_manifest" "t" {
-  depends_on = [
-    kubectl_manifest.s     
-  ]
-  server_side_apply = true
-  yaml_body = <<YAML
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  labels:
-    app.kubernetes.io/component: piraeus-operator
-    app.kubernetes.io/name: piraeus-datastore
-  name: piraeus-operator-controller-manager
-  namespace: piraeus-datastore
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app.kubernetes.io/component: piraeus-operator
-      app.kubernetes.io/name: piraeus-datastore
-  template:
-    metadata:
-      annotations:
-        kubectl.kubernetes.io/default-container: manager
-      labels:
-        app.kubernetes.io/component: piraeus-operator
-        app.kubernetes.io/name: piraeus-datastore
-    spec:
-      containers:
-        - args:
-            - --leader-elect
-            - --metrics-bind-address=0
-            - --namespace=$(NAMESPACE)
-            - --image-config-map-name=$(IMAGE_CONFIG_MAP_NAME)
-          command:
-            - /manager
-          env:
-            - name: NAMESPACE
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.namespace
-            - name: IMAGE_CONFIG_MAP_NAME
-              value: piraeus-operator-image-config
-          image: quay.io/piraeusdatastore/piraeus-operator:v2
-          livenessProbe:
-            httpGet:
-              path: /healthz
-              port: 8081
-            initialDelaySeconds: 15
-            periodSeconds: 20
-          name: manager
-          ports:
-            - containerPort: 9443
-              name: webhook-server
-              protocol: TCP
-          readinessProbe:
-            httpGet:
-              path: /readyz
-              port: 8081
-            initialDelaySeconds: 5
-            periodSeconds: 10
-          resources:
-            limits:
-              cpu: 500m
-              memory: 256Mi
-            requests:
-              cpu: 10m
-              memory: 64Mi
-          securityContext:
-            allowPrivilegeEscalation: false
-            readOnlyRootFilesystem: true
-          volumeMounts:
-            - mountPath: /tmp/k8s-webhook-server/serving-certs
-              name: cert
-              readOnly: true
-      securityContext:
-        runAsNonRoot: true
-      serviceAccountName: piraeus-operator-controller-manager
-      terminationGracePeriodSeconds: 10
-      volumes:
-        - name: cert
-          secret:
-            defaultMode: 420
-            secretName: webhook-server-cert
-YAML
-}
+# resource "kubectl_manifest" "t" {
+#   depends_on = [
+#     kubectl_manifest.s     
+#   ]
+#   server_side_apply = true
+#   yaml_body = <<YAML
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   labels:
+#     app.kubernetes.io/component: piraeus-operator
+#     app.kubernetes.io/name: piraeus-datastore
+#   name: piraeus-operator-controller-manager
+#   namespace: piraeus-datastore
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app.kubernetes.io/component: piraeus-operator
+#       app.kubernetes.io/name: piraeus-datastore
+#   template:
+#     metadata:
+#       annotations:
+#         kubectl.kubernetes.io/default-container: manager
+#       labels:
+#         app.kubernetes.io/component: piraeus-operator
+#         app.kubernetes.io/name: piraeus-datastore
+#     spec:
+#       containers:
+#         - args:
+#             - --leader-elect
+#             - --metrics-bind-address=0
+#             - --namespace=$(NAMESPACE)
+#             - --image-config-map-name=$(IMAGE_CONFIG_MAP_NAME)
+#           command:
+#             - /manager
+#           env:
+#             - name: NAMESPACE
+#               valueFrom:
+#                 fieldRef:
+#                   fieldPath: metadata.namespace
+#             - name: IMAGE_CONFIG_MAP_NAME
+#               value: piraeus-operator-image-config
+#           image: quay.io/piraeusdatastore/piraeus-operator:v2
+#           livenessProbe:
+#             httpGet:
+#               path: /healthz
+#               port: 8081
+#             initialDelaySeconds: 15
+#             periodSeconds: 20
+#           name: manager
+#           ports:
+#             - containerPort: 9443
+#               name: webhook-server
+#               protocol: TCP
+#           readinessProbe:
+#             httpGet:
+#               path: /readyz
+#               port: 8081
+#             initialDelaySeconds: 5
+#             periodSeconds: 10
+#           resources:
+#             limits:
+#               cpu: 500m
+#               memory: 256Mi
+#             requests:
+#               cpu: 10m
+#               memory: 64Mi
+#           securityContext:
+#             allowPrivilegeEscalation: false
+#             readOnlyRootFilesystem: true
+#           volumeMounts:
+#             - mountPath: /tmp/k8s-webhook-server/serving-certs
+#               name: cert
+#               readOnly: true
+#       securityContext:
+#         runAsNonRoot: true
+#       serviceAccountName: piraeus-operator-controller-manager
+#       terminationGracePeriodSeconds: 10
+#       volumes:
+#         - name: cert
+#           secret:
+#             defaultMode: 420
+#             secretName: webhook-server-cert
+# YAML
+# }
 resource "kubectl_manifest" "u" {
   depends_on = [
     kubectl_manifest.t     
