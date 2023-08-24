@@ -2048,21 +2048,20 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.12.0
   labels:
     app.kubernetes.io/name: piraeus-datastore
-  name: linstorsatelliteconfigurations.piraeus.io
+  name: linstorsatellites.piraeus.io
 spec:
   group: piraeus.io
   names:
-    kind: LinstorSatelliteConfiguration
-    listKind: LinstorSatelliteConfigurationList
-    plural: linstorsatelliteconfigurations
-    singular: linstorsatelliteconfiguration
+    kind: LinstorSatellite
+    listKind: LinstorSatelliteList
+    plural: linstorsatellites
+    singular: linstorsatellite
   scope: Cluster
   versions:
     - name: v1
       schema:
         openAPIV3Schema:
-          description: LinstorSatelliteConfiguration is the Schema for the
-            linstorsatelliteconfigurations API
+          description: LinstorSatellite is the Schema for the linstorsatellites API
           properties:
             apiVersion:
               description: "APIVersion defines the versioned schema of this representation of
@@ -2082,16 +2081,37 @@ spec:
             metadata:
               type: object
             spec:
-              description: >-
-                LinstorSatelliteConfigurationSpec defines a partial, desired state
-                of a LinstorSatelliteSpec. 
-                 All the LinstorSatelliteConfiguration resources with matching NodeSelector will be merged into a single LinstorSatelliteSpec.
+              description: LinstorSatelliteSpec defines the desired state of LinstorSatellite
               properties:
+                clusterRef:
+                  description: ClusterRef references the LinstorCluster used to create this
+                    LinstorSatellite.
+                  properties:
+                    clientSecretName:
+                      description: ClientSecretName references the secret used by the operator to
+                        validate the https endpoint.
+                      type: string
+                    externalController:
+                      description: ExternalController references an external controller. When set, the
+                        Operator uses the external cluster to register
+                        satellites.
+                      properties:
+                        url:
+                          description: URL of the external controller.
+                          minLength: 3
+                          type: string
+                      required:
+                        - url
+                      type: object
+                    name:
+                      description: Name of the LinstorCluster resource controlling this satellite.
+                      type: string
+                  type: object
                 internalTLS:
                   description: >-
                     InternalTLS configures secure communication for the LINSTOR
                     Satellite. 
-                     If set, the control traffic between LINSTOR Controller and Satellite will be encrypted using mTLS.
+                     If set, the control traffic between LINSTOR Controller and Satellite will be encrypted using mTLS. The Controller will use the client key from `LinstorCluster.spec.internalTLS` when connecting.
                   nullable: true
                   properties:
                     certManager:
@@ -2116,13 +2136,6 @@ spec:
                       description: SecretName references a secret holding the TLS key and
                         certificates.
                       type: string
-                  type: object
-                nodeSelector:
-                  additionalProperties:
-                    type: string
-                  description: NodeSelector selects which LinstorSatellite resources this spec
-                    should be applied to. See
-                    https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
                   type: object
                 patches:
                   description: >-
@@ -2202,6 +2215,9 @@ spec:
                   x-kubernetes-list-map-keys:
                     - name
                   x-kubernetes-list-type: map
+                repository:
+                  description: Repository used to pull workload images.
+                  type: string
                 storagePools:
                   description: StoragePools is a list of storage pools to configure on the node.
                   items:
@@ -2288,13 +2304,15 @@ spec:
                       - name
                     type: object
                   type: array
+              required:
+                - clusterRef
               type: object
             status:
-              description: LinstorSatelliteConfigurationStatus defines the observed state of
-                LinstorSatelliteConfiguration
+              description: LinstorSatelliteStatus defines the observed state of
+                LinstorSatellite
               properties:
                 conditions:
-                  description: Current LINSTOR Satellite Config state
+                  description: Current LINSTOR Satellite state
                   items:
                     description: >-
                       Condition contains details for one aspect of the current state of
