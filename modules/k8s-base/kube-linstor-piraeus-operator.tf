@@ -2048,20 +2048,21 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.12.0
   labels:
     app.kubernetes.io/name: piraeus-datastore
-  name: linstorclusters.piraeus.io
+  name: linstornodeconnections.piraeus.io
 spec:
   group: piraeus.io
   names:
-    kind: LinstorCluster
-    listKind: LinstorClusterList
-    plural: linstorclusters
-    singular: linstorcluster
+    kind: LinstorNodeConnection
+    listKind: LinstorNodeConnectionList
+    plural: linstornodeconnections
+    singular: linstornodeconnection
   scope: Cluster
   versions:
     - name: v1
       schema:
         openAPIV3Schema:
-          description: LinstorCluster is the Schema for the linstorclusters API
+          description: LinstorNodeConnection is the Schema for the linstornodeconnections
+            API
           properties:
             apiVersion:
               description: "APIVersion defines the versioned schema of this representation of
@@ -2081,159 +2082,31 @@ spec:
             metadata:
               type: object
             spec:
-              description: LinstorClusterSpec defines the desired state of LinstorCluster
+              description: LinstorNodeConnectionSpec defines the desired state of
+                LinstorNodeConnection
               properties:
-                apiTLS:
-                  description: >-
-                    ApiTLS secures the LINSTOR API. 
-                     This configures the TLS key and certificate used to secure the LINSTOR API.
-                  nullable: true
-                  properties:
-                    apiSecretName:
-                      description: ApiSecretName references a secret holding the TLS key and
-                        certificate used to protect the API. Defaults to
-                        "linstor-api-tls".
-                      type: string
-                    certManager:
-                      description: CertManager references a cert-manager Issuer or ClusterIssuer. If
-                        set, cert-manager.io/Certificate resources will be
-                        created, provisioning the secrets referenced in
-                        *SecretName using the issuer configured here.
-                      properties:
-                        group:
-                          description: Group of the resource being referred to.
-                          type: string
-                        kind:
-                          description: Kind of the resource being referred to.
-                          type: string
-                        name:
-                          description: Name of the resource being referred to.
-                          type: string
-                      required:
-                        - name
-                      type: object
-                    clientSecretName:
-                      description: ClientSecretName references a secret holding the TLS key and
-                        certificate used by the operator to configure the
-                        cluster. Defaults to "linstor-client-tls".
-                      type: string
-                    csiControllerSecretName:
-                      description: CsiControllerSecretName references a secret holding the TLS key and
-                        certificate used by the CSI Controller to provision
-                        volumes. Defaults to "linstor-csi-controller-tls".
-                      type: string
-                    csiNodeSecretName:
-                      description: CsiNodeSecretName references a secret holding the TLS key and
-                        certificate used by the CSI Nodes to query the volume
-                        state. Defaults to "linstor-csi-node-tls".
-                      type: string
-                  type: object
-                externalController:
-                  description: ExternalController references an external controller. When set, the
-                    Operator will skip deploying a LINSTOR Controller and
-                    instead use the external cluster to register satellites.
-                  properties:
-                    url:
-                      description: URL of the external controller.
-                      minLength: 3
-                      type: string
-                  required:
-                    - url
-                  type: object
-                internalTLS:
-                  description: >-
-                    InternalTLS secures the connection between LINSTOR Controller and
-                    Satellite. 
-                     This configures the client certificate used when the Controller connects to a Satellite. This only has an effect when the Satellite is configured to for secure connections using `LinstorSatellite.spec.internalTLS`.
-                  nullable: true
-                  properties:
-                    certManager:
-                      description: CertManager references a cert-manager Issuer or ClusterIssuer. If
-                        set, a Certificate resource will be created,
-                        provisioning the secret references in SecretName using
-                        the issuer configured here.
-                      properties:
-                        group:
-                          description: Group of the resource being referred to.
-                          type: string
-                        kind:
-                          description: Kind of the resource being referred to.
-                          type: string
-                        name:
-                          description: Name of the resource being referred to.
-                          type: string
-                      required:
-                        - name
-                      type: object
-                    secretName:
-                      description: SecretName references a secret holding the TLS key and
-                        certificates.
-                      type: string
-                  type: object
-                linstorPassphraseSecret:
-                  description: >-
-                    LinstorPassphraseSecret used to configure the LINSTOR master
-                    passphrase. 
-                     The referenced secret must contain a single key "MASTER_PASSPHRASE". The master passphrase is used to * Derive encryption keys for volumes using the LUKS layer. * Store credentials for accessing remotes for backups. See https://linbit.com/drbd-user-guide/linstor-guide-1_0-en/#s-encrypt_commands for more information.
-                  type: string
-                nodeSelector:
-                  additionalProperties:
-                    type: string
-                  description: NodeSelector selects the nodes on which LINSTOR Satellites will be
-                    deployed. See
-                    https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
-                  type: object
-                patches:
-                  description: >-
-                    Patches is a list of kustomize patches to apply. 
-                     See https://kubectl.docs.kubernetes.io/references/kustomize/kustomization/patches/ for how to create patches.
+                paths:
+                  description: Paths configure the network path used when connecting two nodes.
                   items:
-                    description: Patch represent either a Strategic Merge Patch or a JSON patch and
-                      its targets.
                     properties:
-                      options:
-                        additionalProperties:
-                          type: boolean
-                        description: Options is a list of options for the patch
-                        type: object
-                      patch:
-                        description: Patch is the content of a patch.
-                        minLength: 1
+                      interface:
+                        description: Interface to use on both nodes.
                         type: string
-                      target:
-                        description: Target points to the resources that the patch is applied to
-                        properties:
-                          annotationSelector:
-                            description: AnnotationSelector is a string that follows the label selection
-                              expression
-                              https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#api
-                              It matches against the resource annotations.
-                            type: string
-                          group:
-                            type: string
-                          kind:
-                            type: string
-                          labelSelector:
-                            description: LabelSelector is a string that follows the label selection
-                              expression
-                              https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#api
-                              It matches against the resource labels.
-                            type: string
-                          name:
-                            description: Name of the resource.
-                            type: string
-                          namespace:
-                            description: Namespace the resource belongs to, if it can belong to a namespace.
-                            type: string
-                          version:
-                            type: string
-                        type: object
+                      name:
+                        description: Name of the path.
+                        type: string
+                    required:
+                      - interface
+                      - name
                     type: object
                   type: array
+                  x-kubernetes-list-map-keys:
+                    - name
+                  x-kubernetes-list-type: map
                 properties:
                   description: >-
-                    Properties to apply on the cluster level. 
-                     Use to create default settings for DRBD that should apply to all resources or to configure some other cluster wide default.
+                    Properties to apply for the node connection. 
+                     Use to create default settings for DRBD that should apply to all resources connections between a set of cluster nodes.
                   items:
                     properties:
                       name:
@@ -2250,15 +2123,62 @@ spec:
                   x-kubernetes-list-map-keys:
                     - name
                   x-kubernetes-list-type: map
-                repository:
-                  description: Repository used to pull workload images.
-                  type: string
+                selector:
+                  description: Selector selects which pair of Satellites the connection should
+                    apply to. If not given, the connection will be applied to
+                    all connections.
+                  items:
+                    description: SelectorTerm matches pairs of nodes by checking that the nodes
+                      match all specified requirements.
+                    properties:
+                      matchLabels:
+                        description: MatchLabels is a list of match expressions that the node pairs must
+                          meet.
+                        items:
+                          properties:
+                            key:
+                              description: Key is the name of a node label.
+                              minLength: 1
+                              type: string
+                            op:
+                              default: Exists
+                              description: Op to apply to the label. Exists (default) checks for the presence
+                                of the label on both nodes in the pair.
+                                DoesNotExist checks that the label is not
+                                present on either node in the pair. In checks
+                                for the presence of the label value given by
+                                Values on both nodes in the pair. NotIn checks
+                                that both nodes in the pair do not have any of
+                                the label values given by Values. Same checks
+                                that the label value is equal in the node pair.
+                                NotSame checks that the label value is not equal
+                                in the node pair.
+                              enum:
+                                - Exists
+                                - DoesNotExist
+                                - In
+                                - NotIn
+                                - Same
+                                - NotSame
+                              type: string
+                            values:
+                              description: Values to match on, using the provided Op.
+                              items:
+                                type: string
+                              type: array
+                          required:
+                            - key
+                          type: object
+                        type: array
+                    type: object
+                  type: array
               type: object
             status:
-              description: LinstorClusterStatus defines the observed state of LinstorCluster
+              description: LinstorNodeConnectionStatus defines the observed state of
+                LinstorNodeConnection
               properties:
                 conditions:
-                  description: Current LINSTOR Cluster state
+                  description: Current LINSTOR Node Connection state
                   items:
                     description: >-
                       Condition contains details for one aspect of the current state of
