@@ -2048,21 +2048,21 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.12.0
   labels:
     app.kubernetes.io/name: piraeus-datastore
-  name: linstornodeconnections.piraeus.io
+  name: linstorsatelliteconfigurations.piraeus.io
 spec:
   group: piraeus.io
   names:
-    kind: LinstorNodeConnection
-    listKind: LinstorNodeConnectionList
-    plural: linstornodeconnections
-    singular: linstornodeconnection
+    kind: LinstorSatelliteConfiguration
+    listKind: LinstorSatelliteConfigurationList
+    plural: linstorsatelliteconfigurations
+    singular: linstorsatelliteconfiguration
   scope: Cluster
   versions:
     - name: v1
       schema:
         openAPIV3Schema:
-          description: LinstorNodeConnection is the Schema for the linstornodeconnections
-            API
+          description: LinstorSatelliteConfiguration is the Schema for the
+            linstorsatelliteconfigurations API
           properties:
             apiVersion:
               description: "APIVersion defines the versioned schema of this representation of
@@ -2082,40 +2082,119 @@ spec:
             metadata:
               type: object
             spec:
-              description: LinstorNodeConnectionSpec defines the desired state of
-                LinstorNodeConnection
+              description: >-
+                LinstorSatelliteConfigurationSpec defines a partial, desired state
+                of a LinstorSatelliteSpec. 
+                 All the LinstorSatelliteConfiguration resources with matching NodeSelector will be merged into a single LinstorSatelliteSpec.
               properties:
-                paths:
-                  description: Paths configure the network path used when connecting two nodes.
+                internalTLS:
+                  description: >-
+                    InternalTLS configures secure communication for the LINSTOR
+                    Satellite. 
+                     If set, the control traffic between LINSTOR Controller and Satellite will be encrypted using mTLS.
+                  nullable: true
+                  properties:
+                    certManager:
+                      description: CertManager references a cert-manager Issuer or ClusterIssuer. If
+                        set, a Certificate resource will be created,
+                        provisioning the secret references in SecretName using
+                        the issuer configured here.
+                      properties:
+                        group:
+                          description: Group of the resource being referred to.
+                          type: string
+                        kind:
+                          description: Kind of the resource being referred to.
+                          type: string
+                        name:
+                          description: Name of the resource being referred to.
+                          type: string
+                      required:
+                        - name
+                      type: object
+                    secretName:
+                      description: SecretName references a secret holding the TLS key and
+                        certificates.
+                      type: string
+                  type: object
+                nodeSelector:
+                  additionalProperties:
+                    type: string
+                  description: NodeSelector selects which LinstorSatellite resources this spec
+                    should be applied to. See
+                    https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
+                  type: object
+                patches:
+                  description: >-
+                    Patches is a list of kustomize patches to apply. 
+                     See https://kubectl.docs.kubernetes.io/references/kustomize/kustomization/patches/ for how to create patches.
                   items:
+                    description: Patch represent either a Strategic Merge Patch or a JSON patch and
+                      its targets.
                     properties:
-                      interface:
-                        description: Interface to use on both nodes.
+                      options:
+                        additionalProperties:
+                          type: boolean
+                        description: Options is a list of options for the patch
+                        type: object
+                      patch:
+                        description: Patch is the content of a patch.
+                        minLength: 1
                         type: string
-                      name:
-                        description: Name of the path.
-                        type: string
-                    required:
-                      - interface
-                      - name
+                      target:
+                        description: Target points to the resources that the patch is applied to
+                        properties:
+                          annotationSelector:
+                            description: AnnotationSelector is a string that follows the label selection
+                              expression
+                              https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#api
+                              It matches against the resource annotations.
+                            type: string
+                          group:
+                            type: string
+                          kind:
+                            type: string
+                          labelSelector:
+                            description: LabelSelector is a string that follows the label selection
+                              expression
+                              https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#api
+                              It matches against the resource labels.
+                            type: string
+                          name:
+                            description: Name of the resource.
+                            type: string
+                          namespace:
+                            description: Namespace the resource belongs to, if it can belong to a namespace.
+                            type: string
+                          version:
+                            type: string
+                        type: object
                     type: object
                   type: array
-                  x-kubernetes-list-map-keys:
-                    - name
-                  x-kubernetes-list-type: map
                 properties:
-                  description: >-
-                    Properties to apply for the node connection. 
-                     Use to create default settings for DRBD that should apply to all resources connections between a set of cluster nodes.
+                  description: Properties is a list of properties to set on the node.
                   items:
                     properties:
                       name:
                         description: Name of the property to set.
                         minLength: 1
                         type: string
+                      optional:
+                        description: Optional values are only set if they have a non-empty value
+                        type: boolean
                       value:
                         description: Value to set the property to.
                         type: string
+                      valueFrom:
+                        description: ValueFrom sets the value from an existing resource.
+                        properties:
+                          nodeFieldRef:
+                            description: Select a field of the node. Supports `metadata.name`,
+                              `metadata.labels['<KEY>']`,
+                              `metadata.annotations['<KEY>']`.
+                            minLength: 1
+                            type: string
+                        type: object
                     required:
                       - name
                     type: object
@@ -2123,62 +2202,99 @@ spec:
                   x-kubernetes-list-map-keys:
                     - name
                   x-kubernetes-list-type: map
-                selector:
-                  description: Selector selects which pair of Satellites the connection should
-                    apply to. If not given, the connection will be applied to
-                    all connections.
+                storagePools:
+                  description: StoragePools is a list of storage pools to configure on the node.
                   items:
-                    description: SelectorTerm matches pairs of nodes by checking that the nodes
-                      match all specified requirements.
                     properties:
-                      matchLabels:
-                        description: MatchLabels is a list of match expressions that the node pairs must
-                          meet.
+                      filePool:
+                        description: Configures a file system based storage pool, allocating a regular
+                          file per volume.
+                        properties:
+                          directory:
+                            description: Directory is the path to the host directory used to store volume
+                              data.
+                            type: string
+                        type: object
+                      fileThinPool:
+                        description: Configures a file system based storage pool, allocating a sparse
+                          file per volume.
+                        properties:
+                          directory:
+                            description: Directory is the path to the host directory used to store volume
+                              data.
+                            type: string
+                        type: object
+                      lvmPool:
+                        description: Configures a LVM Volume Group as storage pool.
+                        properties:
+                          volumeGroup:
+                            type: string
+                        type: object
+                      lvmThinPool:
+                        description: Configures a LVM Thin Pool as storage pool.
+                        properties:
+                          thinPool:
+                            description: ThinPool is the name of the thinpool LV (without VG prefix).
+                            type: string
+                          volumeGroup:
+                            type: string
+                        type: object
+                      name:
+                        description: Name of the storage pool in linstor.
+                        minLength: 3
+                        type: string
+                      properties:
+                        description: Properties to set on the storage pool.
                         items:
                           properties:
-                            key:
-                              description: Key is the name of a node label.
+                            name:
+                              description: Name of the property to set.
                               minLength: 1
                               type: string
-                            op:
-                              default: Exists
-                              description: Op to apply to the label. Exists (default) checks for the presence
-                                of the label on both nodes in the pair.
-                                DoesNotExist checks that the label is not
-                                present on either node in the pair. In checks
-                                for the presence of the label value given by
-                                Values on both nodes in the pair. NotIn checks
-                                that both nodes in the pair do not have any of
-                                the label values given by Values. Same checks
-                                that the label value is equal in the node pair.
-                                NotSame checks that the label value is not equal
-                                in the node pair.
-                              enum:
-                                - Exists
-                                - DoesNotExist
-                                - In
-                                - NotIn
-                                - Same
-                                - NotSame
+                            optional:
+                              description: Optional values are only set if they have a non-empty value
+                              type: boolean
+                            value:
+                              description: Value to set the property to.
                               type: string
-                            values:
-                              description: Values to match on, using the provided Op.
-                              items:
-                                type: string
-                              type: array
+                            valueFrom:
+                              description: ValueFrom sets the value from an existing resource.
+                              properties:
+                                nodeFieldRef:
+                                  description: Select a field of the node. Supports `metadata.name`,
+                                    `metadata.labels['<KEY>']`,
+                                    `metadata.annotations['<KEY>']`.
+                                  minLength: 1
+                                  type: string
+                              type: object
                           required:
-                            - key
+                            - name
                           type: object
                         type: array
+                        x-kubernetes-list-map-keys:
+                          - name
+                        x-kubernetes-list-type: map
+                      source:
+                        properties:
+                          hostDevices:
+                            description: HostDevices is a list of device paths used to configure the given
+                              pool.
+                            items:
+                              type: string
+                            minItems: 1
+                            type: array
+                        type: object
+                    required:
+                      - name
                     type: object
                   type: array
               type: object
             status:
-              description: LinstorNodeConnectionStatus defines the observed state of
-                LinstorNodeConnection
+              description: LinstorSatelliteConfigurationStatus defines the observed state of
+                LinstorSatelliteConfiguration
               properties:
                 conditions:
-                  description: Current LINSTOR Node Connection state
+                  description: Current LINSTOR Satellite Config state
                   items:
                     description: >-
                       Condition contains details for one aspect of the current state of
