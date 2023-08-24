@@ -2046,16 +2046,18 @@ kind: RoleBinding
 metadata:
   labels:
     app.kubernetes.io/name: piraeus-datastore
-  name: piraeus-operator-gencert
+  name: piraeus-operator-leader-election-rolebinding
   namespace: piraeus-datastore
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: piraeus-operator-gencert
+  name: piraeus-operator-leader-election-role
 subjects:
+  - kind: ServiceAccount
+    name: piraeus-operator-controller-manager
+    namespace: piraeus-datastore
   - kind: ServiceAccount
     name: piraeus-operator-gencert
     namespace: piraeus-datastore
-
 YAML
 } 
