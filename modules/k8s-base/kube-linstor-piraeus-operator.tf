@@ -2046,14 +2046,14 @@ kind: ClusterRoleBinding
 metadata:
   labels:
     app.kubernetes.io/name: piraeus-datastore
-  name: piraeus-operator-gencert
+  name: piraeus-operator-manager-rolebinding
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: piraeus-operator-gencert
+  name: piraeus-operator-controller-manager
 subjects:
   - kind: ServiceAccount
-    name: piraeus-operator-gencert
+    name: piraeus-operator-controller-manager
     namespace: piraeus-datastore
 YAML
 } 
