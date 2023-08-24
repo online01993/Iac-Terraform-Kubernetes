@@ -2046,7 +2046,7 @@ kind: ServiceAccount
 metadata:
   labels:
     app.kubernetes.io/name: piraeus-datastore
-  name: piraeus-operator-controller-manager
+  name: piraeus-operator-gencert
   namespace: piraeus-datastore
 YAML
 } 
