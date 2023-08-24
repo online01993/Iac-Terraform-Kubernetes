@@ -4063,16 +4063,16 @@ webhooks:
  YAML
 }
 
-# resource "kubectl_manifest" "linstorcluster_piraeus_datastore" {
-#   depends_on = [
-#     kubectl_manifest.linstorcluster_all     
-#   ]
-#   server_side_apply = true
-#   yaml_body = <<YAML
-# apiVersion: piraeus.io/v1
-# kind: LinstorCluster
-# metadata:
-#   name: linstorcluster
-# spec: {}
-# YAML
-# }
+resource "kubectl_manifest" "linstorcluster_piraeus_datastore" {
+  depends_on = [
+    kubectl_manifest.linstorcluster_all     
+  ]
+  server_side_apply = true
+  yaml_body = <<YAML
+apiVersion: piraeus.io/v1
+kind: LinstorCluster
+metadata:
+  name: linstorcluster
+spec: {}
+YAML
+}
