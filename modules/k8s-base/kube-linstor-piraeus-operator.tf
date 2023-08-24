@@ -2046,19 +2046,39 @@ kind: Role
 metadata:
   labels:
     app.kubernetes.io/name: piraeus-datastore
-  name: piraeus-operator-gencert
+  name: piraeus-operator-leader-election-role
   namespace: piraeus-datastore
 rules:
   - apiGroups:
       - ""
     resources:
-      - secrets
+      - configmaps
     verbs:
       - get
       - list
       - watch
       - create
-      - patch
       - update
+      - patch
+      - delete
+  - apiGroups:
+      - coordination.k8s.io
+    resources:
+      - leases
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+      - delete
+  - apiGroups:
+      - ""
+    resources:
+      - events
+    verbs:
+      - create
+      - patch
 YAML
 } 
