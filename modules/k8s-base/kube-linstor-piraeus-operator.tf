@@ -2042,100 +2042,19 @@
   server_side_apply = true
   yaml_body = <<YAML
 apiVersion: v1
-data:
-  0_piraeus_datastore_images.yaml: >
-    ---
-
-    # This is the configuration for default images used by piraeus-operator
-
-    #
-
-    # "base" is the default repository prefix to use.
-
-    base: quay.io/piraeusdatastore
-
-    # "components" is a mapping of image placeholders to actual image names with tag.
-
-    # For example, the image name "linstor-controller" in the kustomize-resources will be replaced by:
-
-    #   quay.io/piraeusdatastore/piraeus-server:v1.22.0
-
-    components:
-      linstor-controller:
-        tag: v1.23.0
-        image: piraeus-server
-      linstor-satellite:
-        tag: v1.23.0
-        image: piraeus-server
-      linstor-csi:
-        tag: v1.2.0
-        image: piraeus-csi
-      drbd-reactor:
-        tag: v1.2.0
-        image: drbd-reactor
-      ha-controller:
-        tag: v1.1.4
-        image: piraeus-ha-controller
-      drbd-shutdown-guard:
-        tag: v1.0.0
-        image: drbd-shutdown-guard
-      drbd-module-loader:
-        tag: v9.2.4
-        # The special "match" attribute is used to select an image based on the node's reported OS.
-        # The operator will first check the k8s node's ".status.nodeInfo.osImage" field, and compare it against the list
-        # here. If one matches, that specific image name will be used instead of the fallback image.
-        image: drbd9-jammy # Fallback image: chose a fairly recent kernel, which can hopefully compile whatever config is actually in use
-        match:
-          - osImage: CentOS Linux 7
-            image: drbd9-centos7
-          - osImage: CentOS Linux 8
-            image: drbd9-centos8
-          - osImage: AlmaLinux 8
-            image: drbd9-almalinux8
-          - osImage: Red Hat Enterprise Linux CoreOS
-            image: drbd9-almalinux8
-          - osImage: AlmaLinux 9
-            image: drbd9-almalinux9
-          - osImage: Ubuntu 18\.04
-            image: drbd9-bionic
-          - osImage: Ubuntu 20\.04
-            image: drbd9-focal
-          - osImage: Ubuntu 22\.04
-            image: drbd9-jammy
-          - osImage: Debian GNU/Linux 11
-            image: drbd9-bullseye
-          - osImage: Debian GNU/Linux 10
-            image: drbd9-buster
-  0_sig_storage_images.yaml: |
-    ---
-    base: registry.k8s.io/sig-storage
-    components:
-      csi-attacher:
-        tag: v4.3.0
-        image: csi-attacher
-      csi-livenessprobe:
-        tag: v2.10.0
-        image: livenessprobe
-      csi-provisioner:
-        tag: v3.5.0
-        image: csi-provisioner
-      csi-snapshotter:
-        tag: v6.2.2
-        image: csi-snapshotter
-      csi-resizer:
-        tag: v1.8.0
-        image: csi-resizer
-      csi-external-health-monitor-controller:
-        tag: v0.9.0
-        image: csi-external-health-monitor-controller
-      csi-node-driver-registrar:
-        tag: v2.8.0
-        image: csi-node-driver-registrar
-kind: ConfigMap
+kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: piraeus-datastore
-  name: piraeus-operator-image-config
+  name: piraeus-operator-webhook-service
   namespace: piraeus-datastore
+spec:
+  ports:
+    - port: 443
+      protocol: TCP
+      targetPort: 9443
+  selector:
+    app.kubernetes.io/component: piraeus-operator
+    app.kubernetes.io/name: piraeus-datastore
 YAML
 } 
