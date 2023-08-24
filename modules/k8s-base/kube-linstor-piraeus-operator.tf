@@ -2009,7 +2009,7 @@
 # }
 
 
-resource "kubectl_manifest" "linstorcluster_all" {
+/*resource "kubectl_manifest" "linstorcluster_all" {
   depends_on = [
   kubernetes_namespace.kube_flannel,
   kubernetes_service_account.flannel,
@@ -2033,18 +2033,21 @@ resource "kubectl_manifest" "linstorcluster_all" {
     : i.id => i
   }
  yaml_body = each.value.doc
-}
+}*/
 
-/* resource "kubectl_manifest" "linstorcluster_piraeus_datastore" {
-  depends_on = [
+ resource "kubectl_manifest" "linstorcluster_piraeus_datastore" {
+  /*depends_on = [
     kubectl_manifest.linstorcluster_all     
-  ]
+  ]*/
   server_side_apply = true
   yaml_body = <<YAML
-apiVersion: piraeus.io/v1
-kind: LinstorCluster
+apiVersion: v1
+kind: Namespace
 metadata:
-  name: linstorcluster
-spec: {}
+  labels:
+    app.kubernetes.io/name: piraeus-datastore
+    pod-security.kubernetes.io/enforce: privileged
+    pod-security.kubernetes.io/enforce-version: latest
+  name: piraeus-datastore
 YAML
-} */
+} 
