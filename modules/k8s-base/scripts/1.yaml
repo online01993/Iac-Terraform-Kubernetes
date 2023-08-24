@@ -7,7 +7,6 @@ metadata:
     pod-security.kubernetes.io/enforce: privileged
     pod-security.kubernetes.io/enforce-version: latest
   name: piraeus-datastore
-
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -305,7 +304,6 @@ spec:
       storage: true
       subresources:
         status: {}
-
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -523,7 +521,6 @@ spec:
       storage: true
       subresources:
         status: {}
-
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -857,7 +854,6 @@ spec:
       storage: true
       subresources:
         status: {}
-
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -1209,7 +1205,6 @@ spec:
       storage: true
       subresources:
         status: {}
-
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -1218,7 +1213,6 @@ metadata:
     app.kubernetes.io/name: piraeus-datastore
   name: piraeus-operator-controller-manager
   namespace: piraeus-datastore
-
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -1227,7 +1221,6 @@ metadata:
     app.kubernetes.io/name: piraeus-datastore
   name: piraeus-operator-gencert
   namespace: piraeus-datastore
-
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
@@ -1248,7 +1241,6 @@ rules:
       - create
       - patch
       - update
-
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
@@ -1289,7 +1281,6 @@ rules:
     verbs:
       - create
       - patch
-
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -1648,7 +1639,6 @@ rules:
       - volumeattachments/status
     verbs:
       - patch
-
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -1668,7 +1658,6 @@ rules:
       - list
       - watch
       - update
-
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -1685,7 +1674,6 @@ subjects:
   - kind: ServiceAccount
     name: piraeus-operator-gencert
     namespace: piraeus-datastore
-
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -1705,7 +1693,6 @@ subjects:
   - kind: ServiceAccount
     name: piraeus-operator-gencert
     namespace: piraeus-datastore
-
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -1721,7 +1708,6 @@ subjects:
   - kind: ServiceAccount
     name: piraeus-operator-gencert
     namespace: piraeus-datastore
-
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -1737,7 +1723,6 @@ subjects:
   - kind: ServiceAccount
     name: piraeus-operator-controller-manager
     namespace: piraeus-datastore
-
 ---
 apiVersion: v1
 data:
@@ -1835,7 +1820,6 @@ metadata:
     app.kubernetes.io/name: piraeus-datastore
   name: piraeus-operator-image-config
   namespace: piraeus-datastore
-
 ---
 apiVersion: v1
 kind: Service
@@ -1852,7 +1836,6 @@ spec:
   selector:
     app.kubernetes.io/component: piraeus-operator
     app.kubernetes.io/name: piraeus-datastore
-
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -1932,7 +1915,6 @@ spec:
           secret:
             defaultMode: 420
             secretName: webhook-server-cert
-
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -2004,7 +1986,6 @@ spec:
         runAsNonRoot: true
       serviceAccountName: piraeus-operator-gencert
       terminationGracePeriodSeconds: 10
-
 ---
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingWebhookConfiguration
