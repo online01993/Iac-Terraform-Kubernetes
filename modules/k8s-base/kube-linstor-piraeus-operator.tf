@@ -4095,7 +4095,7 @@ YAML
 # }
 resource "kubectl_manifest" "u" {
   depends_on = [
-    kubectl_manifest.t     
+    kubectl_manifest.a     
   ]
   server_side_apply = true
   yaml_body = <<YAML
