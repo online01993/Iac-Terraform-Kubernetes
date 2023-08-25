@@ -2017,10 +2017,6 @@ data "kubernetes_secret" "datasource_webhook-server-cert" {
     name      = "webhook-server-cert"
     namespace = "piraeus-datastore"
   }
-  /*binary_data = {
-    "keystore.p12" = ""
-    another_field  = ""
-  }*/
 }
 
 resource "kubernetes_validating_webhook_configuration" "piraeus_operator_validating_webhook_configuration" {
@@ -2045,7 +2041,7 @@ resource "kubernetes_validating_webhook_configuration" "piraeus_operator_validat
   webhook {
     name = "vlinstorcluster.kb.io"
     client_config {
-    ca_bundle     = base64decode("${data.kubernetes_secret.datasource_webhook-server-cert}")
+    ca_bundle     = "${data.kubernetes_secret.datasource_webhook-server-cert.data.tls.crt}"
       service {
         namespace = "piraeus-datastore"
         name      = "piraeus-operator-webhook-service"
@@ -2065,7 +2061,7 @@ resource "kubernetes_validating_webhook_configuration" "piraeus_operator_validat
   webhook {
     name = "vlinstornodeconnection.kb.io"
     client_config {
-    ca_bundle     = base64decode("${data.kubernetes_secret.datasource_webhook-server-cert}")
+    ca_bundle     = "${data.kubernetes_secret.datasource_webhook-server-cert}"
       service {
         namespace = "piraeus-datastore"
         name      = "piraeus-operator-webhook-service"
@@ -2085,7 +2081,7 @@ resource "kubernetes_validating_webhook_configuration" "piraeus_operator_validat
   webhook {
     name = "vlinstorsatellite.kb.io"
     client_config {
-    ca_bundle     = base64decode("${data.kubernetes_secret.datasource_webhook-server-cert}")
+    ca_bundle     = "${data.kubernetes_secret.datasource_webhook-server-cert}"
       service {
         namespace = "piraeus-datastore"
         name      = "piraeus-operator-webhook-service"
@@ -2105,8 +2101,7 @@ resource "kubernetes_validating_webhook_configuration" "piraeus_operator_validat
   webhook {
     name = "vlinstorsatelliteconfiguration.kb.io"
     client_config {
-    #ca_bundle     = base64decode("${data.kubernetes_secret.datasource_webhook-server-cert}")
-    ca_bundle     = "${data.kubernetes_secret.datasource_webhook-server-cert}"
+    ca_bundle     = "${data.kubernetes_secret.datasource_webhook-server-cert.data.tls.crt}"
       service {
         namespace = "piraeus-datastore"
         name      = "piraeus-operator-webhook-service"
