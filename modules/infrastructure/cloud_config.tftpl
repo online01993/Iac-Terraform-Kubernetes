@@ -83,3 +83,9 @@ apt:
         Fix-Broken "true";
       };
     };
+power_state:
+ delay: "+30"
+ mode: reboot
+ message: Cloud-init finished
+ timeout: 30
+ condition: True
