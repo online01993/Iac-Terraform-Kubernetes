@@ -2096,7 +2096,7 @@ resource "kubernetes_validating_webhook_configuration" "piraeus_operator_validat
     admission_review_versions = ["v1"]
   }
 }
-/*
+
 resource "kubectl_manifest" "linstorcluster_piraeus_datastore" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
@@ -2119,4 +2119,4 @@ metadata:
   name: linstorcluster
 spec: {}
 YAML
-}*/
+}
