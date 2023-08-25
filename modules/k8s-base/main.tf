@@ -18,6 +18,11 @@ resource "terraform_data" "k8s-base-setup_01_resource_masters" {
   }
   provisioner "remote-exec" {
     inline = [
+      "sudo shutdown -r now"
+    ]
+  }
+  provisioner "remote-exec" {
+    inline = [
       "chmod +x /tmp/01-k8s-base-setup.sh",
       "/tmp/01-k8s-base-setup.sh",
       "rm -rf /tmp/01-k8s-base-setup.sh",
@@ -40,6 +45,11 @@ resource "terraform_data" "k8s-base-setup_01_resource_nodes" {
       version_runc       = "${var.version_runc}"
       version_cni-plugin = "${var.version_cni-plugin}"
     })
+  }
+  provisioner "remote-exec" {
+    inline = [
+      "sudo shutdown -r now"
+    ]
   }
   provisioner "remote-exec" {
     inline = [
