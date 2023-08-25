@@ -8,6 +8,17 @@ resource "terraform_data" "k8s-base-setup_01_resource_masters" {
     private_key = var.vm_rsa_ssh_key_private
     host        = each.value.address
   }
+  provisioner "remote-exec" {
+    inline = [<<EOF
+      #cloud-init-wait 
+      while [ ! -f /var/lib/cloud/instance/boot-finished ]; do 
+      echo -e "\033[1;36mWaiting for cloud-init..."
+      sleep 10
+      done
+      (sleep 2 && sudo shutdown -r now)&
+      EOF
+    ]
+  }
   provisioner "file" {
     destination = "/tmp/01-k8s-base-setup.sh"
     content = templatefile("${path.module}/scripts/01-k8s-base-setup.sh.tpl", {
@@ -15,11 +26,6 @@ resource "terraform_data" "k8s-base-setup_01_resource_masters" {
       version_runc       = "${var.version_runc}"
       version_cni-plugin = "${var.version_cni-plugin}"
     })
-  }
-  provisioner "remote-exec" {
-    inline = [
-      "sleep 2 && sudo shutdown -r now"
-    ]
   }
   provisioner "remote-exec" {
     inline = [
@@ -38,6 +44,17 @@ resource "terraform_data" "k8s-base-setup_01_resource_nodes" {
     private_key = var.vm_rsa_ssh_key_private
     host        = each.value.address
   }
+  provisioner "remote-exec" {
+    inline = [<<EOF
+      #cloud-init-wait 
+      while [ ! -f /var/lib/cloud/instance/boot-finished ]; do 
+      echo -e "\033[1;36mWaiting for cloud-init..."
+      sleep 10
+      done
+      (sleep 2 && sudo shutdown -r now)&
+      EOF
+    ]
+  }
   provisioner "file" {
     destination = "/tmp/01-k8s-base-setup.sh"
     content = templatefile("${path.module}/scripts/01-k8s-base-setup.sh.tpl", {
@@ -45,11 +62,6 @@ resource "terraform_data" "k8s-base-setup_01_resource_nodes" {
       version_runc       = "${var.version_runc}"
       version_cni-plugin = "${var.version_cni-plugin}"
     })
-  }
-  provisioner "remote-exec" {
-    inline = [
-      "sleep 2 && sudo shutdown -r now"
-    ]
   }
   provisioner "remote-exec" {
     inline = [
