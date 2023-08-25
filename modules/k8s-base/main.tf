@@ -15,14 +15,12 @@ resource "terraform_data" "k8s-base-setup_01_resource_masters" {
       echo -e "\033[1;36mWaiting for cloud-init..."
       sleep 10
       done
-      (sleep 2 && sudo shutdown -r now)&
+      (sleep 5 && sudo shutdown -r now)&
       EOF
     ]
   }
   provisioner "local-exec" {
-    command = <<EOF
-      sleep 60
-    EOF
+    command = "sleep 60"
   }
   provisioner "file" {
     destination = "/tmp/01-k8s-base-setup.sh"
@@ -56,14 +54,12 @@ resource "terraform_data" "k8s-base-setup_01_resource_nodes" {
       echo -e "\033[1;36mWaiting for cloud-init..."
       sleep 10
       done
-      (sleep 2 && sudo shutdown -r now)&
+      (sleep 5 && sudo shutdown -r now)&
       EOF
     ]
   }
   provisioner "local-exec" {
-    command = <<EOF
-      sleep 60
-    EOF
+    command = "sleep 60"
   }
   provisioner "file" {
     destination = "/tmp/01-k8s-base-setup.sh"
