@@ -1698,7 +1698,7 @@ resource "kubernetes_service" "piraeus_operator_webhook_service" {
   }
 }
 
-/* resource "kubernetes_deployment" "piraeus_operator_controller_manager" {
+resource "kubernetes_deployment" "piraeus_operator_controller_manager" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
     kubectl_manifest.CRD_linstorclusters_piraeus_io,
@@ -1809,9 +1809,9 @@ resource "kubernetes_service" "piraeus_operator_webhook_service" {
       }
     }
   }
-} */
+}
 
-/*  resource "kubernetes_deployment" "piraeus_operator_gencert" {
+/*resource "kubernetes_deployment" "piraeus_operator_gencert" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
     kubectl_manifest.CRD_linstorclusters_piraeus_io,
@@ -1913,9 +1913,9 @@ resource "kubernetes_service" "piraeus_operator_webhook_service" {
       }
     }
   }
-}  */
+}*/
 
-/* resource "kubectl_manifest" "piraeus_operator_controller_manager" {
+/*resource "kubectl_manifest" "piraeus_operator_controller_manager" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
     kubectl_manifest.CRD_linstorclusters_piraeus_io,
@@ -2009,7 +2009,7 @@ spec:
 YAML
 } */
 
-/* resource "kubectl_manifest" "piraeus_operator_gencert" {
+resource "kubectl_manifest" "piraeus_operator_gencert" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
     kubectl_manifest.CRD_linstorclusters_piraeus_io,
@@ -2093,7 +2093,7 @@ spec:
       serviceAccountName: piraeus-operator-gencert
       terminationGracePeriodSeconds: 10
 YAML
-} */
+}
 
 resource "kubernetes_validating_webhook_configuration" "piraeus_operator_validating_webhook_configuration" {
   depends_on = [
@@ -2191,7 +2191,7 @@ resource "kubernetes_validating_webhook_configuration" "piraeus_operator_validat
   }
 }
 
-/* resource "kubectl_manifest" "linstorcluster_piraeus_datastore" {
+resource "kubectl_manifest" "linstorcluster_piraeus_datastore" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
     kubectl_manifest.CRD_linstorclusters_piraeus_io,
@@ -2201,10 +2201,10 @@ resource "kubernetes_validating_webhook_configuration" "piraeus_operator_validat
     kubernetes_config_map.piraeus_operator_image_config,
     kubernetes_service.piraeus_operator_webhook_service,
     kubernetes_validating_webhook_configuration.piraeus_operator_validating_webhook_configuration,
-    #kubernetes_deployment.piraeus_operator_controller_manager,
+    kubernetes_deployment.piraeus_operator_controller_manager,
     #kubernetes_deployment.piraeus_operator_gencert,
-    kubectl_manifest.piraeus_operator_controller_manager,
-    kubernetes_deployment.piraeus_operator_gencert
+    #kubectl_manifest.piraeus_operator_controller_manager,
+    kubectl_manifest.piraeus_operator_gencert
   ]
   server_side_apply = false
   yaml_body = <<YAML
@@ -2214,4 +2214,4 @@ metadata:
   name: linstorcluster
 spec: {}
 YAML
-} */
+}
