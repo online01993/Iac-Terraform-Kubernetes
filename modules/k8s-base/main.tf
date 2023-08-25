@@ -19,6 +19,11 @@ resource "terraform_data" "k8s-base-setup_01_resource_masters" {
       EOF
     ]
   }
+  provisioner "local-exec" {
+    command = <<EOF
+      sleep 60
+    EOF
+  }
   provisioner "file" {
     destination = "/tmp/01-k8s-base-setup.sh"
     content = templatefile("${path.module}/scripts/01-k8s-base-setup.sh.tpl", {
@@ -54,6 +59,11 @@ resource "terraform_data" "k8s-base-setup_01_resource_nodes" {
       (sleep 2 && sudo shutdown -r now)&
       EOF
     ]
+  }
+  provisioner "local-exec" {
+    command = <<EOF
+      sleep 60
+    EOF
   }
   provisioner "file" {
     destination = "/tmp/01-k8s-base-setup.sh"
