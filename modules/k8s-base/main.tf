@@ -15,7 +15,7 @@ resource "terraform_data" "k8s-base-setup_01_resource_masters" {
       echo -e "\033[1;36mWaiting for cloud-init..."
       sleep 10
       done
-      (sleep 5 && sudo shutdown -r now)&
+      (sleep 2 && sudo reboot)&
       EOF
     ]
   }
@@ -54,7 +54,7 @@ resource "terraform_data" "k8s-base-setup_01_resource_nodes" {
       echo -e "\033[1;36mWaiting for cloud-init..."
       sleep 10
       done
-      (sleep 5 && sudo shutdown -r now)&
+      (sleep 2 && sudo reboot)&
       EOF
     ]
   }
