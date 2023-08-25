@@ -48,5 +48,5 @@ provider "kubectl" {
   insecure                = true
   client_certificate      = base64decode(module.kubernetes-base.k8s-client-certificate-data)
   client_key              = base64decode(module.kubernetes-base.k8s-client-key-data)
-  #cluster_ca_certificate  = base64decode(module.kubernetes-base.k8s-certificate-authority-data)
+  cluster_ca_certificate  = base64decode(module.kubernetes-base.k8s-certificate-authority-data)
 }
