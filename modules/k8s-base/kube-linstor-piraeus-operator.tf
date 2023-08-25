@@ -1811,7 +1811,7 @@ resource "kubernetes_service" "piraeus_operator_webhook_service" {
   }
 } */
 
- resource "kubernetes_deployment" "piraeus_operator_gencert" {
+/*  resource "kubernetes_deployment" "piraeus_operator_gencert" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
     kubectl_manifest.CRD_linstorclusters_piraeus_io,
@@ -1913,9 +1913,9 @@ resource "kubernetes_service" "piraeus_operator_webhook_service" {
       }
     }
   }
-} 
+}  */
 
-resource "kubectl_manifest" "piraeus_operator_controller_manager" {
+/* resource "kubectl_manifest" "piraeus_operator_controller_manager" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
     kubectl_manifest.CRD_linstorclusters_piraeus_io,
@@ -2007,7 +2007,7 @@ spec:
             defaultMode: 420
             secretName: webhook-server-cert
 YAML
-}
+} */
 
 /* resource "kubectl_manifest" "piraeus_operator_gencert" {
   depends_on = [
@@ -2103,9 +2103,9 @@ resource "kubernetes_validating_webhook_configuration" "piraeus_operator_validat
     kubectl_manifest.CRD_linstorsatelliteconfigurations_piraeus_io,
     kubectl_manifest.CRD_linstorsatellites_piraeus_io,
     kubernetes_config_map.piraeus_operator_image_config,
-    kubernetes_service.piraeus_operator_webhook_service,
-    kubectl_manifest.piraeus_operator_controller_manager,
-    kubernetes_deployment.piraeus_operator_gencert
+    kubernetes_service.piraeus_operator_webhook_service#,
+    #kubectl_manifest.piraeus_operator_controller_manager,
+    #kubernetes_deployment.piraeus_operator_gencert
   ]
   metadata {
     name = "piraeus-operator-validating-webhook-configuration"
@@ -2191,7 +2191,7 @@ resource "kubernetes_validating_webhook_configuration" "piraeus_operator_validat
   }
 }
 
-resource "kubectl_manifest" "linstorcluster_piraeus_datastore" {
+/* resource "kubectl_manifest" "linstorcluster_piraeus_datastore" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
     kubectl_manifest.CRD_linstorclusters_piraeus_io,
@@ -2214,4 +2214,4 @@ metadata:
   name: linstorcluster
 spec: {}
 YAML
-}
+} */
