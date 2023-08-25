@@ -2001,7 +2001,7 @@ spec:
 YAML
 } */
 
-resource "kubernetes_validating_webhook_configuration" "piraeus_operator_validating_webhook_configuration" {
+data "kubernetes_secret" "datasource_webhook-server-cert" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
     kubectl_manifest.CRD_linstorclusters_piraeus_io,
@@ -2014,6 +2014,29 @@ resource "kubernetes_validating_webhook_configuration" "piraeus_operator_validat
     kubernetes_deployment.piraeus_operator_gencert
   ]
   metadata {
+    name      = "webhook-server-cert"
+    namespace = "piraeus-datastore"
+  }
+  binary_data = {
+    "keystore.p12" = ""
+    another_field  = ""
+  }
+}
+
+resource "kubernetes_validating_webhook_configuration" "piraeus_operator_validating_webhook_configuration" {
+  depends_on = [
+    kubernetes_namespace.piraeus_datastore,
+    kubectl_manifest.CRD_linstorclusters_piraeus_io,
+    kubectl_manifest.CRD_linstornodeconnections_piraeus_io,
+    kubectl_manifest.CRD_linstorsatelliteconfigurations_piraeus_io,
+    kubectl_manifest.CRD_linstorsatellites_piraeus_io,
+    kubernetes_config_map.piraeus_operator_image_config,
+    kubernetes_service.piraeus_operator_webhook_service,
+    kubernetes_deployment.piraeus_operator_controller_manager,
+    kubernetes_deployment.piraeus_operator_gencert,
+    data.kubernetes_secret.datasource_webhook-server-cert
+  ]
+  metadata {
     name = "piraeus-operator-validating-webhook-configuration"
     labels = {
       "app.kubernetes.io/name" = "piraeus-datastore"
@@ -2022,6 +2045,7 @@ resource "kubernetes_validating_webhook_configuration" "piraeus_operator_validat
   webhook {
     name = "vlinstorcluster.kb.io"
     client_config {
+    ca_bundle     = "${data.kubernetes_secret.datasource_webhook-server-certbinary_data}"
       service {
         namespace = "piraeus-datastore"
         name      = "piraeus-operator-webhook-service"
@@ -2041,6 +2065,7 @@ resource "kubernetes_validating_webhook_configuration" "piraeus_operator_validat
   webhook {
     name = "vlinstornodeconnection.kb.io"
     client_config {
+    ca_bundle     = "${data.kubernetes_secret.datasource_webhook-server-certbinary_data}"
       service {
         namespace = "piraeus-datastore"
         name      = "piraeus-operator-webhook-service"
@@ -2060,6 +2085,7 @@ resource "kubernetes_validating_webhook_configuration" "piraeus_operator_validat
   webhook {
     name = "vlinstorsatellite.kb.io"
     client_config {
+    ca_bundle     = "${data.kubernetes_secret.datasource_webhook-server-certbinary_data}"
       service {
         namespace = "piraeus-datastore"
         name      = "piraeus-operator-webhook-service"
@@ -2079,6 +2105,7 @@ resource "kubernetes_validating_webhook_configuration" "piraeus_operator_validat
   webhook {
     name = "vlinstorsatelliteconfiguration.kb.io"
     client_config {
+    ca_bundle     = "${data.kubernetes_secret.datasource_webhook-server-certbinary_data}"
       service {
         namespace = "piraeus-datastore"
         name      = "piraeus-operator-webhook-service"
