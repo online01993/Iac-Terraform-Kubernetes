@@ -1902,7 +1902,7 @@ resource "kubernetes_deployment" "piraeus_operator_gencert" {
           }
           security_context {
             read_only_root_filesystem  = true
-            allow_privilege_escalation = true
+            #allow_privilege_escalation = false
           }
         }
         termination_grace_period_seconds = 10
