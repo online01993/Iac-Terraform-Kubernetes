@@ -2017,10 +2017,10 @@ data "kubernetes_secret" "datasource_webhook-server-cert" {
     name      = "webhook-server-cert"
     namespace = "piraeus-datastore"
   }
-  binary_data = {
+  /*binary_data = {
     "keystore.p12" = ""
     another_field  = ""
-  }
+  }*/
 }
 
 resource "kubernetes_validating_webhook_configuration" "piraeus_operator_validating_webhook_configuration" {
