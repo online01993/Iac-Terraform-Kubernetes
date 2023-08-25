@@ -1811,7 +1811,7 @@ resource "kubernetes_deployment" "piraeus_operator_controller_manager" {
   }
 }
 
-/*resource "kubernetes_deployment" "piraeus_operator_gencert" {
+resource "kubernetes_deployment" "piraeus_operator_gencert" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
     kubectl_manifest.CRD_linstorclusters_piraeus_io,
@@ -1902,7 +1902,7 @@ resource "kubernetes_deployment" "piraeus_operator_controller_manager" {
           }
           security_context {
             read_only_root_filesystem  = true
-            allow_privilege_escalation = false
+            allow_privilege_escalation = true
           }
         }
         termination_grace_period_seconds = 10
@@ -1913,103 +1913,9 @@ resource "kubernetes_deployment" "piraeus_operator_controller_manager" {
       }
     }
   }
-}*/
+}
 
-/*resource "kubectl_manifest" "piraeus_operator_controller_manager" {
-  depends_on = [
-    kubernetes_namespace.piraeus_datastore,
-    kubectl_manifest.CRD_linstorclusters_piraeus_io,
-    kubectl_manifest.CRD_linstornodeconnections_piraeus_io,
-    kubectl_manifest.CRD_linstorsatelliteconfigurations_piraeus_io,
-    kubectl_manifest.CRD_linstorsatellites_piraeus_io,
-    kubernetes_config_map.piraeus_operator_image_config,
-    kubernetes_service_account.piraeus_operator_controller_manager,
-    kubernetes_cluster_role_binding.piraeus_operator_manager_rolebinding     
-  ]
-  server_side_apply = true
-  yaml_body = <<YAML
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  labels:
-    app.kubernetes.io/component: piraeus-operator
-    app.kubernetes.io/name: piraeus-datastore
-  name: piraeus-operator-controller-manager
-  namespace: piraeus-datastore
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app.kubernetes.io/component: piraeus-operator
-      app.kubernetes.io/name: piraeus-datastore
-  template:
-    metadata:
-      annotations:
-        kubectl.kubernetes.io/default-container: manager
-      labels:
-        app.kubernetes.io/component: piraeus-operator
-        app.kubernetes.io/name: piraeus-datastore
-    spec:
-      containers:
-        - args:
-            - --leader-elect
-            - --metrics-bind-address=0
-            - --namespace=$(NAMESPACE)
-            - --image-config-map-name=$(IMAGE_CONFIG_MAP_NAME)
-          command:
-            - /manager
-          env:
-            - name: NAMESPACE
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.namespace
-            - name: IMAGE_CONFIG_MAP_NAME
-              value: piraeus-operator-image-config
-          image: quay.io/piraeusdatastore/piraeus-operator:v2
-          livenessProbe:
-            httpGet:
-              path: /healthz
-              port: 8081
-            initialDelaySeconds: 15
-            periodSeconds: 20
-          name: manager
-          ports:
-            - containerPort: 9443
-              name: webhook-server
-              protocol: TCP
-          readinessProbe:
-            httpGet:
-              path: /readyz
-              port: 8081
-            initialDelaySeconds: 5
-            periodSeconds: 10
-          resources:
-            limits:
-              cpu: 500m
-              memory: 256Mi
-            requests:
-              cpu: 10m
-              memory: 64Mi
-          securityContext:
-            allowPrivilegeEscalation: false
-            readOnlyRootFilesystem: true
-          volumeMounts:
-            - mountPath: /tmp/k8s-webhook-server/serving-certs
-              name: cert
-              readOnly: true
-      securityContext:
-        runAsNonRoot: true
-      serviceAccountName: piraeus-operator-controller-manager
-      terminationGracePeriodSeconds: 10
-      volumes:
-        - name: cert
-          secret:
-            defaultMode: 420
-            secretName: webhook-server-cert
-YAML
-} */
-
-resource "kubectl_manifest" "piraeus_operator_gencert" {
+/* resource "kubectl_manifest" "piraeus_operator_gencert" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
     kubectl_manifest.CRD_linstorclusters_piraeus_io,
@@ -2093,7 +1999,7 @@ spec:
       serviceAccountName: piraeus-operator-gencert
       terminationGracePeriodSeconds: 10
 YAML
-}
+} */
 
 resource "kubernetes_validating_webhook_configuration" "piraeus_operator_validating_webhook_configuration" {
   depends_on = [
@@ -2103,9 +2009,9 @@ resource "kubernetes_validating_webhook_configuration" "piraeus_operator_validat
     kubectl_manifest.CRD_linstorsatelliteconfigurations_piraeus_io,
     kubectl_manifest.CRD_linstorsatellites_piraeus_io,
     kubernetes_config_map.piraeus_operator_image_config,
-    kubernetes_service.piraeus_operator_webhook_service#,
-    #kubectl_manifest.piraeus_operator_controller_manager,
-    #kubernetes_deployment.piraeus_operator_gencert
+    kubernetes_service.piraeus_operator_webhook_service,
+    kubernetes_deployment.piraeus_operator_controller_manager,
+    kubernetes_deployment.piraeus_operator_gencert
   ]
   metadata {
     name = "piraeus-operator-validating-webhook-configuration"
@@ -2191,7 +2097,7 @@ resource "kubernetes_validating_webhook_configuration" "piraeus_operator_validat
   }
 }
 
-resource "kubectl_manifest" "linstorcluster_piraeus_datastore" {
+/* resource "kubectl_manifest" "linstorcluster_piraeus_datastore" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
     kubectl_manifest.CRD_linstorclusters_piraeus_io,
@@ -2202,9 +2108,8 @@ resource "kubectl_manifest" "linstorcluster_piraeus_datastore" {
     kubernetes_service.piraeus_operator_webhook_service,
     kubernetes_validating_webhook_configuration.piraeus_operator_validating_webhook_configuration,
     kubernetes_deployment.piraeus_operator_controller_manager,
-    #kubernetes_deployment.piraeus_operator_gencert,
-    #kubectl_manifest.piraeus_operator_controller_manager,
-    kubectl_manifest.piraeus_operator_gencert
+    kubernetes_deployment.piraeus_operator_gencert
+    #kubectl_manifest.piraeus_operator_gencert
   ]
   server_side_apply = false
   yaml_body = <<YAML
@@ -2214,4 +2119,4 @@ metadata:
   name: linstorcluster
 spec: {}
 YAML
-}
+} */
