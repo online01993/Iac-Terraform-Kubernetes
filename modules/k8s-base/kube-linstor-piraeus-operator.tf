@@ -2105,7 +2105,8 @@ resource "kubernetes_validating_webhook_configuration" "piraeus_operator_validat
   webhook {
     name = "vlinstorsatelliteconfiguration.kb.io"
     client_config {
-    ca_bundle     = base64decode("${data.kubernetes_secret.datasource_webhook-server-cert}")
+    #ca_bundle     = base64decode("${data.kubernetes_secret.datasource_webhook-server-cert}")
+    ca_bundle     = "${data.kubernetes_secret.datasource_webhook-server-cert}"
       service {
         namespace = "piraeus-datastore"
         name      = "piraeus-operator-webhook-service"
