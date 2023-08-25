@@ -1811,7 +1811,7 @@ resource "kubernetes_deployment" "piraeus_operator_controller_manager" {
   }
 }
 
-resource "kubernetes_deployment" "piraeus_operator_gencert" {
+/* resource "kubernetes_deployment" "piraeus_operator_gencert" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
     kubectl_manifest.CRD_linstorclusters_piraeus_io,
@@ -1913,7 +1913,7 @@ resource "kubernetes_deployment" "piraeus_operator_gencert" {
       }
     }
   }
-}
+} */
 
 /* resource "kubectl_manifest" "piraeus_operator_gencert" {
   depends_on = [
