@@ -2111,7 +2111,7 @@ resource "kubectl_manifest" "linstorcluster_piraeus_datastore" {
     kubernetes_deployment.piraeus_operator_gencert
     #kubectl_manifest.piraeus_operator_gencert
   ]
-  server_side_apply = false
+  server_side_apply = true
   yaml_body = <<YAML
 apiVersion: piraeus.io/v1
 kind: LinstorCluster
