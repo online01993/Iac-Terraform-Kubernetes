@@ -40,7 +40,6 @@ packages:
   - curl
   - gnupg
   - wget
-  - drbd-utils
 no_ssh_fingerprints: false
 ssh_deletekeys: 1
 ssh:
@@ -52,6 +51,7 @@ runcmd:
   - sed -i -e '/^PermitRootLogin/s/^.*$/PermitRootLogin no/' /etc/ssh/sshd_config
   - sed -i -e '$aAllowUsers robot' /etc/ssh/sshd_config
   - systemctl restart sshd
+  - apt-get install -y linux-headers-$(uname -r)
   - touch /etc/cloud/cloud-init.disabled
 write_files:
   - path: /etc/sysctl.d/10-disable-ipv6.conf
