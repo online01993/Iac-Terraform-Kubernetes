@@ -13,7 +13,7 @@ sudo bash -c 'apt update'
 sudo bash -c 'apt upgrade -y'
 #headers need to DRBD driver compile with PIRAEUS-operator container init 
 #https://github.com/piraeusdatastore/piraeus-operator/blob/debian-11/doc/host-setup.md#build-and-load-drbd-using-the-kernel-module-injection-image-preferred
-sudo bash -c 'apt install -y linux-headers-$(uname -r)'
+sudo bash -c 'apt-get install -y linux-headers-$(dpkg --print-architecture)'
 ###
 sudo bash -c 'cat <<EOF > /etc/sysctl.d/11-kubernetes.conf
 net.bridge.bridge-nf-call-iptables = 1
