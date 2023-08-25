@@ -2097,7 +2097,7 @@ resource "kubernetes_validating_webhook_configuration" "piraeus_operator_validat
   }
 }
 
-/* resource "kubectl_manifest" "linstorcluster_piraeus_datastore" {
+ resource "kubectl_manifest" "linstorcluster_piraeus_datastore" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
     kubectl_manifest.CRD_linstorclusters_piraeus_io,
@@ -2119,4 +2119,4 @@ metadata:
   name: linstorcluster
 spec: {}
 YAML
-} */
+}
