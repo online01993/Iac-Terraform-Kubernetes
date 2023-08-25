@@ -18,7 +18,7 @@ resource "terraform_data" "k8s-base-setup_01_resource_masters" {
   }
   provisioner "remote-exec" {
     inline = [
-      "sudo shutdown -r now"
+      "sleep 2 && sudo shutdown -r now"
     ]
   }
   provisioner "remote-exec" {
@@ -48,7 +48,7 @@ resource "terraform_data" "k8s-base-setup_01_resource_nodes" {
   }
   provisioner "remote-exec" {
     inline = [
-      "sudo shutdown -r now"
+      "sleep 2 && sudo shutdown -r now"
     ]
   }
   provisioner "remote-exec" {
