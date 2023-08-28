@@ -18,13 +18,18 @@ resource "terraform_data" "k8s-base-setup_01_resource_masters" {
       EOF
     ]
   }
-  provisioner "remote-exec" {
-    inline = [
-      "sudo bash -c 'sleep 5; shutdown -r now'"
-    ]
-  }
   provisioner "local-exec" {
-    command = "sleep 60"
+    command = <<-EOT
+      echo "${var.vm_rsa_ssh_key_private}" > ./.robot_id_rsa_master_config_file.key
+      chmod 600 ./.robot_id_rsa_master_config_file.key
+      ssh -o StrictHostKeyChecking=no -i ./.robot_id_rsa_master_config_file.key -o ConnectTimeout=2 robot@${var.masters[0].address} '(sleep 2; sudo reboot)&'; sleep 5      
+      until ssh -o StrictHostKeyChecking=no -i ./.robot_id_rsa_master_config_file.key -o ConnectTimeout=2 robot@${var.masters[0].address} true 2> /dev/null
+      do
+        echo "Waiting for OS to reboot and become available..."
+        sleep 3
+      done
+      rm -rvf ./.robot_id_rsa_master_config_file.key
+    EOT
   }
   provisioner "file" {
     destination = "/tmp/01-k8s-base-setup.sh"
@@ -61,13 +66,18 @@ resource "terraform_data" "k8s-base-setup_01_resource_nodes" {
       EOF
     ]
   }
-  provisioner "remote-exec" {
-    inline = [
-      "sudo bash -c 'sleep 5; shutdown -r now'"
-    ]
-  }
   provisioner "local-exec" {
-    command = "sleep 60"
+    command = <<-EOT
+      echo "${var.vm_rsa_ssh_key_private}" > ./.robot_id_rsa_master_config_file.key
+      chmod 600 ./.robot_id_rsa_master_config_file.key
+      ssh -o StrictHostKeyChecking=no -i ./.robot_id_rsa_master_config_file.key -o ConnectTimeout=2 robot@${var.masters[0].address} '(sleep 2; sudo reboot)&'; sleep 5      
+      until ssh -o StrictHostKeyChecking=no -i ./.robot_id_rsa_master_config_file.key -o ConnectTimeout=2 robot@${var.masters[0].address} true 2> /dev/null
+      do
+        echo "Waiting for OS to reboot and become available..."
+        sleep 3
+      done
+      rm -rvf ./.robot_id_rsa_master_config_file.key
+    EOT
   }
   provisioner "file" {
     destination = "/tmp/01-k8s-base-setup.sh"
