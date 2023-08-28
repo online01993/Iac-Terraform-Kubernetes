@@ -19,7 +19,7 @@ resource "terraform_data" "k8s-base-setup_01_resource_masters" {
     ]
   }
   provisioner "local-exec" {
-    command = <<-EOT
+    command = <<EOF
       echo ${var.vm_rsa_ssh_key_private} > ./.robot_id_rsa_${each.value.id}.key
       chmod 600 ./.robot_id_rsa_"${each.value.id}".key
       ssh -o StrictHostKeyChecking=no -i ./.robot_id_rsa_${each.value.id}.key -o ConnectTimeout=2 robot@${each.value.address} '(sleep 2; sudo reboot)&'; sleep 5      
@@ -29,7 +29,7 @@ resource "terraform_data" "k8s-base-setup_01_resource_masters" {
         sleep 3
       done
       rm -rvf ./.robot_id_rsa_${each.value.id}.key
-    EOT
+    EOF
   }
   provisioner "file" {
     destination = "/tmp/01-k8s-base-setup.sh"
@@ -67,7 +67,7 @@ resource "terraform_data" "k8s-base-setup_01_resource_nodes" {
     ]
   }
   provisioner "local-exec" {
-    command = <<-EOT
+    command = <<EOF
       echo ${var.vm_rsa_ssh_key_private} > ./.robot_id_rsa_${each.value.id}.key
       chmod 600 ./.robot_id_rsa_"${each.value.id}".key
       ssh -o StrictHostKeyChecking=no -i ./.robot_id_rsa_${each.value.id}.key -o ConnectTimeout=2 robot@${each.value.address} '(sleep 2; sudo reboot)&'; sleep 5      
@@ -77,7 +77,7 @@ resource "terraform_data" "k8s-base-setup_01_resource_nodes" {
         sleep 3
       done
       rm -rvf ./.robot_id_rsa_${each.value.id}.key
-    EOT
+    EOF
   }
   provisioner "file" {
     destination = "/tmp/01-k8s-base-setup.sh"
