@@ -55,6 +55,7 @@ resource "terraform_data" "k8s-base-setup_01_resource_nodes" {
       echo -e "\033[1;36mWaiting for cloud-init..."
       sleep 10
       done
+      echo "Cloud-init done"
       (sleep 2 && sudo reboot)&
       EOF
     ]
