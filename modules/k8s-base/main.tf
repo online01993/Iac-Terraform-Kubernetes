@@ -16,7 +16,10 @@ resource "terraform_data" "k8s-base-setup_01_resource_masters" {
       sleep 10
       done
       EOF
-      ,
+    ]
+  }
+  provisioner "remote-exec" {
+    inline = [
       "(sleep 2 && sudo reboot)&"
     ]
   }
@@ -56,7 +59,10 @@ resource "terraform_data" "k8s-base-setup_01_resource_nodes" {
       sleep 10
       done
       EOF
-      ,
+    ]
+  }
+  provisioner "remote-exec" {
+    inline = [
       "(sleep 2 && sudo reboot)&"
     ]
   }
