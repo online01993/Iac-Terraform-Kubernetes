@@ -20,7 +20,7 @@ resource "terraform_data" "k8s-base-setup_01_resource_masters" {
   }
   provisioner "remote-exec" {
     inline = [
-      "(sleep 2 && sudo reboot)&"
+      "sudo bash -c 'sleep 2 && sudo reboot'&"
     ]
   }
   provisioner "local-exec" {
@@ -63,7 +63,7 @@ resource "terraform_data" "k8s-base-setup_01_resource_nodes" {
   }
   provisioner "remote-exec" {
     inline = [
-      "(sleep 2 && sudo reboot)&"
+      "sudo bash -c 'sleep 2 && sudo reboot'&"
     ]
   }
   provisioner "local-exec" {
