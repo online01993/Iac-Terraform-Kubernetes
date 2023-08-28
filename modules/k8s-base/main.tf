@@ -22,8 +22,8 @@ resource "terraform_data" "k8s-base-setup_01_resource_masters" {
     command = <<-EOT
       echo "${var.vm_rsa_ssh_key_private}" > ./.robot_id_rsa_master_config_file"${each.value.id}".key
       chmod 600 ./.robot_id_rsa_master_config_file"${each.value.id}".key
-      ssh -o StrictHostKeyChecking=no -i ./.robot_id_rsa_master_config_file"${each.value.id}".key -o ConnectTimeout=2 robot@${var.masters[i].address} '(sleep 2; sudo reboot)&'; sleep 5      
-      until ssh -o StrictHostKeyChecking=no -i ./.robot_id_rsa_master_config_file"${each.value.id}".key -o ConnectTimeout=2 robot@${var.masters[i].address} true 2> /dev/null
+      ssh -o StrictHostKeyChecking=no -i ./.robot_id_rsa_master_config_file"${each.value.id}".key -o ConnectTimeout=2 robot@${each.value.address} '(sleep 2; sudo reboot)&'; sleep 5      
+      until ssh -o StrictHostKeyChecking=no -i ./.robot_id_rsa_master_config_file"${each.value.id}".key -o ConnectTimeout=2 robot@${each.value.address} true 2> /dev/null
       do
         echo "Waiting for OS to reboot and become available..."
         sleep 3
@@ -70,8 +70,8 @@ resource "terraform_data" "k8s-base-setup_01_resource_nodes" {
     command = <<-EOT
       echo "${var.vm_rsa_ssh_key_private}" > ./.robot_id_rsa_master_config_file"${each.value.id}".key
       chmod 600 ./.robot_id_rsa_master_config_file"${each.value.id}".key
-      ssh -o StrictHostKeyChecking=no -i ./.robot_id_rsa_master_config_file"${each.value.id}".key -o ConnectTimeout=2 robot@${var.masters[i].address} '(sleep 2; sudo reboot)&'; sleep 5      
-      until ssh -o StrictHostKeyChecking=no -i ./.robot_id_rsa_master_config_file"${each.value.id}".key -o ConnectTimeout=2 robot@${var.masters[i].address} true 2> /dev/null
+      ssh -o StrictHostKeyChecking=no -i ./.robot_id_rsa_master_config_file"${each.value.id}".key -o ConnectTimeout=2 robot@${each.value.address} '(sleep 2; sudo reboot)&'; sleep 5      
+      until ssh -o StrictHostKeyChecking=no -i ./.robot_id_rsa_master_config_file"${each.value.id}".key -o ConnectTimeout=2 robot@${each.value.address} true 2> /dev/null
       do
         echo "Waiting for OS to reboot and become available..."
         sleep 3
