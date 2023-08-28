@@ -20,7 +20,7 @@ resource "terraform_data" "k8s-base-setup_01_resource_masters" {
   }
   provisioner "remote-exec" {
     inline = [
-      "sudo shutdown -r +1&"
+      "sudo shutdown -r +1"
     ]
   }
   provisioner "local-exec" {
