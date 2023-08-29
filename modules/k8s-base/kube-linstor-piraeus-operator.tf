@@ -2140,7 +2140,10 @@ apiVersion: piraeus.io/v1
 kind: LinstorCluster
 metadata:
   name: linstorcluster
-spec: {}
+spec: 
+  nodeSelector:
+    node-role.kubernetes.io/worker: ''
+    type: user-node
 YAML
 }
 
