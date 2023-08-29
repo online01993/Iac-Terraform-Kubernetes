@@ -2141,7 +2141,7 @@ kind: LinstorCluster
 metadata:
   name: linstorcluster
 spec: 
-  nodeSelector:
+  nodeSelectorTerms:
   - matchExpressions:
     - key: node-role.kubernetes.io/control-plane
       operator: In
