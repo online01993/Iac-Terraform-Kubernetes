@@ -2141,22 +2141,13 @@ kind: LinstorCluster
 metadata:
   name: linstorcluster
 spec:
-  patches:
-    - target:
-        kind: Deployment
-        name: linstor-controller
-      patch: |
-        apiVersion: apps/v1
-        kind: Deployment
-        metadata:
-          name: linstor-controller
-        spec:
-          template:
-            spec:
-              nodeSelectorTerms:
-              - matchExpressions:
-                - key: node-role.kubernetes.io/control-plane
-                  operator: Exist
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: node-role.kubernetes.io/control-plane
+            operator: Exist
 YAML
 }
 
