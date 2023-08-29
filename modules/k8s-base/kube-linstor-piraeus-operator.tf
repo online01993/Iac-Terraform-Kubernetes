@@ -2158,27 +2158,6 @@ spec:
                 - matchExpressions:
                   - key: node-role.kubernetes.io/control-plane
                     operator: DoesNotExist
-    - target:
-        kind: Deployment
-        name: linstor-controller
-      patch: |
-        apiVersion: apps/v1
-        kind: Deployment
-        metadata:
-          name: linstor-controller
-        spec:
-          template:
-            spec:
-              tolerations:
-                - key: node-role.kubernetes.io/control-plane
-                  effect: NoSchedule
-              affinity:
-                nodeAffinity:
-                  requiredDuringSchedulingIgnoredDuringExecution:
-                    nodeSelectorTerms:
-                    - matchExpressions:
-                      - key: node-role.kubernetes.io/control-plane
-                        operator: Exist
 YAML
 }
 
