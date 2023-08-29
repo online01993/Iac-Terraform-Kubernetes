@@ -2142,7 +2142,7 @@ metadata:
   name: linstorcluster
 spec: 
   nodeSelector:
-    kubernetes.io/hostname: "+worker+"
+    kubernetes.io/hostname: "^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$"
 YAML
 }
 
