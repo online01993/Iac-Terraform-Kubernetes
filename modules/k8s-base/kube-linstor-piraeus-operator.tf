@@ -2160,8 +2160,8 @@ spec:
                     - matchExpressions:
                       - key: role
                         operator: In
-                          values:
-                          - database
+                        values:
+                        - database
 YAML
 }
 
