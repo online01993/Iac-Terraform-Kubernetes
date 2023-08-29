@@ -2142,7 +2142,7 @@ metadata:
   name: linstorcluster
 spec: 
   nodeSelector:
-    on-master: "true"
+    on-controlplane: "true"
 YAML
 }
 
