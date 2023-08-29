@@ -2142,7 +2142,7 @@ metadata:
   name: linstorcluster
 spec: 
   nodeSelector:
-    type: user-node
+    node-role.kubernetes.io/worker: ""
 YAML
 }
 
