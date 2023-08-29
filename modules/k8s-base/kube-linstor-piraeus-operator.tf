@@ -2142,7 +2142,8 @@ metadata:
   name: linstorcluster
 spec: 
   nodeSelector:
-    kubernetes.io/etcd: true
+    matchLabels:
+      node-role.kubernetes.io/control-plane: ""
 YAML
 }
 
