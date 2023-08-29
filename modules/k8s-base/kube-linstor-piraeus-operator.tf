@@ -2158,10 +2158,8 @@ spec:
                   requiredDuringSchedulingIgnoredDuringExecution:
                     nodeSelectorTerms:
                     - matchExpressions:
-                      - key: role
-                        operator: In
-                        values:
-                        - database
+                      - key: node-role.kubernetes.io/control-plane
+                        operator: Exist
 YAML
 }
 
