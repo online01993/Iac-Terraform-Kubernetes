@@ -2153,9 +2153,10 @@ spec:
         spec:
           template:
             spec:
-              tolerations:
+              nodeSelectorTerms:
+              - matchExpressions:
                 - key: node-role.kubernetes.io/control-plane
-                  effect: NoSchedule
+                  operator: DoesNotExist
 YAML
 }
 
