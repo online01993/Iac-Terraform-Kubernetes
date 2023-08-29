@@ -2146,7 +2146,7 @@ spec:
     - key: node-role.kubernetes.io/control-plane
       operator: In
       values:
-      - "false" # must be "true"    
+      - false   
 YAML
 }
 
