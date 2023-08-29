@@ -2144,12 +2144,12 @@ spec:
   patches:
     - target:
         kind: Pod
-        name: satellite
+        name: linstor-satellite
       patch: |
         apiVersion: v1
         kind: Pod
         metadata:
-          name: satellite
+          name: linstor-satellite
         spec:
           affinity:
             nodeAffinity:
