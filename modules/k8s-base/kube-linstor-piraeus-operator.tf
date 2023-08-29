@@ -2142,7 +2142,7 @@ metadata:
   name: linstorcluster
 spec: 
   nodeSelector:
-    role: control-plane
+    role: "control-plane"
 YAML
 }
 
