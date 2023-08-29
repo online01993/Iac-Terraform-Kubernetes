@@ -2120,75 +2120,75 @@ resource "kubernetes_validating_webhook_configuration" "piraeus_operator_validat
   }
 }
 
-# resource "kubectl_manifest" "linstorcluster_piraeus_datastore" {
-#   depends_on = [
-#     kubernetes_namespace.piraeus_datastore,
-#     kubectl_manifest.CRD_linstorclusters_piraeus_io,
-#     kubectl_manifest.CRD_linstornodeconnections_piraeus_io,
-#     kubectl_manifest.CRD_linstorsatelliteconfigurations_piraeus_io,
-#     kubectl_manifest.CRD_linstorsatellites_piraeus_io,
-#     kubernetes_config_map.piraeus_operator_image_config,
-#     kubernetes_service.piraeus_operator_webhook_service,
-#     kubernetes_validating_webhook_configuration.piraeus_operator_validating_webhook_configuration,
-#     kubernetes_deployment.piraeus_operator_controller_manager,
-#     kubernetes_deployment.piraeus_operator_gencert
-#     #kubectl_manifest.piraeus_operator_gencert
-#   ]
-#   server_side_apply = false
-#   yaml_body = <<YAML
-# apiVersion: piraeus.io/v1
-# kind: LinstorCluster
-# metadata:
-#   name: linstorcluster
-# spec:
-#   patches:
-#     - target:
-#         kind: Deployment
-#         name: linstor-controller
-#       patch: |
-#         apiVersion: apps/v1
-#         kind: Deployment
-#         metadata:
-#           name: linstor-controller
-#         spec:
-#           template:
-#             spec:
-#               affinity:
-#                 nodeAffinity:
-#                   requiredDuringSchedulingIgnoredDuringExecution:
-#                     nodeSelectorTerms:
-#                     - matchExpressions:
-#                       - key: node-role.kubernetes.io/control-plane
-#                         operator: DoesNotExist
-# YAML
-# }
+resource "kubectl_manifest" "linstorcluster_piraeus_datastore" {
+  depends_on = [
+    kubernetes_namespace.piraeus_datastore,
+    kubectl_manifest.CRD_linstorclusters_piraeus_io,
+    kubectl_manifest.CRD_linstornodeconnections_piraeus_io,
+    kubectl_manifest.CRD_linstorsatelliteconfigurations_piraeus_io,
+    kubectl_manifest.CRD_linstorsatellites_piraeus_io,
+    kubernetes_config_map.piraeus_operator_image_config,
+    kubernetes_service.piraeus_operator_webhook_service,
+    kubernetes_validating_webhook_configuration.piraeus_operator_validating_webhook_configuration,
+    kubernetes_deployment.piraeus_operator_controller_manager,
+    kubernetes_deployment.piraeus_operator_gencert
+    #kubectl_manifest.piraeus_operator_gencert
+  ]
+  server_side_apply = false
+  yaml_body = <<YAML
+apiVersion: piraeus.io/v1
+kind: LinstorCluster
+metadata:
+  name: linstorcluster
+spec:
+  patches:
+    - target:
+        kind: Deployment
+        name: linstor-controller
+      patch: |
+        apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          name: linstor-controller
+        spec:
+          template:
+            spec:
+              affinity:
+                nodeAffinity:
+                  requiredDuringSchedulingIgnoredDuringExecution:
+                    nodeSelectorTerms:
+                    - matchExpressions:
+                      - key: node-role.kubernetes.io/control-plane
+                        operator: DoesNotExist
+YAML
+}
 
-# resource "kubectl_manifest" "linstorcluster_piraeus_lvm_storage" {
-#   depends_on = [
-#     kubernetes_namespace.piraeus_datastore,
-#     kubectl_manifest.CRD_linstorclusters_piraeus_io,
-#     kubectl_manifest.CRD_linstornodeconnections_piraeus_io,
-#     kubectl_manifest.CRD_linstorsatelliteconfigurations_piraeus_io,
-#     kubectl_manifest.CRD_linstorsatellites_piraeus_io,
-#     kubernetes_config_map.piraeus_operator_image_config,
-#     kubernetes_service.piraeus_operator_webhook_service,
-#     kubernetes_validating_webhook_configuration.piraeus_operator_validating_webhook_configuration,
-#     kubernetes_deployment.piraeus_operator_controller_manager,
-#     kubernetes_deployment.piraeus_operator_gencert,
-#     kubectl_manifest.linstorcluster_piraeus_datastore
-#   ]
-#   server_side_apply = false
-#   yaml_body = <<YAML
-# apiVersion: piraeus.io/v1
-# kind: LinstorSatelliteConfiguration
-# metadata:
-#   name: storage-pool
-# spec:
-#   storagePools:
-#     - name: thinpool
-#       lvmThinPool: {}
-#       source:
-#         hostDevices:
-#           - /dev/xvdb
-# YAML
-# }
+resource "kubectl_manifest" "linstorcluster_piraeus_lvm_storage" {
+  depends_on = [
+    kubernetes_namespace.piraeus_datastore,
+    kubectl_manifest.CRD_linstorclusters_piraeus_io,
+    kubectl_manifest.CRD_linstornodeconnections_piraeus_io,
+    kubectl_manifest.CRD_linstorsatelliteconfigurations_piraeus_io,
+    kubectl_manifest.CRD_linstorsatellites_piraeus_io,
+    kubernetes_config_map.piraeus_operator_image_config,
+    kubernetes_service.piraeus_operator_webhook_service,
+    kubernetes_validating_webhook_configuration.piraeus_operator_validating_webhook_configuration,
+    kubernetes_deployment.piraeus_operator_controller_manager,
+    kubernetes_deployment.piraeus_operator_gencert,
+    kubectl_manifest.linstorcluster_piraeus_datastore
+  ]
+  server_side_apply = false
+  yaml_body = <<YAML
+apiVersion: piraeus.io/v1
+kind: LinstorSatelliteConfiguration
+metadata:
+  name: storage-pool
+spec:
+  storagePools:
+    - name: thinpool
+      lvmThinPool: {}
+      source:
+        hostDevices:
+          - /dev/xvdb
+YAML
+}
