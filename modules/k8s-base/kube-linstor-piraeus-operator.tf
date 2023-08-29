@@ -2159,7 +2159,7 @@ spec:
                     nodeSelectorTerms:
                     - matchExpressions:
                       - key: role
-                        operator: NotIn
+                        operator: In
                           values:
                           - database
 YAML
