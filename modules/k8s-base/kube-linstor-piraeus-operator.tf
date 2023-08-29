@@ -2140,16 +2140,11 @@ apiVersion: piraeus.io/v1
 kind: LinstorCluster
 metadata:
   name: linstorcluster
-spec:
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchFields:
-                  - key: metadata.name
-                    operator: In
-                    values:
-                      - "deb11-k8s-worker-0-e306d5fe-60c3-fbcc-08ee-6dbc70c2f6ed.k8s.its.local"
+spec: 
+  nodeSelector:
+    - matchExpressions:
+      - key: node-role.kubernetes.io/control-plane
+        operator: DoesNotExist
 YAML
 }
 
