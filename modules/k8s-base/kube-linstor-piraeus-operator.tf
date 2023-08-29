@@ -2141,8 +2141,12 @@ kind: LinstorCluster
 metadata:
   name: linstorcluster
 spec: 
-  nodeSelector:
-    kubernetes.io/hostname: "^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$"
+  nodeSelectorTerms:
+        - matchExpressions:
+          - key: node-role.kubernetes.io/control-plane
+            operator: NotIn
+            values:
+            - ""
 YAML
 }
 
