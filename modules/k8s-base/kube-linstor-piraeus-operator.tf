@@ -2142,7 +2142,7 @@ metadata:
   name: linstorcluster
 spec: 
   nodeSelector:
-    example.com/storage: "yes"
+    node-role.kubernetes.io/control-plane: "yes"
 YAML
 }
 
