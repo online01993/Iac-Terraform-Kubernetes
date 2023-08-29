@@ -2154,14 +2154,14 @@ spec:
           template:
             spec:
               affinity:
-                podAntiAffinity:
+                nodeAffinity:
                   requiredDuringSchedulingIgnoredDuringExecution:
-                  - labelSelector:
-                      matchExpressions:
-                      - key: app
-                        operator: In
-                        values:
-                        - store
+                    nodeSelectorTerms:
+                    - matchExpressions:
+                      - key: role
+                        operator: NotIn
+                          values:
+                          - database
 YAML
 }
 
