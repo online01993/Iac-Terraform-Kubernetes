@@ -2141,12 +2141,8 @@ kind: LinstorCluster
 metadata:
   name: linstorcluster
 spec: 
-  nodeSelectorTerms:
-  - matchExpressions:
-    - key: node-role.kubernetes.io/control-plane
-      operator: In
-      values:
-      - "'false'"
+  nodeSelector:
+    node-role.kubernetes.io/control-plane: "'false'"
 YAML
 }
 
