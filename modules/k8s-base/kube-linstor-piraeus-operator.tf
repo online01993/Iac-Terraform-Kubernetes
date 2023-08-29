@@ -2144,9 +2144,7 @@ spec:
   nodeSelectorTerms:
         - matchExpressions:
           - key: node-role.kubernetes.io/control-plane
-            operator: NotIn
-            values:
-            - ""
+            operator: DoesNotExist
 YAML
 }
 
