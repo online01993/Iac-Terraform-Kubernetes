@@ -2142,9 +2142,9 @@ metadata:
   name: linstorcluster
 spec: 
   nodeSelectorTerms:
-        - matchExpressions:
-          - key: node-role.kubernetes.io/control-plane
-            operator: DoesNotExist
+    - matchExpressions:
+      - key: node-role.kubernetes.io/control-plane
+        operator: DoesNotExist
 YAML
 }
 
