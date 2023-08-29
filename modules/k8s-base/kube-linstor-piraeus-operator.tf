@@ -2146,7 +2146,7 @@ spec:
       requiredDuringSchedulingIgnoredDuringExecution:
         nodeSelectorTerms:
         - matchExpressions:
-          - key: node-role.kubernetes.io/control-plane
+          - key: node-role.kubernetes.io/worker
             operator: Exist
 YAML
 }
