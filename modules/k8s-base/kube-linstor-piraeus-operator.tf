@@ -2145,7 +2145,7 @@ spec:
     nodeAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
         labelSelector:
-        - matchFields:
+        - matchExpressions:
           - key: node-role.kubernetes.io/worker
             operator: Exist
 YAML
