@@ -2141,10 +2141,10 @@ kind: LinstorCluster
 metadata:
   name: linstorcluster
 spec: 
-  nodeSelector:
-    - matchExpressions:
-      - key: node-role.kubernetes.io/control-plane
-        operator: DoesNotExist
+  tolerations:
+  - key: "node-role.kubernetes.io/control-plane"
+    operator: "DoesNotExist"
+    effect: "NoSchedule"
 YAML
 }
 
