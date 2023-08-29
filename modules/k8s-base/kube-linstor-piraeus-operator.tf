@@ -2144,7 +2144,7 @@ spec:
   affinity:
     nodeAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
+        labelSelector:
         - matchFields:
           - key: node-role.kubernetes.io/worker
             operator: Exist
