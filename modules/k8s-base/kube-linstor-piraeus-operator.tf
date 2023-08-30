@@ -2159,22 +2159,6 @@ metadata:
 spec:
   patches:
     - target:
-        kind: Pod
-        name: satellite
-      patch: |
-        apiVersion: v1
-        kind: Pod
-        metadata:
-          name: satellite
-        spec:
-          affinity:
-            nodeAffinity:
-              requiredDuringSchedulingIgnoredDuringExecution:
-                nodeSelectorTerms:
-                - matchExpressions:
-                  - key: node-role.kubernetes.io/control-plane
-                    operator: DoesNotExist
-    - target:
         kind: Deployment
         name: linstor-controller
       patch: |
