@@ -410,10 +410,11 @@ resource "kubernetes_deployment" "dashboard_metrics_scraper" {
         }
         node_selector = {
           "kubernetes.io/os" = "linux"
+          "node-role.kubernetes.io/control-plane" = ""
         }
         service_account_name = "kubernetes-dashboard"
         toleration {
-          key    = "node-role.kubernetes.io/master"
+          key    = "node-role.kubernetes.io/control-plane"
           effect = "NoSchedule"
         }
       }
