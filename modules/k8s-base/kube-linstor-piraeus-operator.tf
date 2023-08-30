@@ -34,7 +34,7 @@ resource "kubernetes_labels" "kubernetes_labels_linstor_satellite" {
   api_version = "v1"
   kind        = "Node"
   metadata {
-    name = each.value.fqdn
+    name = each.value.netbios
   }
   labels = {
     "node-role.kubernetes.io/linstor-satellite" = ""
