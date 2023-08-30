@@ -95,8 +95,8 @@ global_vm_storage_disk_size_gb = 20
 global_master_cpu_count = 2
 #Count for CPU VM worker node #Kubernetes minimal 2
 global_vm_cpu_count = 4
-#Count for MEM VM master node #Kubernetes minimal 2
-global_master_memory_size_gb = 2
+#Count for MEM VM master node #Kubernetes minimal 3
+global_master_memory_size_gb = 3
 #Count for CPU VM worker node #Kubernetes minimal 2
 global_vm_memory_size_gb = 8
 #Lables for VM master node
