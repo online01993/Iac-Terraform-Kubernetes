@@ -2178,8 +2178,6 @@ kind: LinstorCluster
 metadata:
   name: linstorcluster
 spec:
-  nodeSelector:
-    node-role.kubernetes.io/linstor-satellite: ""
   patches:
     - target:
         kind: Deployment
