@@ -2192,6 +2192,42 @@ spec:
               tolerations:
                 - key: node-role.kubernetes.io/control-plane
                   effect: NoSchedule
+    - target:
+        kind: DaemonSet
+        name: ha-controller  
+      patch: |
+        apiVersion: apps/v1
+        kind: DaemonSet
+        metadata:
+          name: ha-controller  
+        spec:
+          template:
+            spec:
+              affinity:
+                nodeAffinity:
+                  requiredDuringSchedulingIgnoredDuringExecution:
+                    nodeSelectorTerms:
+                      - matchExpressions:
+                        - key: node-role.kubernetes.io/control-plane
+                          operator: DoesNotExist
+    - target:
+        kind: DaemonSet
+        name: linstor-csi-node
+      patch: |
+        apiVersion: apps/v1
+        kind: DaemonSet
+        metadata:
+          name: linstor-csi-node  
+        spec:
+          template:
+            spec:
+              affinity:
+                nodeAffinity:
+                  requiredDuringSchedulingIgnoredDuringExecution:
+                    nodeSelectorTerms:
+                      - matchExpressions:
+                        - key: node-role.kubernetes.io/control-plane
+                          operator: DoesNotExist
 YAML
 }
 
