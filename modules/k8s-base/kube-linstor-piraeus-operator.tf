@@ -2169,13 +2169,8 @@ spec:
         spec:
           template:
             spec:
-              affinity:
-                nodeAffinity:
-                  requiredDuringSchedulingIgnoredDuringExecution:
-                    nodeSelectorTerms:
-                    - matchExpressions:
-                      - key: node-role.kubernetes.io/control-plane
-                        operator: Exist
+              nodeSelector:
+               node-role.kubernetes.io/control-plane = ""
               tolerations:
                 - key: node-role.kubernetes.io/control-plane
                   effect: NoSchedule
