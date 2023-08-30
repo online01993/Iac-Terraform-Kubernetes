@@ -15,7 +15,7 @@ output "masters" {
     for i in range(length(xenorchestra_vm.vm_master)) :
     {
       "id"      = i
-      "netbios" = "deb11-k8s-master-i-${random_uuid.vm_master_id[i].result}"
+      "netbios" = "deb11-k8s-master-${i}-${random_uuid.vm_master_id[i].result}"
       "fqdn"    = xenorchestra_vm.vm_master[i].name_label
       "address" = xenorchestra_vm.vm_master[i].ipv4_addresses[0]
     }
@@ -26,7 +26,7 @@ output "nodes" {
     for i in range(length(xenorchestra_vm.vm)) :
     {
       "id"      = i
-      "netbios" = "deb11-k8s-master-i-${random_uuid.vm_master_id[i].result}"
+      "netbios" = "deb11-k8s-master-${i}-${random_uuid.vm_master_id[i].result}"
       "fqdn"    = xenorchestra_vm.vm[i].name_label
       "address" = xenorchestra_vm.vm[i].ipv4_addresses[0]
     }
