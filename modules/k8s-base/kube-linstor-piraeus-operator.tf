@@ -2142,14 +2142,11 @@ metadata:
   name: linstorcluster
 spec:
   patches:
-    - target:
-        kind: Pod
-        name: linstor-satellite
-      patch: |
+    - patch: |
         apiVersion: v1
         kind: Pod
         metadata:
-          name: linstor-satellite
+          name: satellite
         spec:
           affinity:
             nodeAffinity:
@@ -2158,6 +2155,30 @@ spec:
                 - matchExpressions:
                   - key: node-role.kubernetes.io/control-plane
                     operator: DoesNotExist
+    target:
+      kind: Pod
+      name: satellite
+    - patch: |
+        apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          name: linstor-controller
+        spec:
+          template:
+            spec:
+              tolerations:
+                - key: node-role.kubernetes.io/control-plane
+                  effect: NoSchedule
+              affinity:
+                nodeAffinity:
+                  requiredDuringSchedulingIgnoredDuringExecution:
+                    nodeSelectorTerms:
+                    - matchExpressions:
+                      - key: node-role.kubernetes.io/control-plane
+                        operator: Exist
+    target:
+      kind: Deployment
+      name: linstor-controller
 YAML
 }
 
