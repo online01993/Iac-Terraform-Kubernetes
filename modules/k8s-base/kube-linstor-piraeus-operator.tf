@@ -21,6 +21,26 @@ resource "kubernetes_namespace" "piraeus_datastore" {
   }
 }
 
+resource "kubernetes_labels" "kubernetes_labels_linstor_satellite" {
+  depends_on = [
+    kubernetes_namespace.kube_flannel,
+    kubernetes_service_account.flannel,
+    kubernetes_cluster_role.flannel,
+    kubernetes_cluster_role_binding.flannel,
+    kubernetes_config_map.kube_flannel_cfg,
+    kubernetes_daemonset.kube_flannel_ds
+  ]
+  for_each = { for i in var.nodes : i.id => i }
+  api_version = "v1"
+  kind        = "Node"
+  metadata {
+    name = each.value.fqdn
+  }
+  labels = {
+    "node-role.kubernetes.io/linstor-satellite" = ""
+  }
+}
+
 resource "kubectl_manifest" "CRD_linstorclusters_piraeus_io" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore
@@ -2147,7 +2167,8 @@ resource "kubectl_manifest" "LinstorCluster_piraeus_datastore" {
     kubernetes_service.piraeus_operator_webhook_service,
     kubernetes_validating_webhook_configuration.piraeus_operator_validating_webhook_configuration,
     kubernetes_deployment.piraeus_operator_controller_manager,
-    kubernetes_deployment.piraeus_operator_gencert
+    kubernetes_deployment.piraeus_operator_gencert,
+    kubernetes_labels.kubernetes_labels_linstor_satellite
     #kubectl_manifest.piraeus_operator_gencert
   ]
   server_side_apply = false
@@ -2157,6 +2178,8 @@ kind: LinstorCluster
 metadata:
   name: linstorcluster
 spec:
+  nodeSelector:
+    node-role.kubernetes.io/linstor-satellite: ""
   patches:
     - target:
         kind: Deployment
@@ -2241,7 +2264,8 @@ resource "kubectl_manifest" "LinstorNodeConnection_piraeus_datastore" {
     kubernetes_validating_webhook_configuration.piraeus_operator_validating_webhook_configuration,
     kubernetes_deployment.piraeus_operator_controller_manager,
     kubernetes_deployment.piraeus_operator_gencert,
-    kubectl_manifest.LinstorCluster_piraeus_datastore
+    kubectl_manifest.LinstorCluster_piraeus_datastore,
+    kubernetes_labels.kubernetes_labels_linstor_satellite
   ]
   server_side_apply = false
   yaml_body = <<YAML
@@ -2270,6 +2294,7 @@ resource "kubectl_manifest" "linstorcluster_piraeus_lvm_storage" {
     kubernetes_deployment.piraeus_operator_controller_manager,
     kubernetes_deployment.piraeus_operator_gencert,
     kubectl_manifest.LinstorCluster_piraeus_datastore,
+    kubernetes_labels.kubernetes_labels_linstor_satellite,
     kubectl_manifest.LinstorNodeConnection_piraeus_datastore
   ]
   server_side_apply = false
@@ -2280,7 +2305,7 @@ metadata:
   name: linstorsatelliteconfiguration
 spec:
   nodeSelector:
-    node-role.kubernetes.io/control-plane: ""
+    node-role.kubernetes.io/linstor-satellite: ""
   patches:
     - target:
         kind: Pod
