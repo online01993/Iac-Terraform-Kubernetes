@@ -2177,6 +2177,7 @@ apiVersion: piraeus.io/v1
 kind: LinstorCluster
 metadata:
   name: linstorcluster
+  namespace: piraeus-datastore
 spec:
   nodeSelector:
     node-role.kubernetes.io/linstor-satellite: ""
@@ -2273,6 +2274,7 @@ apiVersion: piraeus.io/v1
 kind: LinstorNodeConnection
 metadata:
   name: linstornodeconnection
+  namespace: piraeus-datastore
 spec:
   selector:
     - matchLabels:
@@ -2303,6 +2305,7 @@ apiVersion: piraeus.io/v1
 kind: LinstorSatelliteConfiguration
 metadata:
   name: linstorsatelliteconfiguration
+  namespace: piraeus-datastore
 spec:
   nodeSelector:
     node-role.kubernetes.io/linstor-satellite: ""
@@ -2329,5 +2332,37 @@ spec:
       source:
         hostDevices:
           - /dev/xvdb
+YAML
+}
+
+resource "kubectl_manifest" "drbd_storage_piraeus_datastore" {
+  depends_on = [
+    kubernetes_namespace.piraeus_datastore,
+    kubectl_manifest.CRD_linstorclusters_piraeus_io,
+    kubectl_manifest.CRD_linstornodeconnections_piraeus_io,
+    kubectl_manifest.CRD_linstorsatelliteconfigurations_piraeus_io,
+    kubectl_manifest.CRD_linstorsatellites_piraeus_io,
+    kubernetes_config_map.piraeus_operator_image_config,
+    kubernetes_service.piraeus_operator_webhook_service,
+    kubernetes_validating_webhook_configuration.piraeus_operator_validating_webhook_configuration,
+    kubernetes_deployment.piraeus_operator_controller_manager,
+    kubernetes_deployment.piraeus_operator_gencert,
+    kubectl_manifest.LinstorCluster_piraeus_datastore,
+    kubernetes_labels.kubernetes_labels_linstor_satellite,
+    kubectl_manifest.LinstorNodeConnection_piraeus_datastore,
+    kubectl_manifest.LinstorSatelliteConfiguration_piraeus_datastore
+  ]
+  server_side_apply = false
+  yaml_body = <<YAML
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: piraeus-storage-replicated
+provisioner: linstor.csi.linbit.com
+allowVolumeExpansion: true
+volumeBindingMode: WaitForFirstConsumer
+parameters:
+  linstor.csi.linbit.com/storagePool: pool1
+  linstor.csi.linbit.com/placementCount: "2"
 YAML
 }
