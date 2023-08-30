@@ -2248,7 +2248,7 @@ resource "kubectl_manifest" "LinstorNodeConnection_piraeus_datastore" {
 apiVersion: piraeus.io/v1
 kind: LinstorNodeConnection
 metadata:
-  name: selector
+  name: linstornodeconnection
 spec:
   selector:
     - matchLabels:
@@ -2277,8 +2277,25 @@ resource "kubectl_manifest" "linstorcluster_piraeus_lvm_storage" {
 apiVersion: piraeus.io/v1
 kind: LinstorSatelliteConfiguration
 metadata:
-  name: storage-pool
+  name: linstorsatelliteconfiguration
 spec:
+  patches:
+    - target:
+        kind: Pod
+        name: satellite
+      patch: |
+        apiVersion: v1
+        kind: Pod
+        metadata:
+          name: satellite
+        spec:
+          affinity:
+                nodeAffinity:
+                  requiredDuringSchedulingIgnoredDuringExecution:
+                    nodeSelectorTerms:
+                      - matchExpressions:
+                        - key: node-role.kubernetes.io/control-plane
+                          operator: DoesNotExist
   storagePools:
     - name: thinpool
       lvmThinPool: {}
