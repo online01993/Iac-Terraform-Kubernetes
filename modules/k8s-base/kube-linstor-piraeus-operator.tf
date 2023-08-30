@@ -2362,7 +2362,7 @@ provisioner: linstor.csi.linbit.com
 allowVolumeExpansion: true
 volumeBindingMode: WaitForFirstConsumer
 parameters:
-  linstor.csi.linbit.com/storagePool: thinpool
+  linstor.csi.linbit.com/storagePool: "thinpool"
   linstor.csi.linbit.com/placementCount: "2"
 YAML
 }
