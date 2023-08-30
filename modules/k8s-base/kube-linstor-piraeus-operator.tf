@@ -2157,6 +2157,8 @@ kind: LinstorCluster
 metadata:
   name: linstorcluster
 spec:
+  nodeSelector:
+    node-role.kubernetes.io/control-plane: ""
   patches:
     - target:
         kind: Deployment
@@ -2174,22 +2176,6 @@ spec:
               tolerations:
                 - key: node-role.kubernetes.io/control-plane
                   effect: NoSchedule
-    - target:
-        kind: Pod
-        name: deb11-k8s-worker-0-e306d5fe-60c3-fbcc-08ee-6dbc70c2f6ed
-      patch: |
-        apiVersion: v1
-        kind: Pod
-        metadata:
-          name: deb11-k8s-worker-0-e306d5fe-60c3-fbcc-08ee-6dbc70c2f6ed
-        spec:
-          affinity:
-            nodeAffinity:
-              requiredDuringSchedulingIgnoredDuringExecution:
-                nodeSelectorTerms:
-                  - matchExpressions:
-                    - key: node-role.kubernetes.io/control-plane
-                      operator: DoesNotExist
 YAML
 }
 
