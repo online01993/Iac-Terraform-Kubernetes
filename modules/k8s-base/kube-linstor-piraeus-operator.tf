@@ -2176,12 +2176,12 @@ spec:
                   effect: NoSchedule
     - target:
         kind: Pod
-        name: satellite
+        name: deb11-k8s-worker-0-e306d5fe-60c3-fbcc-08ee-6dbc70c2f6ed
       patch: |
         apiVersion: v1
         kind: Pod
         metadata:
-          name: satellite
+          name: deb11-k8s-worker-0-e306d5fe-60c3-fbcc-08ee-6dbc70c2f6ed
         spec:
           affinity:
             nodeAffinity:
