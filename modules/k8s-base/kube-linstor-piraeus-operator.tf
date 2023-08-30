@@ -2142,43 +2142,43 @@ metadata:
   name: linstorcluster
 spec:
   patches:
-    target:
-      kind: Pod
-      name: satellite
-    patch: |
-      apiVersion: v1
-      kind: Pod
-      metadata:
+    - target:
+        kind: Pod
         name: satellite
-      spec:
-        affinity:
-          nodeAffinity:
-            requiredDuringSchedulingIgnoredDuringExecution:
-              nodeSelectorTerms:
-              - matchExpressions:
-                - key: node-role.kubernetes.io/control-plane
-                  operator: DoesNotExist
-    target:
-      kind: Deployment
-      name: linstor-controller
-    patch: |
-      apiVersion: apps/v1
-      kind: Deployment
-      metadata:
+      patch: |
+        apiVersion: v1
+        kind: Pod
+        metadata:
+          name: satellite
+        spec:
+          affinity:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                - matchExpressions:
+                  - key: node-role.kubernetes.io/control-plane
+                    operator: DoesNotExist
+    - target:
+        kind: Deployment
         name: linstor-controller
-      spec:
-        template:
-          spec:
-            tolerations:
-              - key: node-role.kubernetes.io/control-plane
-                effect: NoSchedule
-            affinity:
-              nodeAffinity:
-                requiredDuringSchedulingIgnoredDuringExecution:
-                  nodeSelectorTerms:
-                  - matchExpressions:
-                    - key: node-role.kubernetes.io/control-plane
-                      operator: Exist
+      patch: |
+        apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          name: linstor-controller
+        spec:
+          template:
+            spec:
+              tolerations:
+                - key: node-role.kubernetes.io/control-plane
+                  effect: NoSchedule
+              affinity:
+                nodeAffinity:
+                  requiredDuringSchedulingIgnoredDuringExecution:
+                    nodeSelectorTerms:
+                    - matchExpressions:
+                      - key: node-role.kubernetes.io/control-plane
+                        operator: Exist
 YAML
 }
 
