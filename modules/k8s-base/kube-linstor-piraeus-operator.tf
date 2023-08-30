@@ -1801,6 +1801,14 @@ resource "kubernetes_deployment" "piraeus_operator_controller_manager" {
             allow_privilege_escalation = false
           }
         }
+        node_selector = {
+          "kubernetes.io/os" = "linux"
+          "node-role.kubernetes.io/control-plane" = ""
+        }
+        toleration {
+          key    = "node-role.kubernetes.io/control-plane"
+          effect = "NoSchedule"
+        }
         termination_grace_period_seconds = 10
         service_account_name             = "piraeus-operator-controller-manager"
         security_context {
@@ -1904,6 +1912,14 @@ resource "kubernetes_deployment" "piraeus_operator_gencert" {
             read_only_root_filesystem  = true
             allow_privilege_escalation = false
           }
+        }
+        node_selector = {
+          "kubernetes.io/os" = "linux"
+          "node-role.kubernetes.io/control-plane" = ""
+        }
+        toleration {
+          key    = "node-role.kubernetes.io/control-plane"
+          effect = "NoSchedule"
         }
         termination_grace_period_seconds = 10
         service_account_name             = "piraeus-operator-gencert"
