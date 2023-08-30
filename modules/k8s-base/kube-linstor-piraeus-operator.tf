@@ -2253,7 +2253,7 @@ spec:
   selector:
     - matchLabels:
         - key: node-role.kubernetes.io/control-plane
-          operator: DoesNotExist
+          op: DoesNotExist
 YAML
 }
 
