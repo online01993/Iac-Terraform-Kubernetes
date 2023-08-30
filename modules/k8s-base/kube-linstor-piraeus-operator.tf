@@ -2176,6 +2176,22 @@ spec:
               tolerations:
                 - key: node-role.kubernetes.io/control-plane
                   effect: NoSchedule
+    - target:
+        kind: Deployment
+        name: linstor-csi-controller 
+      patch: |
+        apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          name: linstor-csi-controller 
+        spec:
+          template:
+            spec:
+              nodeSelector:
+                node-role.kubernetes.io/control-plane: ""
+              tolerations:
+                - key: node-role.kubernetes.io/control-plane
+                  effect: NoSchedule
 YAML
 }
 
