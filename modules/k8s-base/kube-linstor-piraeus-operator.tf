@@ -2367,7 +2367,7 @@ parameters:
 YAML
 }
 
-resource "kubectl_manifest" "StorageClass_drbd_storage_piraeus_datastore" {
+resource "kubectl_manifest" "PersistentVolumeClaim_drbd_storage_piraeus_datastore" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
     kubectl_manifest.CRD_linstorclusters_piraeus_io,
