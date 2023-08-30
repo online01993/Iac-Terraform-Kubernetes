@@ -2279,6 +2279,8 @@ kind: LinstorSatelliteConfiguration
 metadata:
   name: linstorsatelliteconfiguration
 spec:
+  nodeSelector:
+    node-role.kubernetes.io/control-plane: ""
   patches:
     - target:
         kind: Pod
