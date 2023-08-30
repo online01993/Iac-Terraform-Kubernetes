@@ -2142,7 +2142,7 @@ metadata:
   name: linstorcluster
 spec:
   patches:
-    - patch: |
+    - patch: |-
         apiVersion: v1
         kind: Pod
         metadata:
@@ -2158,7 +2158,7 @@ spec:
     target:
       kind: Pod
       name: satellite
-    - patch: |
+    - patch: |-
         apiVersion: apps/v1
         kind: Deployment
         metadata:
