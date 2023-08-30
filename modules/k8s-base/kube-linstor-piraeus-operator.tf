@@ -2170,7 +2170,7 @@ spec:
           template:
             spec:
               nodeSelector:
-                node-role.kubernetes.io/control-plane = ""
+                node-role.kubernetes.io/control-plane: ""
               tolerations:
                 - key: node-role.kubernetes.io/control-plane
                   effect: NoSchedule
