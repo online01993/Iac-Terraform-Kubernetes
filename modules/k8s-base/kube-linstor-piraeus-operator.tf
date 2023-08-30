@@ -2176,6 +2176,22 @@ spec:
               tolerations:
                 - key: node-role.kubernetes.io/control-plane
                   effect: NoSchedule
+    - target:
+        kind: Pod
+        name: satellite
+      patch: |
+        apiVersion: v1
+        kind: Pod
+        metadata:
+          name: satellite
+        spec:
+          affinity:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                  - matchExpressions:
+                    - key: node-role.kubernetes.io/control-plane
+                      operator: DoesNotExist
 YAML
 }
 
