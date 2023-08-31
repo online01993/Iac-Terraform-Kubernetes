@@ -2195,7 +2195,7 @@ spec:
         - key: node-role.kubernetes.io/control-plane
           op: DoesNotExist
         - key: node-role.kubernetes.io/linstor-satellite
-          op: Exist
+          op: Exists
 YAML
 }
 
