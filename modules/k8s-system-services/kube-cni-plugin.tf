@@ -23,10 +23,6 @@
 }*/
 #k2tf converter to kubernetes provider solution
 resource "kubernetes_namespace" "kube_flannel" {
-  depends_on = [
-    terraform_data.k8s-kubeadm-join_masters_04_resource,
-    terraform_data.k8s-kubeadm-join_nodes_04_resource
-  ]
   metadata {
     name = "kube-flannel"
     labels = {

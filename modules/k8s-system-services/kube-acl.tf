@@ -1,9 +1,5 @@
 #kube-acl.tf
 resource "kubernetes_service_account_v1" "k8sadmin" {
-  depends_on = [
-    terraform_data.k8s-kubeadm-join_masters_04_resource,
-    terraform_data.k8s-kubeadm-join_nodes_04_resource
-  ]
   metadata {
     name      = "k8sadmin"
     namespace = "default"

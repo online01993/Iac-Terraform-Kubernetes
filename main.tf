@@ -49,15 +49,16 @@ module "kubernetes-base" {
   version_containerd           = var.global_version_containerd
   version_runc                 = var.global_version_runc
   version_cni-plugin           = var.global_version_cni-plugin
+  pods_mask_cidr               = "${var.global_pods_address_mask}/${var.global_pods_mask_cidr}"  
+}
+module "k8s-system-services" {
+  depends_on                   = [module.kubernetes-base]
+  source                       = "./modules/k8s-system-services"
   k8s_api_endpoint_ip          = var.global_k8s_api_endpoint_ip
   k8s_api_endpoint_port        = var.global_k8s_api_endpoint_port
   k8s_cni_hairpinMode          = var.global_k8s_cni_hairpinMode
   k8s_cni_isDefaultGateway     = var.global_k8s_cni_isDefaultGateway
   k8s_cni_Backend_Type         = var.global_k8s_cni_Backend_Type
-  pods_mask_cidr               = "${var.global_pods_address_mask}/${var.global_pods_mask_cidr}"
   kube-dashboard_nodePort      = var.global_kube-dashboard_nodePort
-}
-module "kubernetes-services" {
-  depends_on                   = [module.kubernetes-base]
-  source                       = "./modules/k8s-services"
+  pods_mask_cidr               = "${var.global_pods_address_mask}/${var.global_pods_mask_cidr}"
 }  
