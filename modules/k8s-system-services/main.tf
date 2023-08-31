@@ -29,7 +29,7 @@ metadata:
   namespace: piraeus-datastore
 spec:
   clusterRef: 
-    name: linstorcluster
+    name: "linstorcluster"
   storagePools:
     - name: thinpool
       lvmThinPool: {}
