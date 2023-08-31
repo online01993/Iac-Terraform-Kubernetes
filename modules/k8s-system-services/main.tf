@@ -290,7 +290,7 @@ resource "kubectl_manifest" "StorageClass_drbd_storage_piraeus_datastore" {
   }
   server_side_apply = true
   wait = true
-  #force_conflicts = true
+  force_conflicts = true
   yaml_body = <<YAML
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
