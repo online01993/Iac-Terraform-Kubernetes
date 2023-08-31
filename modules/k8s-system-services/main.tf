@@ -247,6 +247,7 @@ resource "kubectl_manifest" "LinstorSatellite_for_each_piraeus_datastore_ssd" {
   }
   for_each = { for i in var.nodes : i.id => i if i.storage.ssd.present }
   server_side_apply = true
+  force_conflicts = true
   wait = true  
   yaml_body = <<YAML
 apiVersion: piraeus.io/v1
@@ -290,7 +291,6 @@ resource "kubectl_manifest" "StorageClass_drbd_storage_piraeus_datastore" {
   }
   server_side_apply = true
   wait = true
-  force_conflicts = true
   yaml_body = <<YAML
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
