@@ -113,6 +113,11 @@ resource "kubectl_manifest" "LinstorNodeConnection_piraeus_datastore" {
     kubectl_manifest.LinstorCluster_piraeus_datastore,
     kubernetes_labels.kubernetes_labels_linstor_satellite
   ]
+  lifecycle {
+    replace_triggered_by = [
+      kubectl_manifest.LinstorCluster_piraeus_datastore.uid
+    ]
+  }
   server_side_apply = true
   wait = true
   yaml_body = <<YAML
@@ -147,6 +152,12 @@ resource "kubectl_manifest" "LinstorSatelliteConfiguration_piraeus_datastore" {
     kubernetes_labels.kubernetes_labels_linstor_satellite,
     kubectl_manifest.LinstorNodeConnection_piraeus_datastore
   ]
+  lifecycle {
+    replace_triggered_by = [
+      kubectl_manifest.LinstorCluster_piraeus_datastore.uid,
+      kubectl_manifest.LinstorNodeConnection_piraeus_datastore.uid
+    ]
+  }
   server_side_apply = true
   wait = true
   yaml_body = <<YAML
@@ -197,6 +208,13 @@ YAML
 #     kubectl_manifest.LinstorNodeConnection_piraeus_datastore,
 #     kubectl_manifest.LinstorSatelliteConfiguration_piraeus_datastore
 #   ]
+#    lifecycle {
+#    replace_triggered_by = [
+#      kubectl_manifest.LinstorCluster_piraeus_datastore.uid,
+#      kubectl_manifest.LinstorNodeConnection_piraeus_datastore.uid,
+#      kubectl_manifest.LinstorSatelliteConfiguration_piraeus_datastore.uid
+#    ]
+#  }
 #   for_each = { for i in var.nodes : i.id => i }
 #   server_side_apply = true
 #   force_conflicts = true
@@ -236,6 +254,13 @@ resource "kubectl_manifest" "StorageClass_drbd_storage_piraeus_datastore" {
     kubectl_manifest.LinstorNodeConnection_piraeus_datastore,
     kubectl_manifest.LinstorSatelliteConfiguration_piraeus_datastore
   ]
+  lifecycle {
+    replace_triggered_by = [
+      kubectl_manifest.LinstorCluster_piraeus_datastore.uid,
+      kubectl_manifest.LinstorNodeConnection_piraeus_datastore.uid,
+      kubectl_manifest.LinstorSatelliteConfiguration_piraeus_datastore.uid
+    ]
+  }
   server_side_apply = true
   wait = true
   #force_conflicts = true
