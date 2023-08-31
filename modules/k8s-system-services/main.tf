@@ -19,6 +19,7 @@ resource "kubectl_manifest" "LinstorSatellite_each_nodes_piraeus_datastore" {
   ]
   for_each = { for i in var.nodes : i.id => i }
   server_side_apply = true
+  force_conflicts = true
   wait = true
   yaml_body = <<YAML
 apiVersion: piraeus.io/v1
