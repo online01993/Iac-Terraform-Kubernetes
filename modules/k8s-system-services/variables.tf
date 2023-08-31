@@ -1,4 +1,20 @@
 #variables.tf
+variable "masters" {
+  type = list(object({
+    id      = number
+    netbios = string
+    fqdn    = string
+    address = string
+  }))
+}
+variable "nodes" {
+  type = list(object({
+    id      = number
+    netbios = string
+    fqdn    = string
+    address = string
+  }))
+}
 variable "pods_mask_cidr" {
   #default = ""
   type = string

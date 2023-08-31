@@ -56,6 +56,8 @@ module "kubernetes-base" {
 module "k8s-system-services" {
   depends_on                   = [module.kubernetes-base]
   source                       = "./modules/k8s-system-services"
+  masters                      = module.infrastructure.masters
+  nodes                        = module.infrastructure.nodes
   k8s_cni_hairpinMode          = var.global_k8s_cni_hairpinMode
   k8s_cni_isDefaultGateway     = var.global_k8s_cni_isDefaultGateway
   k8s_cni_Backend_Type         = var.global_k8s_cni_Backend_Type
