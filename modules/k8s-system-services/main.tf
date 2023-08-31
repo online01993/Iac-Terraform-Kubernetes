@@ -278,8 +278,7 @@ resource "kubectl_manifest" "StorageClass_drbd_storage_piraeus_datastore" {
     kubernetes_deployment.piraeus_operator_gencert,
     kubectl_manifest.LinstorCluster_piraeus_datastore,
     kubernetes_labels.kubernetes_labels_linstor_satellite,
-    kubectl_manifest.LinstorNodeConnection_piraeus_datastore,
-    kubectl_manifest.LinstorSatelliteConfiguration_piraeus_datastore
+    kubectl_manifest.LinstorNodeConnection_piraeus_datastore
   ]
   lifecycle {
     replace_triggered_by = [
