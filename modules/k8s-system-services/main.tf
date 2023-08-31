@@ -39,7 +39,7 @@ resource "kubernetes_labels" "kubernetes_labels_linstor_satellite-ssd_storage" {
     name = each.value.netbios
   }
   labels = {
-    "storage.kubernetes.io/linstor-satellite-storage-ssd" = ""
+    "linstor-satellite-storage-ssd" = ""
   }
 }
 
