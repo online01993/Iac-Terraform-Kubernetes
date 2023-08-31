@@ -1,5 +1,5 @@
 #main.tf
-#Genirate Linstor storage
+#Genirate Linstor/Piraeus storage
 resource "kubectl_manifest" "LinstorCluster_piraeus_datastore" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
@@ -169,25 +169,6 @@ metadata:
 spec:
   nodeSelector:
     node-role.kubernetes.io/linstor-satellite: ""
-  patches:
-    - target:
-        kind: Pod
-        name: satellite
-      patch: |
-        apiVersion: v1
-        kind: Pod
-        metadata:
-          name: satellite
-        spec:
-          affinity:
-                nodeAffinity:
-                  requiredDuringSchedulingIgnoredDuringExecution:
-                    nodeSelectorTerms:
-                      - matchExpressions:
-                        - key: node-role.kubernetes.io/control-plane
-                          operator: DoesNotExist
-                        - key: node-role.kubernetes.io/linstor-satellite
-                          operator: Exists
 YAML
 }
 
