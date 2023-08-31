@@ -248,7 +248,7 @@ resource "kubectl_manifest" "LinstorSatellite_for_each_piraeus_datastore_ssd" {
   for_each = { for i in var.nodes : i.id => i if i.storage.ssd.present }
   server_side_apply = true
   force_new = true
-  #force_conflicts = true
+  force_conflicts = true
   wait = true  
   yaml_body = <<YAML
 apiVersion: piraeus.io/v1
