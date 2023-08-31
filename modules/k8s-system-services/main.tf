@@ -9,7 +9,7 @@ resource "kubernetes_labels" "kubernetes_labels_linstor_satellite" {
     kubernetes_config_map.kube_flannel_cfg,
     kubernetes_daemonset.kube_flannel_ds
   ]
-  for_each = { for i in var.nodes : i.id => i if i.storage.ssd.present == "True"}
+  for_each = { for i in var.nodes : i.id => i if i.storage.ssd.present == True}
   api_version = "v1"
   kind        = "Node"
   metadata {
