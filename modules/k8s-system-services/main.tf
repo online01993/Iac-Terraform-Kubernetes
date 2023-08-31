@@ -13,6 +13,7 @@ resource "kubernetes_labels" "kubernetes_labels_linstor_satellite" {
     if 
         i.storage.ssd.present || i.storage.nvme.present || i.storage.hdd.present
   }
+  field_manager = "TerraformLabels_linstor-satellite"
   api_version = "v1"
   kind        = "Node"
   metadata {
@@ -33,6 +34,7 @@ resource "kubernetes_labels" "kubernetes_labels_linstor_satellite-ssd_storage" {
     kubernetes_daemonset.kube_flannel_ds
   ]
   for_each = { for i in var.nodes : i.id => i if i.storage.ssd.present }
+  field_manager = "TerraformLabels_linstor-satellite-storage-ssd"
   api_version = "v1"
   kind        = "Node"
   metadata {
