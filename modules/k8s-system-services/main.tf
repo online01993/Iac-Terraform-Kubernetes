@@ -284,8 +284,7 @@ resource "kubectl_manifest" "StorageClass_drbd_storage_piraeus_datastore" {
   lifecycle {
     replace_triggered_by = [
       kubectl_manifest.LinstorCluster_piraeus_datastore.uid,
-      kubectl_manifest.LinstorNodeConnection_piraeus_datastore.uid,
-      kubectl_manifest.LinstorSatelliteConfiguration_piraeus_datastore.uid
+      kubectl_manifest.LinstorNodeConnection_piraeus_datastore.uid
     ]
   }
   server_side_apply = true
