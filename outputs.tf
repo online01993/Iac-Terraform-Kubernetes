@@ -19,7 +19,7 @@ output "k8s-endpont-ip" {
   value = module.kubernetes-base.k8s-endpont-ip
 }
 output "k8s_kube-token-k8sadmin" {
-  value     = module.kubernetes-system-services.k8s_kube-token-k8sadmin
+  value     = module.k8s-system-services.k8s_kube-token-k8sadmin
   sensitive = false
 }
 output "k8s-admin_file" {
