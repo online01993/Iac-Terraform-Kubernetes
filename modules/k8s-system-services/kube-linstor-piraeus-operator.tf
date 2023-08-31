@@ -2201,7 +2201,7 @@ spec:
 YAML
 }
 
-/*resource "kubectl_manifest" "LinstorSatelliteConfiguration_piraeus_datastore" {
+resource "kubectl_manifest" "LinstorSatelliteConfiguration_piraeus_datastore" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
     kubectl_manifest.CRD_linstorclusters_piraeus_io,
@@ -2248,4 +2248,4 @@ spec:
                         - key: node-role.kubernetes.io/linstor-satellite
                           operator: Exists
 YAML
-}*/
+}
