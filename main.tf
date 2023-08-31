@@ -43,7 +43,6 @@ module "kubernetes-base" {
   vm_rsa_ssh_key_private       = module.infrastructure.vm_rsa_ssh_key_private
   masters                      = module.infrastructure.masters
   nodes                        = module.infrastructure.nodes
-  master_count                 = var.global_master_node_high_availability == true ? 3 : 1
   master_node_address_mask     = var.global_master_node_address_mask
   master_node_address_start_ip = var.global_master_node_address_start_ip
   version_containerd           = var.global_version_containerd

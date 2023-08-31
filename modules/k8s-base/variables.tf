@@ -20,10 +20,6 @@ variable "nodes" {
     address = string
   }))
 }
-variable "master_count" {
-  #default = 3
-  type = number
-}
 variable "version_containerd" {
   type = string
 }

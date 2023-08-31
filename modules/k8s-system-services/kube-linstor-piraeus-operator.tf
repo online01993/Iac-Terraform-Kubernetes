@@ -2286,7 +2286,7 @@ allowVolumeExpansion: true
 volumeBindingMode: WaitForFirstConsumer
 parameters:
   linstor.csi.linbit.com/storagePool: "thinpool"
-  linstor.csi.linbit.com/placementCount: "2"
+  linstor.csi.linbit.com/placementCount: "${length(var.nodes)}"
 YAML
 }
 
