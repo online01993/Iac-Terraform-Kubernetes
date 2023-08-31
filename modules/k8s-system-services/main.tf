@@ -45,6 +45,48 @@ resource "kubernetes_labels" "kubernetes_labels_linstor_satellite-ssd_storage" {
   }
 }
 
+resource "kubernetes_labels" "kubernetes_labels_linstor_satellite-nvme_storage" {
+  depends_on = [
+    kubernetes_namespace.kube_flannel,
+    kubernetes_service_account.flannel,
+    kubernetes_cluster_role.flannel,
+    kubernetes_cluster_role_binding.flannel,
+    kubernetes_config_map.kube_flannel_cfg,
+    kubernetes_daemonset.kube_flannel_ds
+  ]
+  for_each = { for i in var.nodes : i.id => i if i.storage.nvme.present }
+  field_manager = "TerraformLabels_linstor-satellite-storage-nvme"
+  api_version = "v1"
+  kind        = "Node"
+  metadata {
+    name = each.value.netbios
+  }
+  labels = {
+    "linstor-satellite-storage-nvme" = ""
+  }
+}
+
+resource "kubernetes_labels" "kubernetes_labels_linstor_satellite-hdd_storage" {
+  depends_on = [
+    kubernetes_namespace.kube_flannel,
+    kubernetes_service_account.flannel,
+    kubernetes_cluster_role.flannel,
+    kubernetes_cluster_role_binding.flannel,
+    kubernetes_config_map.kube_flannel_cfg,
+    kubernetes_daemonset.kube_flannel_ds
+  ]
+  for_each = { for i in var.nodes : i.id => i if i.storage.hdd.present }
+  field_manager = "TerraformLabels_linstor-satellite-storage-hdd"
+  api_version = "v1"
+  kind        = "Node"
+  metadata {
+    name = each.value.netbios
+  }
+  labels = {
+    "linstor-satellite-storage-hdd" = ""
+  }
+}
+
 resource "kubectl_manifest" "LinstorCluster_piraeus_datastore" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
@@ -181,7 +223,7 @@ spec:
 YAML
 }
 
-resource "kubectl_manifest" "LinstorSatelliteConfiguration_piraeus_datastore" {
+resource "kubectl_manifest" "LinstorSatellite_for_each_piraeus_datastore_ssd" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
     kubectl_manifest.CRD_linstorclusters_piraeus_io,
@@ -203,23 +245,22 @@ resource "kubectl_manifest" "LinstorSatelliteConfiguration_piraeus_datastore" {
       kubectl_manifest.LinstorNodeConnection_piraeus_datastore.uid
     ]
   }
+  for_each = { for i in var.nodes : i.id => i if i.storage.ssd.present }
   server_side_apply = true
-  wait = true
+  wait = true  
   yaml_body = <<YAML
 apiVersion: piraeus.io/v1
-kind: LinstorSatelliteConfiguration
+kind: LinstorSatellite
 metadata:
-  name: linstorsatelliteconfiguration
+  name: ${each.value.netbios}
   namespace: piraeus-datastore
 spec:
-  nodeSelector:
-    node-role.kubernetes.io/linstor-satellite: ""
   storagePools:
      - name: thinpool
        lvmThinPool: {}
        source:
          hostDevices:
-           - /dev/xvdb
+           - ${each.value.storage.ssd.hostPath}
 YAML
 }
 
