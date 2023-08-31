@@ -2242,6 +2242,8 @@ spec:
                       - matchExpressions:
                         - key: node-role.kubernetes.io/control-plane
                           operator: DoesNotExist
+                        - key: node-role.kubernetes.io/linstor-satellite
+                          operator: Exists
   storagePools:
     - name: thinpool
       lvmThinPool: {}
