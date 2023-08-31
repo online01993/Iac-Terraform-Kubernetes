@@ -13,6 +13,23 @@ variable "nodes" {
     netbios = string
     fqdn    = string
     address = string
+    storage = object({
+      ssd   = object({
+        present = bool,
+        hostPath = string,
+        volume  = number
+      })
+      nvme   = object({
+        present = bool,
+        hostPath = string,
+        volume  = number
+      })
+      hdd   = object({
+        present = bool,
+        hostPath = string,
+        volume  = number
+      })
+    })
   }))
 }
 variable "pods_mask_cidr" {

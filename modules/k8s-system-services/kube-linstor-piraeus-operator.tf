@@ -21,26 +21,6 @@ resource "kubernetes_namespace" "piraeus_datastore" {
   }
 }
 
-resource "kubernetes_labels" "kubernetes_labels_linstor_satellite" {
-  depends_on = [
-    kubernetes_namespace.kube_flannel,
-    kubernetes_service_account.flannel,
-    kubernetes_cluster_role.flannel,
-    kubernetes_cluster_role_binding.flannel,
-    kubernetes_config_map.kube_flannel_cfg,
-    kubernetes_daemonset.kube_flannel_ds
-  ]
-  for_each = { for i in var.nodes : i.id => i }
-  api_version = "v1"
-  kind        = "Node"
-  metadata {
-    name = each.value.netbios
-  }
-  labels = {
-    "node-role.kubernetes.io/linstor-satellite" = ""
-  }
-}
-
 resource "kubectl_manifest" "CRD_linstorclusters_piraeus_io" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore

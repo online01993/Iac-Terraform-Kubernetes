@@ -18,6 +18,7 @@ output "masters" {
       "netbios" = "deb11-k8s-master-${i}-${random_uuid.vm_master_id[i].result}"
       "fqdn"    = xenorchestra_vm.vm_master[i].name_label
       "address" = xenorchestra_vm.vm_master[i].ipv4_addresses[0]
+      
     }
   ]
 }
@@ -29,6 +30,23 @@ output "nodes" {
       "netbios" = "deb11-k8s-worker-${i}-${random_uuid.vm_id[i].result}"
       "fqdn"    = xenorchestra_vm.vm[i].name_label
       "address" = xenorchestra_vm.vm[i].ipv4_addresses[0]
+      "storage" = ({
+      "ssd"   = ({
+        "present" = true,
+        "hostPath" = "/dev/xvdb",
+        "volume"  = var.vm_storage_disk_size_gb * 1024 * 1024 * 1024
+      })
+      "nvme"   = ({
+        "present" = false,
+        "hostPath" = "",
+        "volume"  = 0
+      })
+      "hdd"   = ({
+        "present" = false,
+        "hostPath" = "",
+        "volume"  = 0
+      })
+    })
     }
   ]
 }
