@@ -256,13 +256,13 @@ metadata:
   namespace: piraeus-datastore
 spec:
   storagePools:
-  - name: thinpool
-    lvmThinPool: 
-    - name: lvm-thin
-      thinVolume: thinpool
-      volumeGroup: linstor_thinpool
-      devicePaths:
-      - ${each.value.storage.ssd.hostPath}
+    - name: thinpool
+      lvmThinPool:
+        volumeGroup: vg-thinpool
+        thinPool: thin
+      source:
+        hostDevices:
+          - ${each.value.storage.ssd.hostPath}
 YAML
 }
 
