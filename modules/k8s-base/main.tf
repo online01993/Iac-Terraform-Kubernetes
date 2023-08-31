@@ -115,7 +115,7 @@ resource "terraform_data" "k8s-kubeadm_init_02_resource" {
     destination = "/tmp/02-k8s-kubeadm_init.sh"
     content = templatefile("${path.module}/scripts/02-k8s-kubeadm_init.sh.tpl", {
       itterator                    = each.value.id
-      master_count                 = "${var.master_count}"
+      master_count                 = length(var.masters)
       master_network_mask          = "${var.master_node_address_mask}"
       master_node_address_start_ip = "${var.master_node_address_start_ip}"
       pod-network-cidr             = "${var.pods_mask_cidr}"
@@ -281,7 +281,7 @@ resource "terraform_data" "k8s-kubeadm-join_masters_04_resource" {
     destination = "/tmp/04-k8s-kubeadm-join_masters.sh"
     content = templatefile("${path.module}/scripts/04-k8s-kubeadm-join_masters.sh.tpl", {
       kubeadm-join_string = "${data.local_sensitive_file.kubeadm_token_master_file.content}"
-      master_count        = "${var.master_count}"
+      master_count        = length(var.masters)
       itterator           = each.value.id
     })
   }
