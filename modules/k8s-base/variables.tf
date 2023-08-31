@@ -65,3 +65,7 @@ variable "k8s_api_endpoint_port" {
   #default = 8888
   type = string
 }
+variable "kube-dashboard_nodePort" {
+  default = 30100
+  type    = number
+}

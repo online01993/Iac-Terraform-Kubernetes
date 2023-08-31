@@ -3,7 +3,12 @@
 ##kubectl provider solution
 /*resource "kubectl_manifest" "k8s_kube-dashboard" {
   depends_on = [
-    kubectl_manifest.k8s_cni_plugin
+    kubernetes_namespace.kube_flannel,
+    kubernetes_service_account.flannel,
+    kubernetes_cluster_role.flannel,
+    kubernetes_cluster_role_binding.flannel,
+    kubernetes_config_map.kube_flannel_cfg,
+    kubernetes_daemonset.kube_flannel_ds
   ]
   for_each = {
     for i in toset([
@@ -23,6 +28,14 @@
 }*/
 #k2tf converter to kubernetes provider solution
 resource "kubernetes_namespace" "kubernetes_dashboard" {
+  depends_on = [
+    kubernetes_namespace.kube_flannel,
+    kubernetes_service_account.flannel,
+    kubernetes_cluster_role.flannel,
+    kubernetes_cluster_role_binding.flannel,
+    kubernetes_config_map.kube_flannel_cfg,
+    kubernetes_daemonset.kube_flannel_ds
+  ]
   metadata {
     name = "kubernetes-dashboard"
   }

@@ -55,9 +55,9 @@ module "kubernetes-base" {
   k8s_cni_isDefaultGateway     = var.global_k8s_cni_isDefaultGateway
   k8s_cni_Backend_Type         = var.global_k8s_cni_Backend_Type
   pods_mask_cidr               = "${var.global_pods_address_mask}/${var.global_pods_mask_cidr}"
+  kube-dashboard_nodePort      = var.global_kube-dashboard_nodePort
 }
 module "kubernetes-services" {
   depends_on                   = [module.kubernetes-base]
   source                       = "./modules/k8s-services"
-  kube-dashboard_nodePort      = var.global_kube-dashboard_nodePort
 }  

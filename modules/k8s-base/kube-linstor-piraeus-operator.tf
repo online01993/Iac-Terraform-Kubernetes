@@ -1951,92 +1951,6 @@ resource "kubernetes_deployment" "piraeus_operator_gencert" {
   }
 }
 
-/* resource "kubectl_manifest" "piraeus_operator_gencert" {
-  depends_on = [
-    kubernetes_namespace.piraeus_datastore,
-    kubectl_manifest.CRD_linstorclusters_piraeus_io,
-    kubectl_manifest.CRD_linstornodeconnections_piraeus_io,
-    kubectl_manifest.CRD_linstorsatelliteconfigurations_piraeus_io,
-    kubectl_manifest.CRD_linstorsatellites_piraeus_io,
-    kubernetes_config_map.piraeus_operator_image_config,
-    kubernetes_service_account.piraeus_operator_gencert,
-    kubernetes_cluster_role_binding.piraeus_operator_gencert     
-  ]
-  server_side_apply = true
-  yaml_body = <<YAML
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  labels:
-    app.kubernetes.io/component: piraeus-operator-gencert
-    app.kubernetes.io/name: piraeus-datastore
-  name: piraeus-operator-gencert
-  namespace: piraeus-datastore
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app.kubernetes.io/component: piraeus-operator-gencert
-      app.kubernetes.io/name: piraeus-datastore
-  template:
-    metadata:
-      annotations:
-        kubectl.kubernetes.io/default-container: gencert
-      labels:
-        app.kubernetes.io/component: piraeus-operator-gencert
-        app.kubernetes.io/name: piraeus-datastore
-    spec:
-      containers:
-        - args:
-            - --leader-elect
-            - --namespace=$(NAMESPACE)
-            - --webhook-configuration-name=$(WEBHOOK_CONFIGURATION_NAME)
-            - --webhook-service-name=$(WEBHOOK_SERVICE_NAME)
-            - --webhook-tls-secret-name=$(WEBHOOK_TLS_SECRET_NAME)
-          command:
-            - /gencert
-          env:
-            - name: NAMESPACE
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.namespace
-            - name: WEBHOOK_CONFIGURATION_NAME
-              value: piraeus-operator-validating-webhook-configuration
-            - name: WEBHOOK_SERVICE_NAME
-              value: piraeus-operator-webhook-service
-            - name: WEBHOOK_TLS_SECRET_NAME
-              value: webhook-server-cert
-          image: quay.io/piraeusdatastore/piraeus-operator:v2
-          livenessProbe:
-            httpGet:
-              path: /healthz
-              port: 8081
-            initialDelaySeconds: 15
-            periodSeconds: 20
-          name: gencert
-          readinessProbe:
-            httpGet:
-              path: /readyz
-              port: 8081
-            initialDelaySeconds: 5
-            periodSeconds: 10
-          resources:
-            limits:
-              cpu: 50m
-              memory: 128Mi
-            requests:
-              cpu: 5m
-              memory: 32Mi
-          securityContext:
-            allowPrivilegeEscalation: false
-            readOnlyRootFilesystem: true
-      securityContext:
-        runAsNonRoot: true
-      serviceAccountName: piraeus-operator-gencert
-      terminationGracePeriodSeconds: 10
-YAML
-} */
-
 data "kubernetes_secret" "datasource_webhook-server-cert" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
@@ -2280,6 +2194,8 @@ spec:
     - matchLabels:
         - key: node-role.kubernetes.io/control-plane
           op: DoesNotExist
+        - key: node-role.kubernetes.io/linstor-satellite
+          op: Exist
 YAML
 }
 
