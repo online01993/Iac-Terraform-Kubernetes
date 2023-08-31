@@ -15,6 +15,7 @@ resource "kubectl_manifest" "LinstorCluster_piraeus_datastore" {
     kubernetes_labels.kubernetes_labels_linstor_satellite
     #kubectl_manifest.piraeus_operator_gencert
   ]
+  force_new = true
   server_side_apply = true
   wait = true
   yaml_body = <<YAML
@@ -113,6 +114,7 @@ resource "kubectl_manifest" "LinstorNodeConnection_piraeus_datastore" {
     kubectl_manifest.LinstorCluster_piraeus_datastore,
     kubernetes_labels.kubernetes_labels_linstor_satellite
   ]
+  force_new = true
   server_side_apply = true
   wait = true
   yaml_body = <<YAML
@@ -147,6 +149,7 @@ resource "kubectl_manifest" "LinstorSatelliteConfiguration_piraeus_datastore" {
     kubernetes_labels.kubernetes_labels_linstor_satellite,
     kubectl_manifest.LinstorNodeConnection_piraeus_datastore
   ]
+  force_new = true
   server_side_apply = true
   wait = true
   yaml_body = <<YAML
@@ -236,6 +239,7 @@ resource "kubectl_manifest" "StorageClass_drbd_storage_piraeus_datastore" {
     kubectl_manifest.LinstorNodeConnection_piraeus_datastore,
     kubectl_manifest.LinstorSatelliteConfiguration_piraeus_datastore
   ]
+  force_new = true
   server_side_apply = true
   wait = true
   #force_conflicts = true
@@ -271,6 +275,7 @@ resource "kubectl_manifest" "PersistentVolumeClaim_drbd_storage_piraeus_datastor
     kubectl_manifest.LinstorSatelliteConfiguration_piraeus_datastore,
     kubectl_manifest.StorageClass_drbd_storage_piraeus_datastore
   ]
+  force_new = true
   server_side_apply = true
   yaml_body = <<YAML
 apiVersion: v1
