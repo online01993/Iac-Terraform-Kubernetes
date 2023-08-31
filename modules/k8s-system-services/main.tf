@@ -259,7 +259,9 @@ spec:
     lvmThinPools:
     - name: thinpool
       volumeGroup: linstor_thinpool
-      devicePaths: ${each.value.storage.ssd.hostPath}
+      thinVolume: thinpool
+      devicePaths: 
+      - ${each.value.storage.ssd.hostPath}
 YAML
 }
 
