@@ -193,7 +193,7 @@ metadata:
   namespace: piraeus-datastore
 spec:
   nodeSelector:
-    node-role.kubernetes.io/linstor-satellite: "no-auto-create-flag"
+    node-role.kubernetes.io/linstor-satellite: ""
   patches:
     - target:
         kind: Deployment
