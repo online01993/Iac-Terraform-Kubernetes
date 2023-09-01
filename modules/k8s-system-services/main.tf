@@ -381,11 +381,12 @@ metadata:
   name: linstorsatellite-${each.value.netbios}
   namespace: piraeus-datastore
 spec:
-  clusterRef: "linstorcluster"
+  clusterRef: 
+    - name: "linstorcluster"
   storagePools:
-     - name: thinpool
-       source:
-         hostDevices:
+    - name: thinpool
+      source:
+        hostDevices:
           - ${each.value.storage.ssd.hostPath}
 YAML
 }
