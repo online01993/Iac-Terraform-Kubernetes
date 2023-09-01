@@ -345,6 +345,7 @@ spec:
      - name: thinpool
        lvmThinPool: {}
 YAML
+}
 
 resource "kubectl_manifest" "LinstorSatellite_for_each_piraeus_datastore_ssd" {
   depends_on = [
