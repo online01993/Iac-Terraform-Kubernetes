@@ -90,7 +90,7 @@ global_master_disk_size_gb = 16
 #Size for VM worker node system disk size
 global_vm_disk_size_gb = 16
 #Size for VM worker node k8s data disk size
-global_vm_storage_disk_size_gb = 20
+global_vm_storage_disk_size_gb = 30
 #Count for CPU VM master node #Kubernetes minimal 2
 global_master_cpu_count = 2
 #Count for CPU VM worker node #Kubernetes minimal 2
