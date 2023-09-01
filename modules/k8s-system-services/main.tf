@@ -308,7 +308,7 @@ spec:
 YAML
 }
 
-resource "kubectl_manifest" "LinstorSatelliteConfiguration_piraeus_datastore_ssd" {
+resource "kubectl_manifest" "LinstorSatelliteConfiguration_piraeus_datastore" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
     kubectl_manifest.CRD_linstorclusters_piraeus_io,
@@ -340,53 +340,16 @@ metadata:
   namespace: piraeus-datastore
 spec:
   nodeSelector:
-    linstor-satellite-storage-ssd: ""
+    node-role.kubernetes.io/linstor-satellite: ""
   storagePools:
      - name: thin-ssd-pool
        lvmThinPool: {}
-YAML
-}
-
-resource "kubectl_manifest" "LinstorSatelliteConfiguration_piraeus_datastore_hdd" {
-  depends_on = [
-    kubernetes_namespace.piraeus_datastore,
-    kubectl_manifest.CRD_linstorclusters_piraeus_io,
-    kubectl_manifest.CRD_linstornodeconnections_piraeus_io,
-    kubectl_manifest.CRD_linstorsatelliteconfigurations_piraeus_io,
-    kubectl_manifest.CRD_linstorsatellites_piraeus_io,
-    kubernetes_config_map.piraeus_operator_image_config,
-    kubernetes_service.piraeus_operator_webhook_service,
-    kubernetes_validating_webhook_configuration.piraeus_operator_validating_webhook_configuration,
-    kubernetes_deployment.piraeus_operator_controller_manager,
-    kubernetes_deployment.piraeus_operator_gencert,
-    kubectl_manifest.LinstorCluster_piraeus_datastore,
-    kubernetes_labels.kubernetes_labels_linstor_satellite,
-    kubectl_manifest.LinstorNodeConnection_piraeus_datastore
-  ]
-  lifecycle {
-    replace_triggered_by = [
-      kubectl_manifest.LinstorCluster_piraeus_datastore.uid,
-      kubectl_manifest.LinstorNodeConnection_piraeus_datastore.uid
-    ]
-  }
-  server_side_apply = true
-  wait = true
-  yaml_body = <<YAML
-apiVersion: piraeus.io/v1
-kind: LinstorSatelliteConfiguration
-metadata:
-  name: linstorsatelliteconfiguration
-  namespace: piraeus-datastore
-spec:
-  nodeSelector:
-    linstor-satellite-storage-hdd: ""
-  storagePools:
      - name: thin-hdd-pool
-       lvmThinPool: {}
+       lvmThinPool: {}   
 YAML
 }
 
-resource "kubectl_manifest" "LinstorSatellite_for_each_piraeus_datastore_ssd" {
+resource "kubectl_manifest" "LinstorSatellite_for_each_piraeus_datastore" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
     kubectl_manifest.CRD_linstorclusters_piraeus_io,
@@ -408,7 +371,10 @@ resource "kubectl_manifest" "LinstorSatellite_for_each_piraeus_datastore_ssd" {
       kubectl_manifest.LinstorNodeConnection_piraeus_datastore.uid
     ]
   }
-  for_each = { for i in var.nodes : i.id => i if i.storage.ssd.present }
+  for_each = { for i in var.nodes : i.id => i 
+    if 
+        i.storage.ssd.present || i.storage.nvme.present || i.storage.hdd.present
+  }
   server_side_apply = true
   #force_new = true
   #force_conflicts = true
@@ -417,7 +383,7 @@ resource "kubectl_manifest" "LinstorSatellite_for_each_piraeus_datastore_ssd" {
 apiVersion: piraeus.io/v1
 kind: LinstorSatellite
 metadata:
-  name: ${each.value.netbios}-ssd
+  name: ${each.value.netbios}-storage
   namespace: piraeus-datastore
 spec:
   clusterRef: 
@@ -428,46 +394,6 @@ spec:
       source:
         hostDevices:
           - ${each.value.storage.ssd.hostPath}
-YAML
-}
-
-resource "kubectl_manifest" "LinstorSatellite_for_each_piraeus_datastore_hdd" {
-  depends_on = [
-    kubernetes_namespace.piraeus_datastore,
-    kubectl_manifest.CRD_linstorclusters_piraeus_io,
-    kubectl_manifest.CRD_linstornodeconnections_piraeus_io,
-    kubectl_manifest.CRD_linstorsatelliteconfigurations_piraeus_io,
-    kubectl_manifest.CRD_linstorsatellites_piraeus_io,
-    kubernetes_config_map.piraeus_operator_image_config,
-    kubernetes_service.piraeus_operator_webhook_service,
-    kubernetes_validating_webhook_configuration.piraeus_operator_validating_webhook_configuration,
-    kubernetes_deployment.piraeus_operator_controller_manager,
-    kubernetes_deployment.piraeus_operator_gencert,
-    kubectl_manifest.LinstorCluster_piraeus_datastore,
-    kubernetes_labels.kubernetes_labels_linstor_satellite,
-    kubectl_manifest.LinstorNodeConnection_piraeus_datastore
-  ]
-  lifecycle {
-    replace_triggered_by = [
-      kubectl_manifest.LinstorCluster_piraeus_datastore.uid,
-      kubectl_manifest.LinstorNodeConnection_piraeus_datastore.uid
-    ]
-  }
-  for_each = { for i in var.nodes : i.id => i if i.storage.hdd.present }
-  server_side_apply = true
-  #force_new = true
-  #force_conflicts = true
-  wait = true  
-  yaml_body = <<YAML
-apiVersion: piraeus.io/v1
-kind: LinstorSatellite
-metadata:
-  name: ${each.value.netbios}-hdd
-  namespace: piraeus-datastore
-spec:
-  clusterRef: 
-    name: "linstorcluster"
-  storagePools:
     - name: thin-hdd-pool
       lvmThinPool: {}
       source:
