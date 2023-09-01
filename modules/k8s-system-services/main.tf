@@ -193,7 +193,7 @@ metadata:
   namespace: piraeus-datastore
 spec:
   nodeSelector:
-    node-role.kubernetes.io/linstor-satellite: ""
+    node-role.kubernetes.io/linstor-satellite: "1"
   patches:
     - target:
         kind: Deployment
@@ -378,7 +378,7 @@ resource "kubectl_manifest" "LinstorSatellite_for_each_piraeus_datastore_ssd" {
 apiVersion: piraeus.io/v1
 kind: LinstorSatellite
 metadata:
-  name: linstorsatellite-${each.value.netbios}
+  name: ${each.value.netbios}
   namespace: piraeus-datastore
 spec:
   clusterRef: 
