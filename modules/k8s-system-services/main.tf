@@ -378,12 +378,11 @@ resource "kubectl_manifest" "LinstorSatellite_for_each_piraeus_datastore_ssd" {
 apiVersion: piraeus.io/v1
 kind: LinstorSatellite
 metadata:
-  name: ${each.value.netbios}
+  name: LinstorSatellite-${each.value.netbios}
   namespace: piraeus-datastore
 spec:
   storagePools:
      - name: thinpool
-       lvmThinPool: {}
        source:
          hostDevices:
           - ${each.value.storage.ssd.hostPath}
