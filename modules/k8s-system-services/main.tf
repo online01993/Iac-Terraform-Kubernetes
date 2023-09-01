@@ -308,7 +308,7 @@ spec:
 YAML
 }
 
-resource "kubectl_manifest" "LinstorSatelliteConfiguration_piraeus_datastore" {
+resource "kubectl_manifest" "LinstorSatelliteConfiguration_piraeus_datastore_ssd" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
     kubectl_manifest.CRD_linstorclusters_piraeus_io,
@@ -330,30 +330,30 @@ resource "kubectl_manifest" "LinstorSatelliteConfiguration_piraeus_datastore" {
       kubectl_manifest.LinstorNodeConnection_piraeus_datastore.uid
     ]
   }
+  for_each = { for i in var.nodes : i.id => i if i.storage.ssd.present }
   server_side_apply = true
   wait = true
   yaml_body = <<YAML
 apiVersion: piraeus.io/v1
 kind: LinstorSatelliteConfiguration
 metadata:
-  name: linstorsatelliteconfiguration
+  name: linstorsatelliteconfiguration-${each.value.netbios}-ssd
   namespace: piraeus-datastore
 spec:
   nodeSelector:
-    node-role.kubernetes.io/linstor-satellite: ""
+    kubernetes.io/hostname: "${each.value.netbios}"
   storagePools:
      - name: thin-ssd-pool
        lvmThinPool: 
          volumeGroup: vg-thin-ssd-pool
          thinPool: thin
-     - name: thin-hdd-pool
-       lvmThinPool: 
-         volumeGroup: vg-thin-hdd-pool
-         thinPool: thin   
+       source:
+         hostDevices:
+         - ${each.value.storage.ssd.hostPath}
 YAML
 }
 
-resource "kubectl_manifest" "LinstorSatellite_for_each_piraeus_datastore" {
+resource "kubectl_manifest" "LinstorSatelliteConfiguration_piraeus_datastore_hdd" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
     kubectl_manifest.CRD_linstorclusters_piraeus_io,
@@ -375,34 +375,26 @@ resource "kubectl_manifest" "LinstorSatellite_for_each_piraeus_datastore" {
       kubectl_manifest.LinstorNodeConnection_piraeus_datastore.uid
     ]
   }
-  for_each = { for i in var.nodes : i.id => i 
-    if 
-        i.storage.ssd.present || i.storage.nvme.present || i.storage.hdd.present
-  }
+  for_each = { for i in var.nodes : i.id => i if i.storage.hdd.present }
   server_side_apply = true
-  #force_new = true
-  #force_conflicts = true
-  wait = true  
+  wait = true
   yaml_body = <<YAML
 apiVersion: piraeus.io/v1
-kind: LinstorSatellite
+kind: LinstorSatelliteConfiguration
 metadata:
-  name: ${each.value.netbios}
+  name: linstorsatelliteconfiguration-${each.value.netbios}-hdd
   namespace: piraeus-datastore
 spec:
-  clusterRef: 
-    name: "linstorcluster"
+  nodeSelector:
+    kubernetes.io/hostname: "${each.value.netbios}"
   storagePools:
-    - name: thin-ssd-pool
-      lvmThinPool: {}
-      source:
-        hostDevices:
-          - ${each.value.storage.ssd.hostPath}
-    - name: thin-hdd-pool
-      lvmThinPool: {}
-      source:
-        hostDevices:
-          - ${each.value.storage.hdd.hostPath}
+     - name: thin-hdd-pool
+       lvmThinPool: 
+         volumeGroup: vg-thin-hdd-pool
+         thinPool: thin
+       source:
+         hostDevices:
+         - ${each.value.storage.hdd.hostPath}
 YAML
 }
 
