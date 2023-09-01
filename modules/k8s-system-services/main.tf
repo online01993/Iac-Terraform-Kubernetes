@@ -390,7 +390,7 @@ spec:
   clusterRef: 
     name: "linstorcluster"
   storagePools:
-    - name: thinpool
+    - name: thinpool2
       lvmThinPool: {}
       source:
         hostDevices:
