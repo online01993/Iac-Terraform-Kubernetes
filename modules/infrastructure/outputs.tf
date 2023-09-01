@@ -42,8 +42,8 @@ output "nodes" {
         "volume"  = 0
       })
       "hdd"   = ({
-        "present" = false,
-        "hostPath" = "",
+        "present" = true,
+        "hostPath" = "/dev/xvdc",
         "volume"  = 0
       })
     })
