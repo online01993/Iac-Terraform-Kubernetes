@@ -339,7 +339,7 @@ resource "kubectl_manifest" "LinstorSatellite_for_each_piraeus_datastore_ssd" {
 apiVersion: piraeus.io/v1
 kind: LinstorSatellite
 metadata:
-  name: ${each.value.netbios}-datastore_ssd
+  name: ${each.value.netbios}_datastore_ssd
   namespace: piraeus-datastore
 spec:
   clusterRef: 
@@ -384,7 +384,7 @@ resource "kubectl_manifest" "LinstorSatellite_for_each_piraeus_datastore_hdd" {
 apiVersion: piraeus.io/v1
 kind: LinstorSatellite
 metadata:
-  name: ${each.value.netbios}-datastore_hdd
+  name: ${each.value.netbios}_datastore_hdd
   namespace: piraeus-datastore
 spec:
   clusterRef: 
