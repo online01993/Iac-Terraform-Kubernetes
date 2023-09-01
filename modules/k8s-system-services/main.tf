@@ -385,6 +385,7 @@ spec:
     name: "linstorcluster"
   storagePools:
     - name: thinpool
+      lvmThinPool: {}
       source:
         hostDevices:
           - ${each.value.storage.ssd.hostPath}
