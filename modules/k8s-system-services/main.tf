@@ -343,12 +343,10 @@ metadata:
   namespace: piraeus-datastore
 spec:
   storagePools:
-    - name: thinpool
-      lvmThinPool:
-        volumeGroup: vg-thinpool
-        thinPool: thin
-      source:
-        hostDevices:
+     - name: thinpool
+       lvmThinPool: {}
+       source:
+         hostDevices:
           - ${each.value.storage.ssd.hostPath}
 YAML
 }
