@@ -343,9 +343,13 @@ spec:
     node-role.kubernetes.io/linstor-satellite: ""
   storagePools:
      - name: thin-ssd-pool
-       lvmThinPool: {}
+       lvmThinPool: 
+         volumeGroup: vg-thin-ssd-pool
+         thinPool: thin
      - name: thin-hdd-pool
-       lvmThinPool: {}   
+       lvmThinPool: 
+         volumeGroup: vg-thin-hdd-pool
+         thinPool: thin   
 YAML
 }
 
