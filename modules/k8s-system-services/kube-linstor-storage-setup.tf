@@ -270,7 +270,7 @@ resource "kubectl_manifest" "LinstorSatelliteConfiguration_piraeus_datastore_ssd
        }  
        "source": {
          "hostDevices": {
-         "- ${each.value.storage.ssd.hostPath}"
+         "- " "${each.value.storage.ssd.hostPath}"
          }
        } 
   }       
@@ -294,7 +294,7 @@ resource "kubectl_manifest" "LinstorSatelliteConfiguration_piraeus_datastore_ssd
        }  
        "source": {
          "hostDevices": {
-         "- ${each.value.storage.ssd.hostPath}"
+         "- " "${each.value.storage.ssd.hostPath}"
          }
        } 
   }       
