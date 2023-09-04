@@ -367,7 +367,6 @@ resource "kubectl_manifest" "LinstorSatelliteConfiguration_piraeus_datastore_nvm
  })
 }
 
-
 resource "kubectl_manifest" "LinstorSatelliteConfiguration_piraeus_datastore_hdd" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
