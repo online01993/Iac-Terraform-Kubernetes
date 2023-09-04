@@ -37,8 +37,8 @@ output "nodes" {
         "volume"  = var.vm_storage_disk_size_gb * 1024 * 1024 * 1024
       })
       "nvme"   = ({
-        "present" = false,
-        "hostPath" = "",
+        "present" = true,
+        "hostPath" = "/dev/xvdd",
         "volume"  = 0
       })
       "hdd"   = ({
