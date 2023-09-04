@@ -478,3 +478,17 @@ parameters:
   linstor.csi.linbit.com/placementCount: "${length([for i in var.nodes: i if i.storage.hdd.present])}"
 YAML
 }
+
+resource "kubernetes_storage_class" "storage_class_${var_hdd_k_8_s_stor_pool_type}_${var_hdd_k_8_s_stor_pool_name}_hdd_storage_replicated" {
+  count = length([for i in var.nodes: i if i.storage.hdd.present]) > 0 ? 1 : 0
+  metadata {
+    name = "storage-class-${var.hdd_k8s_stor_pool_type}-${var.hdd_k8s_stor_pool_name}-hdd-storage-replicated"
+  }
+  parameters = {
+    "linstor.csi.linbit.com/placementCount" = "${length([for i in var.nodes: i if i.storage.hdd.present])}"
+    "linstor.csi.linbit.com/storagePool" = "${var.hdd_k8s_stor_pool_type}-${var.hdd_k8s_stor_pool_name}-hdd-pool"
+  }
+  allow_volume_expansion = true
+  reclaim_policy         = "delete"
+  volume_binding_mode    = "WaitForFirstConsumer"
+}
