@@ -513,7 +513,7 @@ resource "kubernetes_storage_class" "storage_class_nvme_storage_replicated" {
   volume_binding_mode    = "WaitForFirstConsumer"
 }
 
-/* resource "kubernetes_storage_class" "storage_class_hdd_storage_replicated" {
+resource "kubernetes_storage_class" "storage_class_hdd_storage_replicated" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
     kubectl_manifest.CRD_linstorclusters_piraeus_io,
@@ -549,4 +549,4 @@ resource "kubernetes_storage_class" "storage_class_nvme_storage_replicated" {
   allow_volume_expansion = true
   reclaim_policy         = "Retain"
   volume_binding_mode    = "WaitForFirstConsumer"
-} */
+}
