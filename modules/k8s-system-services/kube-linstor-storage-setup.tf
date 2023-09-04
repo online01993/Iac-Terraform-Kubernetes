@@ -452,12 +452,12 @@ resource "kubernetes_storage_class" "storage_class_ssd_storage_replicated" {
     kubectl_manifest.LinstorCluster_piraeus_datastore,
     kubernetes_labels.kubernetes_labels_linstor_satellite,
     kubectl_manifest.LinstorNodeConnection_piraeus_datastore,
-    kubectl_manifest.LinstorSatelliteConfiguration_piraeus_datastore_hdd
+    kubectl_manifest.LinstorSatelliteConfiguration_piraeus_datastore_ssd
   ]
   lifecycle {
     replace_triggered_by = [
       kubectl_manifest.LinstorCluster_piraeus_datastore.uid,
-      kubectl_manifest.LinstorSatelliteConfiguration_piraeus_datastore_hdd
+      kubectl_manifest.LinstorSatelliteConfiguration_piraeus_datastore_ssd
     ]
   }
   count = length([for i in var.nodes: i if i.storage.ssd.present]) > 0 ? 1 : 0
@@ -490,12 +490,12 @@ resource "kubernetes_storage_class" "storage_class_nvme_storage_replicated" {
     kubectl_manifest.LinstorCluster_piraeus_datastore,
     kubernetes_labels.kubernetes_labels_linstor_satellite,
     kubectl_manifest.LinstorNodeConnection_piraeus_datastore,
-    kubectl_manifest.LinstorSatelliteConfiguration_piraeus_datastore_hdd
+    kubectl_manifest.LinstorSatelliteConfiguration_piraeus_datastore_nvme
   ]
   lifecycle {
     replace_triggered_by = [
       kubectl_manifest.LinstorCluster_piraeus_datastore.uid,
-      kubectl_manifest.LinstorSatelliteConfiguration_piraeus_datastore_hdd
+      kubectl_manifest.LinstorSatelliteConfiguration_piraeus_datastore_nvme
     ]
   }
   count = length([for i in var.nodes: i if i.storage.nvme.present]) > 0 ? 1 : 0
