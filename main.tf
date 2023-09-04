@@ -62,4 +62,10 @@ module "k8s-system-services" {
   k8s_cni_Backend_Type         = var.global_k8s_cni_Backend_Type
   kube-dashboard_nodePort      = var.global_kube-dashboard_nodePort
   pods_mask_cidr               = "${var.global_pods_address_mask}/${var.global_pods_mask_cidr}"
+  ssd_k8s_stor_pool_type       = var.global_ssd_k8s_stor_pool_type
+  ssd_k8s_stor_pool_name       = var.global_ssd_k8s_stor_pool_name
+  nvme_k8s_stor_pool_type      = var.global_nvme_k8s_stor_pool_type
+  nvme_k8s_stor_pool_name      = var.global_nvme_k8s_stor_pool_name
+  hdd_k8s_stor_pool_type       = var.global_hdd_k8s_stor_pool_type
+  hdd_k8s_stor_pool_name       = var.global_hdd_k8s_stor_pool_name
 }  

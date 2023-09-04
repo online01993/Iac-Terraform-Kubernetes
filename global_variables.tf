@@ -53,3 +53,9 @@ variable "global_k8s_cni_hairpinMode" {}
 variable "global_k8s_cni_isDefaultGateway" {}
 variable "global_k8s_cni_Backend_Type" {}
 variable "global_kube-dashboard_nodePort" {}
+variable "global_ssd_k8s_stor_pool_type" {}
+variable "global_ssd_k8s_stor_pool_name" {}
+variable "global_nvme_k8s_stor_pool_type" {}
+variable "global_nvme_k8s_stor_pool_name" {}
+variable "global_hdd_k8s_stor_pool_type" {}
+variable "global_hdd_k8s_stor_pool_name" {}
