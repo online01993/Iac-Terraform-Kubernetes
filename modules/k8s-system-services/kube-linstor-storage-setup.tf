@@ -274,8 +274,7 @@ resource "kubectl_manifest" "LinstorSatelliteConfiguration_piraeus_datastore_ssd
          }
        } 
   }       
-}})
-: yamlencode({
+}}) : yamlencode({
 "apiVersion": "piraeus.io/v1"
 "kind": "LinstorSatelliteConfiguration"
 "metadata": {
