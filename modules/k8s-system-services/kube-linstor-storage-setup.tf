@@ -269,7 +269,7 @@ spec:
          hostDevices:
          - ${each.value.storage.ssd.hostPath}
 YAML
-:<<YAML
+: {<<YAML
 apiVersion: piraeus.io/v1
 kind: LinstorSatelliteConfiguration
 metadata:
@@ -287,6 +287,7 @@ spec:
          hostDevices:
          - ${each.value.storage.ssd.hostPath}
 YAML
+}
 }
 
 resource "kubectl_manifest" "LinstorSatelliteConfiguration_piraeus_datastore_nvme" {
