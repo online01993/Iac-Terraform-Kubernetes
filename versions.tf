@@ -3,18 +3,18 @@ terraform {
   required_providers {
     xenorchestra = {
       source = "terra-farm/xenorchestra"
-      version = "0.24.2"
+      version = ">=0.24.2"
     }
     tls = {
       source = "hashicorp/tls"
     }
     kubectl = {
       source  = "gavinbunney/kubectl"
-      version = "1.14.0"
+      version = ">=1.14.0"
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
-      version = "2.22.0"
+      version = ">=2.22.0"
     }
   }
 }
