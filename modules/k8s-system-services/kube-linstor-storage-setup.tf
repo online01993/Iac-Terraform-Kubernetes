@@ -252,51 +252,47 @@ resource "kubectl_manifest" "LinstorSatelliteConfiguration_piraeus_datastore_ssd
   server_side_apply = true
   wait = true
   yaml_body = var.ssd_k8s_stor_pool_type == "thin" ? yamlencode({
-"apiVersion": "piraeus.io/v1"
-"kind": "LinstorSatelliteConfiguration"
-"metadata": {
-  "name": "linstorsatelliteconfiguration-${each.value.netbios}-ssd"
-  "namespace": "piraeus-datastore"
-}  
-"spec": {
-  "nodeSelector": {
-    "kubernetes.io/hostname": "${each.value.netbios}"
-  }  
-  "storagePools": {
-     "- name": "thin-ssd-pool"
-       "lvmThinPool": { 
-         "volumeGroup": "vg-thin-ssd-pool"
-         "thinPool": "thin"
-       }  
-       "source": {
-         "hostDevices": {
-         "- " = "${each.value.storage.ssd.hostPath}"
-         }
-       } 
-  }       
+"apiVersion" = "piraeus.io/v1"
+"kind" = "LinstorSatelliteConfiguration"
+"metadata" = {
+  "name" = "linstorsatelliteconfiguration-${each.value.netbios}-ssd"
+  "namespace" = "piraeus-datastore"
+}
+"spec" = {
+  "nodeSelector" = {
+    "kubernetes.io/hostname" = "${each.value.netbios}"
+  }
+  "storagePools" = {
+    "lvmThinPool" = {
+      "thinPool" = "${var.ssd_k8s_stor_pool_type}"
+      "volumeGroup" = "vg-${var.ssd_k8s_stor_pool_type}-${var.ssd_k8s_stor_pool_type}-${var.ssd_k8s_stor_pool_name}-ssd-pool"
+    }
+    "name" = "${var.ssd_k8s_stor_pool_type}-${var.ssd_k8s_stor_pool_type}-${var.ssd_k8s_stor_pool_name}-ssd-pool"
+    "source" = {
+      "hostDevices" = ["${each.value.storage.ssd.hostPath}"]
+    }
+  }
 }}) : yamlencode({
-"apiVersion": "piraeus.io/v1"
-"kind": "LinstorSatelliteConfiguration"
-"metadata": {
-  "name": "linstorsatelliteconfiguration-${each.value.netbios}-ssd"
-  "namespace": "piraeus-datastore"
-}  
-"spec": {
-  "nodeSelector": {
-    "kubernetes.io/hostname": "${each.value.netbios}"
-  }  
-  "storagePools": {
-     "- name": "thin-ssd-pool"
-       "lvmThinPool": { 
-         "volumeGroup": "vg-thin-ssd-pool"
-         "thinPool": "thin"
-       }  
-       "source": {
-         "hostDevices": {
-         "- " = "${each.value.storage.ssd.hostPath}"
-         }
-       } 
-  }       
+"apiVersion" = "piraeus.io/v1"
+"kind" = "LinstorSatelliteConfiguration"
+"metadata" = {
+  "name" = "linstorsatelliteconfiguration-${each.value.netbios}-ssd"
+  "namespace" = "piraeus-datastore"
+}
+"spec" = {
+  "nodeSelector" = {
+    "kubernetes.io/hostname" = "${each.value.netbios}"
+  }
+  "storagePools" = {
+    "lvmThinPool" = {
+      "thinPool" = "${var.ssd_k8s_stor_pool_type}"
+      "volumeGroup" = "vg-${var.ssd_k8s_stor_pool_type}-${var.ssd_k8s_stor_pool_type}-${var.ssd_k8s_stor_pool_name}-ssd-pool"
+    }
+    "name" = "${var.ssd_k8s_stor_pool_type}-${var.ssd_k8s_stor_pool_type}-${var.ssd_k8s_stor_pool_name}-ssd-pool"
+    "source" = {
+      "hostDevices" = ["${each.value.storage.ssd.hostPath}"]
+    }
+  }
 }})
 }
 
