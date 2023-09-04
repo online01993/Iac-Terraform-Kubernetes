@@ -37,7 +37,7 @@ provider "xenorchestra" {
 # }
 provider "kubernetes" {
   #host                    = module.kubernetes-base.k8s-api-endpont-url
-  host                    = "10.200.0.11:6443"
+  host                    = "https://10.200.0.11:6443"
   insecure                = true
   #client_certificate      = base64decode(module.kubernetes-base.k8s-client-certificate-data)
   client_certificate      = module.kubernetes-base.k8s-client-certificate-data
