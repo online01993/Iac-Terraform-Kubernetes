@@ -85,13 +85,6 @@ resource "kubernetes_persistent_volume_claim" "pvc_ssd_replicated" {
   depends_on = [
     kubernetes_storage_class.storage_class_ssd_storage_replicated
   ]
-  /* lifecycle {
-    replace_triggered_by = [
-      kubectl_manifest.LinstorCluster_piraeus_datastore.uid,
-      kubectl_manifest.LinstorSatelliteConfiguration_piraeus_datastore_ssd,
-      kubectl_manifest.StorageClass_drbd_storage_piraeus_datastore_ssd
-    ]
-  } */
   metadata {
     name = "replicated-volume"
     namespace = "default"
@@ -105,4 +98,5 @@ resource "kubernetes_persistent_volume_claim" "pvc_ssd_replicated" {
     }
     storage_class_name = "storage-class-${var.ssd_k8s_stor_pool_type}-${var.ssd_k8s_stor_pool_name}-ssd-storage-replicated"
   }
+  wait_until_bound = false
 }

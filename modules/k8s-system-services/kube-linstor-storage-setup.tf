@@ -359,46 +359,6 @@ spec:
 YAML
 }
 
-/* resource "kubectl_manifest" "StorageClass_drbd_storage_piraeus_datastore_ssd" {
-  depends_on = [
-    kubernetes_namespace.piraeus_datastore,
-    kubectl_manifest.CRD_linstorclusters_piraeus_io,
-    kubectl_manifest.CRD_linstornodeconnections_piraeus_io,
-    kubectl_manifest.CRD_linstorsatelliteconfigurations_piraeus_io,
-    kubectl_manifest.CRD_linstorsatellites_piraeus_io,
-    kubernetes_config_map.piraeus_operator_image_config,
-    kubernetes_service.piraeus_operator_webhook_service,
-    kubernetes_validating_webhook_configuration.piraeus_operator_validating_webhook_configuration,
-    kubernetes_deployment.piraeus_operator_controller_manager,
-    kubernetes_deployment.piraeus_operator_gencert,
-    kubectl_manifest.LinstorCluster_piraeus_datastore,
-    kubernetes_labels.kubernetes_labels_linstor_satellite,
-    kubectl_manifest.LinstorNodeConnection_piraeus_datastore,
-    kubectl_manifest.LinstorSatelliteConfiguration_piraeus_datastore_ssd
-  ]
-  lifecycle {
-    replace_triggered_by = [
-      kubectl_manifest.LinstorCluster_piraeus_datastore.uid,
-      kubectl_manifest.LinstorSatelliteConfiguration_piraeus_datastore_ssd
-    ]
-  }
-  count = length([for i in var.nodes: i if i.storage.ssd.present]) > 0 ? 1 : 0
-  server_side_apply = true
-  wait = true
-  yaml_body = <<YAML
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: "storage-class-${var.ssd_k8s_stor_pool_type}-${var.ssd_k8s_stor_pool_name}-ssd-storage-replicated"
-provisioner: linstor.csi.linbit.com
-allowVolumeExpansion: true
-volumeBindingMode: WaitForFirstConsumer
-parameters:
-  linstor.csi.linbit.com/storagePool: "${var.ssd_k8s_stor_pool_type}-${var.ssd_k8s_stor_pool_name}-ssd-pool"
-  linstor.csi.linbit.com/placementCount: "${length([for i in var.nodes: i if i.storage.ssd.present])}"
-YAML
-} */
-
 resource "kubernetes_storage_class" "storage_class_ssd_storage_replicated" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
@@ -437,46 +397,6 @@ resource "kubernetes_storage_class" "storage_class_ssd_storage_replicated" {
   volume_binding_mode    = "WaitForFirstConsumer"
 }
 
-/* resource "kubectl_manifest" "StorageClass_drbd_storage_piraeus_datastore_nvme" {
-  depends_on = [
-    kubernetes_namespace.piraeus_datastore,
-    kubectl_manifest.CRD_linstorclusters_piraeus_io,
-    kubectl_manifest.CRD_linstornodeconnections_piraeus_io,
-    kubectl_manifest.CRD_linstorsatelliteconfigurations_piraeus_io,
-    kubectl_manifest.CRD_linstorsatellites_piraeus_io,
-    kubernetes_config_map.piraeus_operator_image_config,
-    kubernetes_service.piraeus_operator_webhook_service,
-    kubernetes_validating_webhook_configuration.piraeus_operator_validating_webhook_configuration,
-    kubernetes_deployment.piraeus_operator_controller_manager,
-    kubernetes_deployment.piraeus_operator_gencert,
-    kubectl_manifest.LinstorCluster_piraeus_datastore,
-    kubernetes_labels.kubernetes_labels_linstor_satellite,
-    kubectl_manifest.LinstorNodeConnection_piraeus_datastore,
-    kubectl_manifest.LinstorSatelliteConfiguration_piraeus_datastore_nvme
-  ]
-  lifecycle {
-    replace_triggered_by = [
-      kubectl_manifest.LinstorCluster_piraeus_datastore.uid,
-      kubectl_manifest.LinstorSatelliteConfiguration_piraeus_datastore_nvme
-    ]
-  }
-  count = length([for i in var.nodes: i if i.storage.nvme.present]) > 0 ? 1 : 0
-  server_side_apply = true
-  wait = true
-  yaml_body = <<YAML
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: "storage-class-${var.nvme_k8s_stor_pool_type}-${var.nvme_k8s_stor_pool_name}-nvme-storage-replicated"
-provisioner: linstor.csi.linbit.com
-allowVolumeExpansion: true
-volumeBindingMode: WaitForFirstConsumer
-parameters:
-  linstor.csi.linbit.com/storagePool: "${var.nvme_k8s_stor_pool_type}-${var.nvme_k8s_stor_pool_name}-nvme-pool"
-  linstor.csi.linbit.com/placementCount: "${length([for i in var.nodes: i if i.storage.nvme.present])}"
-YAML
-} */
-
 resource "kubernetes_storage_class" "storage_class_nvme_storage_replicated" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
@@ -514,46 +434,6 @@ resource "kubernetes_storage_class" "storage_class_nvme_storage_replicated" {
   reclaim_policy         = "Retain"
   volume_binding_mode    = "WaitForFirstConsumer"
 }
-
-/* resource "kubectl_manifest" "StorageClass_drbd_storage_piraeus_datastore_hdd" {
-  depends_on = [
-    kubernetes_namespace.piraeus_datastore,
-    kubectl_manifest.CRD_linstorclusters_piraeus_io,
-    kubectl_manifest.CRD_linstornodeconnections_piraeus_io,
-    kubectl_manifest.CRD_linstorsatelliteconfigurations_piraeus_io,
-    kubectl_manifest.CRD_linstorsatellites_piraeus_io,
-    kubernetes_config_map.piraeus_operator_image_config,
-    kubernetes_service.piraeus_operator_webhook_service,
-    kubernetes_validating_webhook_configuration.piraeus_operator_validating_webhook_configuration,
-    kubernetes_deployment.piraeus_operator_controller_manager,
-    kubernetes_deployment.piraeus_operator_gencert,
-    kubectl_manifest.LinstorCluster_piraeus_datastore,
-    kubernetes_labels.kubernetes_labels_linstor_satellite,
-    kubectl_manifest.LinstorNodeConnection_piraeus_datastore,
-    kubectl_manifest.LinstorSatelliteConfiguration_piraeus_datastore_hdd
-  ]
-  lifecycle {
-    replace_triggered_by = [
-      kubectl_manifest.LinstorCluster_piraeus_datastore.uid,
-      kubectl_manifest.LinstorSatelliteConfiguration_piraeus_datastore_hdd
-    ]
-  }
-  count = length([for i in var.nodes: i if i.storage.hdd.present]) > 0 ? 1 : 0
-  server_side_apply = true
-  wait = true
-  yaml_body = <<YAML
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: "storage-class-${var.hdd_k8s_stor_pool_type}-${var.hdd_k8s_stor_pool_name}-hdd-storage-replicated"
-provisioner: linstor.csi.linbit.com
-allowVolumeExpansion: true
-volumeBindingMode: WaitForFirstConsumer
-parameters:
-  linstor.csi.linbit.com/storagePool: "${var.hdd_k8s_stor_pool_type}-${var.hdd_k8s_stor_pool_name}-hdd-pool"
-  linstor.csi.linbit.com/placementCount: "${length([for i in var.nodes: i if i.storage.hdd.present])}"
-YAML
-} */
 
 resource "kubernetes_storage_class" "storage_class_hdd_storage_replicated" {
   depends_on = [
