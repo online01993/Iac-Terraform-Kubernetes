@@ -269,26 +269,30 @@ spec:
          hostDevices:
          - ${each.value.storage.ssd.hostPath}
 YAML
-: (
-<<YAML
-apiVersion: piraeus.io/v1
-kind: LinstorSatelliteConfiguration
-metadata:
-  name: linstorsatelliteconfiguration-${each.value.netbios}-ssd
-  namespace: piraeus-datastore
-spec:
-  nodeSelector:
-    kubernetes.io/hostname: "${each.value.netbios}"
-  storagePools:
-     - name: thin-ssd-pool
-       lvmThinPool: 
-         volumeGroup: vg-thin-ssd-pool
-         thinPool: thin
-       source:
-         hostDevices:
-         - ${each.value.storage.ssd.hostPath}
-YAML
-)
+:yamlencode({
+"apiVersion": "piraeus.io/v1"
+"kind": "LinstorSatelliteConfiguration"
+"metadata": {
+  "name": "linstorsatelliteconfiguration-${each.value.netbios}-ssd"
+  "namespace": "piraeus-datastore"
+}  
+"spec": {
+  "nodeSelector": {
+    "kubernetes.io/hostname": "${each.value.netbios}"
+  }  
+  "storagePools": {
+     "- name": "thin-ssd-pool"
+       "lvmThinPool": { 
+         "volumeGroup": "vg-thin-ssd-pool"
+         "thinPool": "thin"
+       }  
+       "source": {
+         "hostDevices": {
+         "- ${each.value.storage.ssd.hostPath}"
+         }
+       } 
+  }       
+}})
 }
 
 resource "kubectl_manifest" "LinstorSatelliteConfiguration_piraeus_datastore_nvme" {
