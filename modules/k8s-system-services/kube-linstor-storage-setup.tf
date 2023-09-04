@@ -270,7 +270,7 @@ spec:
          - ${each.value.storage.ssd.hostPath}
 YAML
 :
- <<YAML
+<<YAML
 apiVersion: piraeus.io/v1
 kind: LinstorSatelliteConfiguration
 metadata:
