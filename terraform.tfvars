@@ -160,9 +160,15 @@ global_k8s_cni_isDefaultGateway = true
 global_k8s_cni_Backend_Type = "vxlan"
 #NodePort for Kube-dashboard
 global_kube-dashboard_nodePort = 30100
+#SSD LVM Storage type for Linstore Thin or Thick
 global_ssd_k8s_stor_pool_type = "thin"
-global_ssd_k8s_stor_pool_name = "${global_ssd_k8s_stor_pool_type}-ssd-pool"
-global_nvme_k8s_stor_pool_type = ""
-global_nvme_k8s_stor_pool_name = ""
-global_hdd_k8s_stor_pool_type = ""
-global_hdd_k8s_stor_pool_name = ""
+#SSD LVM Storage name prefix for Linstore
+global_ssd_k8s_stor_pool_name = "main"
+#NVME LVM Storage type for Linstore Thin or Thick
+global_nvme_k8s_stor_pool_type = "thin"
+#NVME LVM Storage name prefix for Linstore
+global_nvme_k8s_stor_pool_name = "main"
+#HDD LVM Storage type for Linstore Thin or Thick
+global_hdd_k8s_stor_pool_type = "thin"
+#HDD LVM Storage name prefix for Linstore
+global_hdd_k8s_stor_pool_name = "main"

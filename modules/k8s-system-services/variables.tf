@@ -41,7 +41,7 @@ variable "ssd_k8s_stor_pool_type" {
   }
 }
 variable "ssd_k8s_stor_pool_name" {
-  default = var.ssd_k8s_stor_pool_type"-ssd-pool"
+  default = "default"
   type = string
 }
 variable "nvme_k8s_stor_pool_type" {
@@ -53,7 +53,7 @@ variable "nvme_k8s_stor_pool_type" {
   }
 }
 variable "nvme_k8s_stor_pool_name" {
-  default = "${var.nvme_k8s_stor_pool_type}-nvme-pool"
+  default = "default"
   type = string
 }
 variable "hdd_k8s_stor_pool_type" {
@@ -65,7 +65,7 @@ variable "hdd_k8s_stor_pool_type" {
   }
 }
 variable "hdd_k8s_stor_pool_name" {
-  default = "${var.hdd_k8s_stor_pool_type}-hdd-pool"
+  default = "default"
   type = string
 }
 variable "pods_mask_cidr" {
