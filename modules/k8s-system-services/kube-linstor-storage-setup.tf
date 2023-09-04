@@ -325,7 +325,7 @@ resource "kubectl_manifest" "LinstorSatelliteConfiguration_piraeus_datastore_nvm
   "apiVersion" = "piraeus.io/v1"
   "kind" = "LinstorSatelliteConfiguration"
   "metadata" = {
-    "name" = "linstorsatelliteconfiguration-${each.value.netbios}-${var.ssd_k8s_stor_pool_type}-ssd"
+    "name" = "linstorsatelliteconfiguration-${each.value.netbios}-${var.nvme_k8s_stor_pool_type}-nvme"
     "namespace" = "piraeus-datastore"
   }
   "spec" = {
@@ -395,7 +395,7 @@ resource "kubectl_manifest" "LinstorSatelliteConfiguration_piraeus_datastore_hdd
   "apiVersion" = "piraeus.io/v1"
   "kind" = "LinstorSatelliteConfiguration"
   "metadata" = {
-    "name" = "linstorsatelliteconfiguration-${each.value.netbios}-${var.ssd_k8s_stor_pool_type}-ssd"
+    "name" = "linstorsatelliteconfiguration-${each.value.netbios}-${var.hdd_k8s_stor_pool_type}-hdd"
     "namespace" = "piraeus-datastore"
   }
   "spec" = {
@@ -403,7 +403,7 @@ resource "kubectl_manifest" "LinstorSatelliteConfiguration_piraeus_datastore_hdd
       "kubernetes.io/hostname" = "${each.value.netbios}"
     }
     "storagePools" : [{
-      "name" = "${var.nvme_k8s_stor_pool_type}-${var.nvme_k8s_stor_pool_name}-nvme-pool"
+      "name" = "${var.hdd_k8s_stor_pool_type}-${var.hdd_k8s_stor_pool_name}-hdd-pool"
       "lvmThinPool" = {
         "thinPool" = "${var.hdd_k8s_stor_pool_type}"
         "volumeGroup" = "vg-${var.hdd_k8s_stor_pool_type}-${var.hdd_k8s_stor_pool_name}-hdd-pool"
