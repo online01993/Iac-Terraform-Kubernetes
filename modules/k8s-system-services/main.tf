@@ -461,6 +461,7 @@ resource "kubectl_manifest" "StorageClass_drbd_storage_piraeus_datastore_ssd" {
       kubectl_manifest.LinstorCluster_piraeus_datastore.uid
     ]
   }
+  count = length([for i in var.nodes: i if i.storage.ssd.present]) > 0 ? 1 : 0
   server_side_apply = true
   wait = true
   yaml_body = <<YAML
