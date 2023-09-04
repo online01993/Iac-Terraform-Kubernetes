@@ -263,15 +263,14 @@ resource "kubectl_manifest" "LinstorSatelliteConfiguration_piraeus_datastore_ssd
     "kubernetes.io/hostname" = "${each.value.netbios}"
   }
   "storagePools" = {
-    "name" = "${var.ssd_k8s_stor_pool_type}-${var.ssd_k8s_stor_pool_name}-ssd-pool" {
-      "lvmThinPool" = {
-        "thinPool" = "${var.ssd_k8s_stor_pool_type}"
-        "volumeGroup" = "vg-${var.ssd_k8s_stor_pool_type}-${var.ssd_k8s_stor_pool_name}-ssd-pool"
-      }
-      "source" = {
-        "hostDevices" = ["${each.value.storage.ssd.hostPath}"]
-      }
-    }  
+    "lvmThinPool" = {
+      "thinPool" = "${var.ssd_k8s_stor_pool_type}"
+      "volumeGroup" = "vg-${var.ssd_k8s_stor_pool_type}-${var.ssd_k8s_stor_pool_name}-ssd-pool"
+    }
+    "- name" = "${var.ssd_k8s_stor_pool_type}-${var.ssd_k8s_stor_pool_name}-ssd-pool"
+    "source" = {
+      "hostDevices" = ["${each.value.storage.ssd.hostPath}"]
+    }
   }
 }}) : yamlencode({
 "apiVersion" = "piraeus.io/v1"
@@ -285,15 +284,14 @@ resource "kubectl_manifest" "LinstorSatelliteConfiguration_piraeus_datastore_ssd
     "kubernetes.io/hostname" = "${each.value.netbios}"
   }
   "storagePools" = {
-    "name" = "${var.ssd_k8s_stor_pool_type}-${var.ssd_k8s_stor_pool_name}-ssd-pool" {
-      "lvmThinPool" = {
-        "thinPool" = "${var.ssd_k8s_stor_pool_type}"
-        "volumeGroup" = "vg-${var.ssd_k8s_stor_pool_type}-${var.ssd_k8s_stor_pool_name}-ssd-pool"
-      }
-      "source" = {
-        "hostDevices" = ["${each.value.storage.ssd.hostPath}"]
-      }
-    }  
+    "lvmThinPool" = {
+      "thinPool" = "${var.ssd_k8s_stor_pool_type}"
+      "volumeGroup" = "vg-${var.ssd_k8s_stor_pool_type}-${var.ssd_k8s_stor_pool_name}-ssd-pool"
+    }
+    "- name" = "${var.ssd_k8s_stor_pool_type}-${var.ssd_k8s_stor_pool_name}-ssd-pool"
+    "source" = {
+      "hostDevices" = ["${each.value.storage.ssd.hostPath}"]
+    }
   }
 }})
 }
