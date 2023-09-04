@@ -262,7 +262,7 @@ resource "kubectl_manifest" "LinstorSatelliteConfiguration_piraeus_datastore_ssd
   "nodeSelector" = {
     "kubernetes.io/hostname" = "${each.value.netbios}"
   }
-  "storagePools" = [{
+  "storagePools" : [{
     "lvmThinPool" = {
       "thinPool" = "${var.ssd_k8s_stor_pool_type}"
       "volumeGroup" = "vg-${var.ssd_k8s_stor_pool_type}-${var.ssd_k8s_stor_pool_name}-ssd-pool"
@@ -283,7 +283,7 @@ resource "kubectl_manifest" "LinstorSatelliteConfiguration_piraeus_datastore_ssd
   "nodeSelector" = {
     "kubernetes.io/hostname" = "${each.value.netbios}"
   }
-  "storagePools" = {[
+  "storagePools" : [{
     "lvmThinPool" = {
       "thinPool" = "${var.ssd_k8s_stor_pool_type}"
       "volumeGroup" = "vg-${var.ssd_k8s_stor_pool_type}-${var.ssd_k8s_stor_pool_name}-ssd-pool"
@@ -292,7 +292,7 @@ resource "kubectl_manifest" "LinstorSatelliteConfiguration_piraeus_datastore_ssd
     "source" = {
       "hostDevices" = ["${each.value.storage.ssd.hostPath}"]
     }
-  ]}
+  }]
 }})
 }
 
