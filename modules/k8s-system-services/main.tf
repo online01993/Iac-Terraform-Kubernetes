@@ -83,7 +83,7 @@ resource "kubernetes_labels" "kubernetes_labels_workers_topology_zone" {
 
 resource "kubernetes_persistent_volume_claim" "pvc_ssd_replicated" {
   depends_on = [
-    kubectl_manifest.StorageClass_drbd_storage_piraeus_datastore_ssd
+    kubernetes_storage_class.storage_class_ssd_storage_replicated
   ]
   /* lifecycle {
     replace_triggered_by = [
