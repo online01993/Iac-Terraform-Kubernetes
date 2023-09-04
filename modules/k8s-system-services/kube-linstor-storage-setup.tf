@@ -251,25 +251,31 @@ resource "kubectl_manifest" "LinstorSatelliteConfiguration_piraeus_datastore_ssd
   for_each = { for i in var.nodes : i.id => i if i.storage.ssd.present }
   server_side_apply = true
   wait = true
-  yaml_body = var.ssd_k8s_stor_pool_type == "thin" ? <<YAML
-apiVersion: piraeus.io/v1
-kind: LinstorSatelliteConfiguration
-metadata:
-  name: linstorsatelliteconfiguration-${each.value.netbios}-ssd
-  namespace: piraeus-datastore
-spec:
-  nodeSelector:
-    kubernetes.io/hostname: "${each.value.netbios}"
-  storagePools:
-     - name: ${var.ssd_k8s_stor_pool_type}-${var.ssd_k8s_stor_pool_type}-${var.ssd_k8s_stor_pool_name}-ssd-pool
-       lvmThinPool: 
-         volumeGroup: vg-${var.ssd_k8s_stor_pool_type}-${var.ssd_k8s_stor_pool_type}-${var.ssd_k8s_stor_pool_name}-ssd-pool
-         thinPool: ${var.ssd_k8s_stor_pool_type}
-       source:
-         hostDevices:
-         - ${each.value.storage.ssd.hostPath}
-YAML
-:yamlencode({
+  yaml_body = var.ssd_k8s_stor_pool_type == "thin" ? yamlencode({
+"apiVersion": "piraeus.io/v1"
+"kind": "LinstorSatelliteConfiguration"
+"metadata": {
+  "name": "linstorsatelliteconfiguration-${each.value.netbios}-ssd"
+  "namespace": "piraeus-datastore"
+}  
+"spec": {
+  "nodeSelector": {
+    "kubernetes.io/hostname": "${each.value.netbios}"
+  }  
+  "storagePools": {
+     "- name": "thin-ssd-pool"
+       "lvmThinPool": { 
+         "volumeGroup": "vg-thin-ssd-pool"
+         "thinPool": "thin"
+       }  
+       "source": {
+         "hostDevices": {
+         "- ${each.value.storage.ssd.hostPath}"
+         }
+       } 
+  }       
+}})
+: yamlencode({
 "apiVersion": "piraeus.io/v1"
 "kind": "LinstorSatelliteConfiguration"
 "metadata": {
