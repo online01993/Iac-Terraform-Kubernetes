@@ -367,7 +367,7 @@ resource "kubectl_manifest" "LinstorSatelliteConfiguration_piraeus_datastore_nvm
  })
 }
 
-/* resource "kubectl_manifest" "LinstorSatelliteConfiguration_piraeus_datastore_hdd" {
+resource "kubectl_manifest" "LinstorSatelliteConfiguration_piraeus_datastore_hdd" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
     kubectl_manifest.CRD_linstorclusters_piraeus_io,
@@ -436,7 +436,7 @@ resource "kubectl_manifest" "LinstorSatelliteConfiguration_piraeus_datastore_nvm
   }
  })
 }
- */
+
 resource "kubernetes_storage_class" "storage_class_ssd_storage_replicated" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
