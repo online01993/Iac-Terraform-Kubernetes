@@ -36,14 +36,13 @@ provider "xenorchestra" {
 # alias = "bind"
 # }
 provider "kubernetes" {
-  #host                    = module.kubernetes-base.k8s-api-endpont-url
-  host                    = "https://10.200.0.10:8888"
-  insecure                = false
+  host                    = module.kubernetes-base.k8s-api-endpont-url
+  insecure                = true
   #client_certificate      = base64decode(module.kubernetes-base.k8s-client-certificate-data)
-  client_certificate      = module.kubernetes-base.k8s-client-certificate-data
+  #client_certificate      = module.kubernetes-base.k8s-client-certificate-data
   #client_key              = base64decode(module.kubernetes-base.k8s-client-key-data)
-  client_key              = module.kubernetes-base.k8s-client-key-data
-  cluster_ca_certificate  = base64decode(module.kubernetes-base.k8s-certificate-authority-data)
+  #client_key              = module.kubernetes-base.k8s-client-key-data
+  #cluster_ca_certificate  = base64decode(module.kubernetes-base.k8s-certificate-authority-data)
   #cluster_ca_certificate  = module.kubernetes-base.k8s-certificate-authority-data
 }
 provider "kubectl" {
