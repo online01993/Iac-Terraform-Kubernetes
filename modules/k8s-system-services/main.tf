@@ -473,7 +473,7 @@ allowVolumeExpansion: true
 volumeBindingMode: WaitForFirstConsumer
 parameters:
   linstor.csi.linbit.com/storagePool: "thin-ssd-pool"
-  linstor.csi.linbit.com/placementCount: "${length(toset([for i in var.nodes : i.id => i if i.storage.ssd.present]))}"
+  linstor.csi.linbit.com/placementCount: "${length([for i in var.nodes : i.id => i if i.storage.ssd.present])}"
 YAML
 }
 
