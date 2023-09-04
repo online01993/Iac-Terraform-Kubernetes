@@ -429,10 +429,11 @@ resource "kubernetes_storage_class" "storage_class_ssd_storage_replicated" {
   parameters = {
     "linstor.csi.linbit.com/placementCount" = "${length([for i in var.nodes: i if i.storage.ssd.present])}"
     "linstor.csi.linbit.com/storagePool" = "${var.ssd_k8s_stor_pool_type}-${var.ssd_k8s_stor_pool_name}-ssd-pool"
+    "DrbdOptions/Net/max-buffers"        =  "10000"
   }
   storage_provisioner    = "linstor.csi.linbit.com"
   allow_volume_expansion = true
-  reclaim_policy         = "Delete"
+  reclaim_policy         = "Retain"
   volume_binding_mode    = "WaitForFirstConsumer"
 }
 
@@ -506,10 +507,11 @@ resource "kubernetes_storage_class" "storage_class_nvme_storage_replicated" {
   parameters = {
     "linstor.csi.linbit.com/placementCount" = "${length([for i in var.nodes: i if i.storage.nvme.present])}"
     "linstor.csi.linbit.com/storagePool" = "${var.nvme_k8s_stor_pool_type}-${var.nvme_k8s_stor_pool_name}-nvme-pool"
+    "DrbdOptions/Net/max-buffers"        =  "10000"
   }
   storage_provisioner    = "linstor.csi.linbit.com"
   allow_volume_expansion = true
-  reclaim_policy         = "Delete"
+  reclaim_policy         = "Retain"
   volume_binding_mode    = "WaitForFirstConsumer"
 }
 
@@ -583,9 +585,10 @@ resource "kubernetes_storage_class" "storage_class_hdd_storage_replicated" {
   parameters = {
     "linstor.csi.linbit.com/placementCount" = "${length([for i in var.nodes: i if i.storage.hdd.present])}"
     "linstor.csi.linbit.com/storagePool" = "${var.hdd_k8s_stor_pool_type}-${var.hdd_k8s_stor_pool_name}-hdd-pool"
+    "DrbdOptions/Net/max-buffers"        =  "10000"
   }
   storage_provisioner    = "linstor.csi.linbit.com"
   allow_volume_expansion = true
-  reclaim_policy         = "Delete"
+  reclaim_policy         = "Retain"
   volume_binding_mode    = "WaitForFirstConsumer"
 }
