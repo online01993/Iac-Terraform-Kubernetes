@@ -41,7 +41,7 @@ variable "ssd_k8s_stor_pool_type" {
   }
 }
 variable "ssd_k8s_stor_pool_name" {
-  default = "${var.ssd_k8s_stor_pool_type}-ssd-pool"
+  default = var.ssd_k8s_stor_pool_type"-ssd-pool"
   type = string
 }
 variable "nvme_k8s_stor_pool_type" {
