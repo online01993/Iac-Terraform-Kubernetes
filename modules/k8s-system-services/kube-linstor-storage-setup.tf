@@ -200,14 +200,37 @@ resource "kubectl_manifest" "LinstorNodeConnection_piraeus_datastore" {
     kubectl_manifest.LinstorCluster_piraeus_datastore,
     kubernetes_labels.kubernetes_labels_linstor_satellite
   ]
-  lifecycle {
-    replace_triggered_by = [
-      kubectl_manifest.LinstorCluster_piraeus_datastore.uid
-    ]
-  }
   server_side_apply = true
   wait = true
-  yaml_body = <<YAML
+  yaml_body = yamlencode({
+    "apiVersion" = "piraeus.io/v1"
+    "kind" = "LinstorNodeConnection"
+    "metadata" = {
+      "name" = "linstornodeconnection"
+      "namespace" = "piraeus-datastore"
+    }
+    "spec" = {
+      "selector" : [{
+        "matchLabels" : [{
+          "key" = "node-role.kubernetes.io/control-plane"
+          "op" = "DoesNotExist"
+        }]
+        "matchLabels" : [{
+          "key" = "node-role.kubernetes.io/linstor-satellite"
+          "op" = "Exists"
+        }]
+        "matchLabels" : [{
+          "key" = "topology.kubernetes.io/region"
+          "op" = "Same"
+        }]
+        "matchLabels" : [{
+          "key" = "topology.kubernetes.io/zone"
+          "op" = "Same"
+        }]
+      }]
+    }
+  })  
+/*  yaml_body = <<YAML
 apiVersion: piraeus.io/v1
 kind: LinstorNodeConnection
 metadata:
@@ -225,6 +248,7 @@ spec:
         - key: topology.kubernetes.io/zone
           op: Same  
 YAML
+*/
 }
 
 resource "kubectl_manifest" "LinstorSatelliteConfiguration_piraeus_datastore_ssd" {
@@ -243,11 +267,6 @@ resource "kubectl_manifest" "LinstorSatelliteConfiguration_piraeus_datastore_ssd
     kubernetes_labels.kubernetes_labels_linstor_satellite,
     kubectl_manifest.LinstorNodeConnection_piraeus_datastore
   ]
-  lifecycle {
-    replace_triggered_by = [
-      kubectl_manifest.LinstorCluster_piraeus_datastore.uid
-    ]
-  }
   for_each = { for i in var.nodes : i.id => i if i.storage.ssd.present }
   server_side_apply = true
   wait = true
@@ -313,11 +332,6 @@ resource "kubectl_manifest" "LinstorSatelliteConfiguration_piraeus_datastore_nvm
     kubernetes_labels.kubernetes_labels_linstor_satellite,
     kubectl_manifest.LinstorNodeConnection_piraeus_datastore
   ]
-  lifecycle {
-    replace_triggered_by = [
-      kubectl_manifest.LinstorCluster_piraeus_datastore.uid
-    ]
-  }
   for_each = { for i in var.nodes : i.id => i if i.storage.nvme.present }
   server_side_apply = true
   wait = true
@@ -383,11 +397,6 @@ resource "kubectl_manifest" "LinstorSatelliteConfiguration_piraeus_datastore_hdd
     kubernetes_labels.kubernetes_labels_linstor_satellite,
     kubectl_manifest.LinstorNodeConnection_piraeus_datastore
   ]
-  lifecycle {
-    replace_triggered_by = [
-      kubectl_manifest.LinstorCluster_piraeus_datastore.uid
-    ]
-  }
   for_each = { for i in var.nodes : i.id => i if i.storage.hdd.present }
   server_side_apply = true
   wait = true
@@ -454,12 +463,6 @@ resource "kubernetes_storage_class" "storage_class_ssd_storage_replicated" {
     kubectl_manifest.LinstorNodeConnection_piraeus_datastore,
     kubectl_manifest.LinstorSatelliteConfiguration_piraeus_datastore_ssd
   ]
-  lifecycle {
-    replace_triggered_by = [
-      kubectl_manifest.LinstorCluster_piraeus_datastore.uid,
-      kubectl_manifest.LinstorSatelliteConfiguration_piraeus_datastore_ssd
-    ]
-  }
   count = length([for i in var.nodes: i if i.storage.ssd.present]) > 0 ? 1 : 0
   metadata {
     name = "storage-class-${var.ssd_k8s_stor_pool_type}-${var.ssd_k8s_stor_pool_name}-ssd-storage-replicated"
@@ -492,12 +495,6 @@ resource "kubernetes_storage_class" "storage_class_nvme_storage_replicated" {
     kubectl_manifest.LinstorNodeConnection_piraeus_datastore,
     kubectl_manifest.LinstorSatelliteConfiguration_piraeus_datastore_nvme
   ]
-  lifecycle {
-    replace_triggered_by = [
-      kubectl_manifest.LinstorCluster_piraeus_datastore.uid,
-      kubectl_manifest.LinstorSatelliteConfiguration_piraeus_datastore_nvme
-    ]
-  }
   count = length([for i in var.nodes: i if i.storage.nvme.present]) > 0 ? 1 : 0
   metadata {
     name = "storage-class-${var.nvme_k8s_stor_pool_type}-${var.nvme_k8s_stor_pool_name}-nvme-storage-replicated"
@@ -530,12 +527,6 @@ resource "kubernetes_storage_class" "storage_class_hdd_storage_replicated" {
     kubectl_manifest.LinstorNodeConnection_piraeus_datastore,
     kubectl_manifest.LinstorSatelliteConfiguration_piraeus_datastore_hdd
   ]
-  lifecycle {
-    replace_triggered_by = [
-      kubectl_manifest.LinstorCluster_piraeus_datastore.uid,
-      kubectl_manifest.LinstorSatelliteConfiguration_piraeus_datastore_hdd
-    ]
-  }
   count = length([for i in var.nodes: i if i.storage.hdd.present]) > 0 ? 1 : 0
   metadata {
     name = "storage-class-${var.hdd_k8s_stor_pool_type}-${var.hdd_k8s_stor_pool_name}-hdd-storage-replicated"
