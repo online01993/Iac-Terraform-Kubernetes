@@ -14,7 +14,11 @@ output "storage_available" {
       "ssd"   = var.nodes[i].storage.ssd.present ? ({
         "present" = var.nodes[i].storage.ssd.present,
         "hostPath" = var.nodes[i].storage.ssd.hostPath,
-        "volume"  = var.nodes[i].storage.ssd.volume
+        "volume"  = var.nodes[i].storage.ssd.volume,
+        "storage_class_name" = kubernetes_storage_class.storage_class_ssd_storage_replicated.metadata.name
+        "storage_class_reclaim_policy" = kubernetes_storage_class.storage_class_ssd_storage_replicated.reclaim_policy
+        "storage_class_storage_provisioner" = kubernetes_storage_class.storage_class_ssd_storage_replicated.storage_provisioner
+        "storage_class_volume_binding_mode" = kubernetes_storage_class.storage_class_ssd_storage_replicated.volume_binding_mode
       }) : null
       "nvme"   = var.nodes[i].storage.nvme.present ? ({
         "present" = var.nodes[i].storage.nvme.present,
