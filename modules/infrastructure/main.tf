@@ -138,7 +138,7 @@ resource "xenorchestra_vm" "vm" {
   tags          = concat(var.node_vm_tags, ["ntmax.ca/cloud-os:debian-11-focal", "ntmax.ca/failure-domain:${count.index % length(data.xenorchestra_hosts.all_hosts.hosts)}"])
   affinity_host = data.xenorchestra_hosts.all_hosts.hosts[count.index % length(data.xenorchestra_hosts.all_hosts.hosts)].id
   lifecycle {
-    ignore_changes = [template]
+    ignore_changes = [disk, template]
   }
   timeouts {
     create = "20m"
