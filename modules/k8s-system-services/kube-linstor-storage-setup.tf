@@ -101,84 +101,84 @@ resource "kubectl_manifest" "LinstorCluster_piraeus_datastore" {
   server_side_apply = true
   wait = true
   yaml_body = <<YAML
-apiVersion: piraeus.io/v1
-kind: LinstorCluster
-metadata:
-  name: linstorcluster
-  namespace: piraeus-datastore
-spec:
-  nodeSelector:
-    node-role.kubernetes.io/linstor-satellite: ""
-  patches:
-    - target:
-        kind: Deployment
-        name: linstor-controller
-      patch: |
-        apiVersion: apps/v1
-        kind: Deployment
-        metadata:
+  apiVersion: piraeus.io/v1
+  kind: LinstorCluster
+  metadata:
+    name: linstorcluster
+    namespace: piraeus-datastore
+  spec:
+    nodeSelector:
+      node-role.kubernetes.io/linstor-satellite: ""
+    patches:
+      - target:
+          kind: Deployment
           name: linstor-controller
-        spec:
-          template:
-            spec:
-              nodeSelector:
-                node-role.kubernetes.io/control-plane: ""
-              tolerations:
-                - key: node-role.kubernetes.io/control-plane
-                  effect: NoSchedule
-    - target:
-        kind: Deployment
-        name: linstor-csi-controller 
-      patch: |
-        apiVersion: apps/v1
-        kind: Deployment
-        metadata:
+        patch: |
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: linstor-controller
+          spec:
+            template:
+              spec:
+                nodeSelector:
+                  node-role.kubernetes.io/control-plane: ""
+                tolerations:
+                  - key: node-role.kubernetes.io/control-plane
+                    effect: NoSchedule
+      - target:
+          kind: Deployment
           name: linstor-csi-controller 
-        spec:
-          template:
-            spec:
-              nodeSelector:
-                node-role.kubernetes.io/control-plane: ""
-              tolerations:
-                - key: node-role.kubernetes.io/control-plane
-                  effect: NoSchedule
-    - target:
-        kind: DaemonSet
-        name: ha-controller  
-      patch: |
-        apiVersion: apps/v1
-        kind: DaemonSet
-        metadata:
+        patch: |
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: linstor-csi-controller 
+          spec:
+            template:
+              spec:
+                nodeSelector:
+                  node-role.kubernetes.io/control-plane: ""
+                tolerations:
+                  - key: node-role.kubernetes.io/control-plane
+                    effect: NoSchedule
+      - target:
+          kind: DaemonSet
           name: ha-controller  
-        spec:
-          template:
-            spec:
-              affinity:
-                nodeAffinity:
-                  requiredDuringSchedulingIgnoredDuringExecution:
-                    nodeSelectorTerms:
-                      - matchExpressions:
-                        - key: node-role.kubernetes.io/control-plane
-                          operator: DoesNotExist
-    - target:
-        kind: DaemonSet
-        name: linstor-csi-node
-      patch: |
-        apiVersion: apps/v1
-        kind: DaemonSet
-        metadata:
-          name: linstor-csi-node  
-        spec:
-          template:
-            spec:
-              affinity:
-                nodeAffinity:
-                  requiredDuringSchedulingIgnoredDuringExecution:
-                    nodeSelectorTerms:
-                      - matchExpressions:
-                        - key: node-role.kubernetes.io/control-plane
-                          operator: DoesNotExist
-YAML
+        patch: |
+          apiVersion: apps/v1
+          kind: DaemonSet
+          metadata:
+            name: ha-controller  
+          spec:
+            template:
+              spec:
+                affinity:
+                  nodeAffinity:
+                    requiredDuringSchedulingIgnoredDuringExecution:
+                      nodeSelectorTerms:
+                        - matchExpressions:
+                          - key: node-role.kubernetes.io/control-plane
+                            operator: DoesNotExist
+      - target:
+          kind: DaemonSet
+          name: linstor-csi-node
+        patch: |
+          apiVersion: apps/v1
+          kind: DaemonSet
+          metadata:
+            name: linstor-csi-node  
+          spec:
+            template:
+              spec:
+                affinity:
+                  nodeAffinity:
+                    requiredDuringSchedulingIgnoredDuringExecution:
+                      nodeSelectorTerms:
+                        - matchExpressions:
+                          - key: node-role.kubernetes.io/control-plane
+                            operator: DoesNotExist
+  YAML
 }
 resource "kubectl_manifest" "LinstorNodeConnection_piraeus_datastore" {
   depends_on = [
