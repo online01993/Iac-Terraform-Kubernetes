@@ -4,7 +4,7 @@ output "k8s_kube-token-k8sadmin" {
 }
 output "storage_available" {
   value = [
-    for i in var.nodes if i.storage.ssd.present || i.storage.nvme.present || i.storage.hdd.present :
+    for i in var.nodes if (i.storage.ssd.present || i.storage.nvme.present || i.storage.hdd.present) :
     {
       "id"      = i
       "netbios" = i.netbios
