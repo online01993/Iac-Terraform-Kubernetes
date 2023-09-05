@@ -38,19 +38,19 @@ output "storage_available" {
   value = [
     {
       "storage_classes" = ({
-      "ssd"   = kubernetes_storage_class.storage_class_ssd_storage_replicated.count > 0 ? ({
+      "ssd"   = length(kubernetes_storage_class.storage_class_ssd_storage_replicated) > 0 ? ({
         "storage_class_name" = kubernetes_storage_class.storage_class_ssd_storage_replicated[0].metadata[0].name
         "storage_class_reclaim_policy" = kubernetes_storage_class.storage_class_ssd_storage_replicated[0].reclaim_policy
         "storage_class_storage_provisioner" = kubernetes_storage_class.storage_class_ssd_storage_replicated[0].storage_provisioner
         "storage_class_volume_binding_mode" = kubernetes_storage_class.storage_class_ssd_storage_replicated[0].volume_binding_mode
       }) : null
-      "nvme"   = kubernetes_storage_class.storage_class_nvme_storage_replicated.count > 0 ? ({
+      "nvme"   = length(kubernetes_storage_class.storage_class_nvme_storage_replicated) > 0 ? ({
         "storage_class_name" = kubernetes_storage_class.storage_class_nvme_storage_replicated[0].metadata[0].name
         "storage_class_reclaim_policy" = kubernetes_storage_class.storage_class_nvme_storage_replicated[0].reclaim_policy
         "storage_class_storage_provisioner" = kubernetes_storage_class.storage_class_nvme_storage_replicated[0].storage_provisioner
         "storage_class_volume_binding_mode" = kubernetes_storage_class.storage_class_nvme_storage_replicated[0].volume_binding_mode
       }) : null
-      "hdd"   = kubernetes_storage_class.storage_class_hdd_storage_replicated.count > 0 ? ({
+      "hdd"   = length(kubernetes_storage_class.storage_class_hdd_storage_replicated) > 0 ? ({
         "storage_class_name" = kubernetes_storage_class.storage_class_hdd_storage_replicated[0].metadata[0].name
         "storage_class_reclaim_policy" = kubernetes_storage_class.storage_class_hdd_storage_replicated[0].reclaim_policy
         "storage_class_storage_provisioner" = kubernetes_storage_class.storage_class_hdd_storage_replicated[0].storage_provisioner
