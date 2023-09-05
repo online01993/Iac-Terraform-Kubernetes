@@ -214,16 +214,10 @@ resource "kubectl_manifest" "LinstorNodeConnection_piraeus_datastore" {
         "matchLabels" : [{
           "key" = "node-role.kubernetes.io/control-plane"
           "op" = "DoesNotExist"
-        }]
-        "matchLabels" : [{
           "key" = "node-role.kubernetes.io/linstor-satellite"
           "op" = "Exists"
-        }]
-        "matchLabels" : [{
           "key" = "topology.kubernetes.io/region"
           "op" = "Same"
-        }]
-        "matchLabels" : [{
           "key" = "topology.kubernetes.io/zone"
           "op" = "Same"
         }]
