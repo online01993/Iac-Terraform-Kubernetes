@@ -39,5 +39,5 @@ output "k8s-certificate-authority-data" {
   sensitive = true
 }
 output "storage_available" {
-  value     = module.k8s-system-services.storage_available
+  value     = module.k8s-system-services.nodes_with_storage_available
 }
