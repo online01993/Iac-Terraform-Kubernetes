@@ -4,7 +4,7 @@ output "k8s_kube-token-k8sadmin" {
 }
 output "storage_available" {
   value = [
-    for i in length(var.nodes) : 
+    for i in range(length(var.nodes)) : 
     {
       "id"      = i
       "netbios" = var.nodes[i].netbios
