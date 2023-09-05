@@ -86,7 +86,7 @@ resource "kubernetes_persistent_volume_claim" "pvc_ssd_replicated_1c_data" {
     kubernetes_storage_class.storage_class_ssd_storage_replicated
   ]
   metadata {
-    name = "pvc_ssd_replicated_1c_data"
+    name = "pvc-ssd-replicated-1c-data"
     namespace = "default"
   }
   spec {
