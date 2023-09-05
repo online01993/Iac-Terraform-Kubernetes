@@ -23,7 +23,6 @@ resource "kubernetes_labels" "kubernetes_labels_linstor_satellite" {
     "node-role.kubernetes.io/linstor-satellite" = ""
   }
 }
-
 resource "kubernetes_labels" "kubernetes_labels_linstor_satellite-ssd_storage" {
   depends_on = [
     kubernetes_namespace.kube_flannel,
@@ -44,7 +43,6 @@ resource "kubernetes_labels" "kubernetes_labels_linstor_satellite-ssd_storage" {
     "linstor-satellite-storage-ssd" = ""
   }
 }
-
 resource "kubernetes_labels" "kubernetes_labels_linstor_satellite-nvme_storage" {
   depends_on = [
     kubernetes_namespace.kube_flannel,
@@ -65,7 +63,6 @@ resource "kubernetes_labels" "kubernetes_labels_linstor_satellite-nvme_storage" 
     "linstor-satellite-storage-nvme" = ""
   }
 }
-
 resource "kubernetes_labels" "kubernetes_labels_linstor_satellite-hdd_storage" {
   depends_on = [
     kubernetes_namespace.kube_flannel,
@@ -86,7 +83,6 @@ resource "kubernetes_labels" "kubernetes_labels_linstor_satellite-hdd_storage" {
     "linstor-satellite-storage-hdd" = ""
   }
 }
-
 resource "kubectl_manifest" "LinstorCluster_piraeus_datastore" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
@@ -184,7 +180,6 @@ spec:
                           operator: DoesNotExist
 YAML
 }
-
 resource "kubectl_manifest" "LinstorNodeConnection_piraeus_datastore" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
@@ -231,28 +226,8 @@ resource "kubectl_manifest" "LinstorNodeConnection_piraeus_datastore" {
         ]
       }]
     }
-  })  
-/*  yaml_body = <<YAML
-apiVersion: piraeus.io/v1
-kind: LinstorNodeConnection
-metadata:
-  name: linstornodeconnection
-  namespace: piraeus-datastore
-spec:
-  selector:
-    - matchLabels:
-        - key: node-role.kubernetes.io/control-plane
-          op: DoesNotExist
-        - key: node-role.kubernetes.io/linstor-satellite
-          op: Exists
-        - key: topology.kubernetes.io/region
-          op: Same
-        - key: topology.kubernetes.io/zone
-          op: Same  
-YAML
-*/
+  })
 }
-
 resource "kubectl_manifest" "LinstorSatelliteConfiguration_piraeus_datastore_ssd" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
@@ -317,7 +292,6 @@ resource "kubectl_manifest" "LinstorSatelliteConfiguration_piraeus_datastore_ssd
   }
  })
 }
-
 resource "kubectl_manifest" "LinstorSatelliteConfiguration_piraeus_datastore_nvme" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
@@ -382,7 +356,6 @@ resource "kubectl_manifest" "LinstorSatelliteConfiguration_piraeus_datastore_nvm
   }
  })
 }
-
 resource "kubectl_manifest" "LinstorSatelliteConfiguration_piraeus_datastore_hdd" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
@@ -447,7 +420,6 @@ resource "kubectl_manifest" "LinstorSatelliteConfiguration_piraeus_datastore_hdd
   }
  })
 }
-
 resource "kubernetes_storage_class" "storage_class_ssd_storage_replicated" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
@@ -479,7 +451,6 @@ resource "kubernetes_storage_class" "storage_class_ssd_storage_replicated" {
   reclaim_policy         = "Retain"
   volume_binding_mode    = "WaitForFirstConsumer"
 }
-
 resource "kubernetes_storage_class" "storage_class_nvme_storage_replicated" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
@@ -511,7 +482,6 @@ resource "kubernetes_storage_class" "storage_class_nvme_storage_replicated" {
   reclaim_policy         = "Retain"
   volume_binding_mode    = "WaitForFirstConsumer"
 }
-
 resource "kubernetes_storage_class" "storage_class_hdd_storage_replicated" {
   depends_on = [
     kubernetes_namespace.piraeus_datastore,
