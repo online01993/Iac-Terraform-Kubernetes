@@ -81,12 +81,12 @@ resource "kubernetes_labels" "kubernetes_labels_workers_topology_zone" {
   }
 }
 
-resource "kubernetes_persistent_volume_claim" "pvc_ssd_replicated" {
+resource "kubernetes_persistent_volume_claim" "pvc_ssd_replicated_1c_data" {
   depends_on = [
     kubernetes_storage_class.storage_class_ssd_storage_replicated
   ]
   metadata {
-    name = "replicated-volume"
+    name = "pvc_ssd_replicated_1c_data"
     namespace = "default"
   }
   spec {
