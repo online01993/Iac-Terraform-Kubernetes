@@ -12,19 +12,19 @@ output "storage_available" {
       "address" = i.address
       "storage_classes" = ({
       "ssd"   = i.storage.ssd.present ? ({
-        "present" = i.ssd.present,
-        "hostPath" = i.ssd.hostPath,
-        "volume"  = i.ssd.volume
+        "present" = i.storage.ssd.present,
+        "hostPath" = i.storage.ssd.hostPath,
+        "volume"  = i.storage.ssd.volume
       }) : null
       "nvme"   = i.storage.nvme.present ? ({
-        "present" = i.nvme.present,
-        "hostPath" = i.nvme.hostPath,
-        "volume"  = i.nvme.volume
+        "present" = i.storage.nvme.present,
+        "hostPath" = i.storage.nvme.hostPath,
+        "volume"  = i.storage.nvme.volume
       }) : null
       "hdd"   = i.storage.hdd.present ? ({
-        "present" = i.hdd.present,
-        "hostPath" = i.hdd.hostPath,
-        "volume"  = i.hdd.volume
+        "present" = i.storage.hdd.present,
+        "hostPath" = i.storage.hdd.hostPath,
+        "volume"  = i.storage.hdd.volume
       }) : null
     })
     } if i.storage.ssd.present || i.storage.nvme.present || i.storage.hdd.present
