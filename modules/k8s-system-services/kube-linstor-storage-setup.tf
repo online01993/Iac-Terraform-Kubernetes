@@ -471,7 +471,7 @@ resource "kubernetes_storage_class" "storage_class_ssd_storage_replicated" {
   }
   storage_provisioner    = "linstor.csi.linbit.com"
   allow_volume_expansion = true
-  reclaim_policy         = "Retain"
+  reclaim_policy         = "Delete"
   volume_binding_mode    = "WaitForFirstConsumer"
 }
 
