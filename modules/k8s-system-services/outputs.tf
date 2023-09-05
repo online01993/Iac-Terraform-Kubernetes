@@ -4,29 +4,29 @@ output "k8s_kube-token-k8sadmin" {
 }
 output "storage_available" {
   value = [
-    for i in var.nodes : 
+    for i in range(length(var.node)) : 
     {
       "id"      = i
-      "netbios" = i.netbios
-      "fqdn"    = i.fqdn
-      "address" = i.address
+      "netbios" = var.node[i].netbios
+      "fqdn"    = var.node[i].fqdn
+      "address" = var.node[i].address
       "storage_classes" = ({
-      "ssd"   = i.storage.ssd.present ? ({
-        "present" = i.storage.ssd.present,
-        "hostPath" = i.storage.ssd.hostPath,
-        "volume"  = i.storage.ssd.volume
+      "ssd"   = var.node[i].storage.ssd.present ? ({
+        "present" = var.node[i].storage.ssd.present,
+        "hostPath" = var.node[i].storage.ssd.hostPath,
+        "volume"  = var.node[i].storage.ssd.volume
       }) : null
-      "nvme"   = i.storage.nvme.present ? ({
-        "present" = i.storage.nvme.present,
-        "hostPath" = i.storage.nvme.hostPath,
-        "volume"  = i.storage.nvme.volume
+      "nvme"   = var.node[i].storage.nvme.present ? ({
+        "present" = var.node[i].storage.nvme.present,
+        "hostPath" = var.node[i].storage.nvme.hostPath,
+        "volume"  = var.node[i].storage.nvme.volume
       }) : null
-      "hdd"   = i.storage.hdd.present ? ({
-        "present" = i.storage.hdd.present,
-        "hostPath" = i.storage.hdd.hostPath,
-        "volume"  = i.storage.hdd.volume
+      "hdd"   = var.node[i].storage.hdd.present ? ({
+        "present" = var.node[i].storage.hdd.present,
+        "hostPath" = var.node[i].storage.hdd.hostPath,
+        "volume"  = var.node[i].storage.hdd.volume
       }) : null
     })
-    } if i.storage.ssd.present || i.storage.nvme.present || i.storage.hdd.present
+    } if var.node[i].storage.ssd.present || var.node[i].storage.nvme.present || var.node[i].storage.hdd.present
   ]
 }
