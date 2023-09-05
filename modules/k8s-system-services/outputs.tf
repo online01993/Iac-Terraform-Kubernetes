@@ -4,29 +4,29 @@ output "k8s_kube-token-k8sadmin" {
 }
 output "storage_available" {
   value = [
-    for i in range(length(var.node)) : 
+    for i in range(length(var.nodes)) : 
     {
       "id"      = i
-      "netbios" = var.node[i].netbios
-      "fqdn"    = var.node[i].fqdn
-      "address" = var.node[i].address
+      "netbios" = var.nodes[i].netbios
+      "fqdn"    = var.nodes[i].fqdn
+      "address" = var.nodes[i].address
       "storage_classes" = ({
-      "ssd"   = var.node[i].storage.ssd.present ? ({
-        "present" = var.node[i].storage.ssd.present,
-        "hostPath" = var.node[i].storage.ssd.hostPath,
-        "volume"  = var.node[i].storage.ssd.volume
+      "ssd"   = var.nodes[i].storage.ssd.present ? ({
+        "present" = var.nodes[i].storage.ssd.present,
+        "hostPath" = var.nodes[i].storage.ssd.hostPath,
+        "volume"  = var.nodes[i].storage.ssd.volume
       }) : null
-      "nvme"   = var.node[i].storage.nvme.present ? ({
-        "present" = var.node[i].storage.nvme.present,
-        "hostPath" = var.node[i].storage.nvme.hostPath,
-        "volume"  = var.node[i].storage.nvme.volume
+      "nvme"   = var.nodes[i].storage.nvme.present ? ({
+        "present" = var.nodes[i].storage.nvme.present,
+        "hostPath" = var.nodes[i].storage.nvme.hostPath,
+        "volume"  = var.nodes[i].storage.nvme.volume
       }) : null
-      "hdd"   = var.node[i].storage.hdd.present ? ({
-        "present" = var.node[i].storage.hdd.present,
-        "hostPath" = var.node[i].storage.hdd.hostPath,
-        "volume"  = var.node[i].storage.hdd.volume
+      "hdd"   = var.nodes[i].storage.hdd.present ? ({
+        "present" = var.nodes[i].storage.hdd.present,
+        "hostPath" = var.nodes[i].storage.hdd.hostPath,
+        "volume"  = var.nodes[i].storage.hdd.volume
       }) : null
     })
-    } if var.node[i].storage.ssd.present || var.node[i].storage.nvme.present || var.node[i].storage.hdd.present
+    } if var.nodes[i].storage.ssd.present || var.nodes[i].storage.nvme.present || var.nodes[i].storage.hdd.present
   ]
 }
