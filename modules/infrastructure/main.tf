@@ -177,7 +177,7 @@ resource "xenorchestra_vm" "vm" {
   }
   #Dynamic SSD disk
   dynamic "disk" {
-  for_each = {for i in local.disk_profiles : i.label >= i if i.label == "disk1"}
+  for_each = { for i in local.disk_profiles : i.label >= i if i.label == "disk1" }
     content {
         sr_id = disk.value.label
         name_label = disk.value.label
