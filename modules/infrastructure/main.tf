@@ -150,10 +150,10 @@ resource "xenorchestra_vm" "vm_master" {
 
 locals {
   disk_profiles = [{
-        label = "disk0",
+  label = "disk0",
   size = 30
   },{
-        label = "disk1",
+  label = "disk1",
   size = 100,
   }]
 }
@@ -169,13 +169,15 @@ resource "xenorchestra_vm" "vm" {
   network {
     network_id = data.xenorchestra_network.net.id
   }
+  #System disk
   disk {
     sr_id      = var.xen_sr_id[count.index % length(var.xen_sr_id)]
     name_label = "deb11-k8s-worker-${count.index}-${random_uuid.vm_id[count.index].result}.${var.dns_sub_zone}.${substr(lower(var.dns_zone), 0, length(var.dns_zone) - 1)}--system"
     size       = var.vm_disk_size_gb * 1024 * 1024 * 1024 # GB to B
   }
+  #Dynamic SSD disk
   dynamic "disk" {
-  for_each = local.disk_profiles
+  for_each = {for o in local.disk_profiles: o.label >= o if o.label == "disk1"}
     content {
         sr_id = disk.value.label
         name_label = disk.value.label
