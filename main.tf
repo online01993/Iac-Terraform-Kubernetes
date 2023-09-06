@@ -12,10 +12,6 @@ module "infrastructure" {
   master_memory_size_gb        = var.global_master_memory_size_gb
   vm_rsa_ssh_key               = var.global_vm_rsa_ssh_key
   xen_sr_id                    = var.global_xen_sr_id
-  xen_xoa_url                  = var.global_xen_xoa_url
-  xen_xoa_username             = var.global_xen_xoa_username
-  xen_xoa_password             = var.global_xen_xoa_password
-  xen_xoa_insecure             = var.global_xen_xoa_insecure
   xen_large_sr_id              = var.global_xen_large_sr_id
   master_labels                = var.global_master_labels
   node_labels                  = var.global_node_labels
@@ -41,34 +37,35 @@ module "infrastructure" {
   worker_node_network_dhcp     = var.global_worker_node_network_dhcp
 }
 module "kubernetes-base" {
-  depends_on                     = [module.infrastructure]
-  source                         = "./modules/k8s-base"
-  vm_rsa_ssh_key_public          = local.vm_rsa_ssh_key_public
-  vm_rsa_ssh_key_private         = local.vm_rsa_ssh_key_private
-  master_count                   = var.global_master_node_high_availability == true ? 3 : 1
-  master_node_address_start_ip   = var.global_master_node_address_start_ip
-  k8s_api_endpoint_ip            = var.global_k8s_api_endpoint_ip
-  k8s_api_endpoint_port          = var.global_k8s_api_endpoint_port
-  masters                        = module.infrastructure.masters
-  nodes                          = module.infrastructure.nodes
-  master_node_address_mask       = var.global_master_node_address_mask
-  pods_address_mask              = var.global_pods_address_mask
-  pods_mask_cidr                 = var.global_pods_mask_cidr
-  version_containerd             = var.global_version_containerd
-  version_runc                   = var.global_version_runc
-  version_cni-plugin             = var.global_version_cni-plugin
+  depends_on                   = [module.infrastructure]
+  source                       = "./modules/k8s-base"
+  vm_rsa_ssh_key_public        = module.infrastructure.vm_rsa_ssh_key_public
+  vm_rsa_ssh_key_private       = module.infrastructure.vm_rsa_ssh_key_private
+  masters                      = module.infrastructure.masters
+  nodes                        = module.infrastructure.nodes
+  master_node_address_mask     = var.global_master_node_address_mask
+  master_node_address_start_ip = var.global_master_node_address_start_ip
+  version_containerd           = var.global_version_containerd
+  version_runc                 = var.global_version_runc
+  version_cni-plugin           = var.global_version_cni-plugin
+  pods_mask_cidr               = "${var.global_pods_address_mask}/${var.global_pods_mask_cidr}"  
+  k8s_api_endpoint_ip          = var.global_k8s_api_endpoint_ip
+  k8s_api_endpoint_port        = var.global_k8s_api_endpoint_port
 }
-module "kubernetes-services" {
-  source                         = "./modules/k8s-services"
-  k8s_cni_hairpinMode            = var.global_k8s_cni_hairpinMode
-  k8s_cni_isDefaultGateway       = var.global_k8s_cni_isDefaultGateway
-  k8s_cni_Backend_Type           = var.global_k8s_cni_Backend_Type
-  k8s-url                        = local.k8s-url
-  k8s-endpont                    = local.k8s-endpont
-  k8s-admin_file                 = local.k8s-admin_file
-  k8s-client-key-data            = local.k8s-client-key-data
-  k8s-client-certificate-data    = local.k8s-client-certificate-data
-  k8s-certificate-authority-data = local.k8s-certificate-authority-data
-  kube-dashboard_nodePort        = var.global_kube-dashboard_nodePort
-  pods_mask_cidr                 = "${var.global_pods_address_mask}/${var.global_pods_mask_cidr}"
+module "k8s-system-services" {
+  depends_on                   = [module.kubernetes-base]
+  source                       = "./modules/k8s-system-services"
+  masters                      = module.infrastructure.masters
+  nodes                        = module.infrastructure.nodes
+  k8s_cni_hairpinMode          = var.global_k8s_cni_hairpinMode
+  k8s_cni_isDefaultGateway     = var.global_k8s_cni_isDefaultGateway
+  k8s_cni_Backend_Type         = var.global_k8s_cni_Backend_Type
+  kube-dashboard_nodePort      = var.global_kube-dashboard_nodePort
+  pods_mask_cidr               = "${var.global_pods_address_mask}/${var.global_pods_mask_cidr}"
+  ssd_k8s_stor_pool_type       = var.global_ssd_k8s_stor_pool_type
+  ssd_k8s_stor_pool_name       = var.global_ssd_k8s_stor_pool_name
+  nvme_k8s_stor_pool_type      = var.global_nvme_k8s_stor_pool_type
+  nvme_k8s_stor_pool_name      = var.global_nvme_k8s_stor_pool_name
+  hdd_k8s_stor_pool_type       = var.global_hdd_k8s_stor_pool_type
+  hdd_k8s_stor_pool_name       = var.global_hdd_k8s_stor_pool_name
 }  

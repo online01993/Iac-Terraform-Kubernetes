@@ -1,4 +1,7 @@
+#
 # MAIN FILE TO VARIABLES SET
+#
+
 #
 # XO XCP-ng settings
 #
@@ -91,11 +94,11 @@ global_vm_storage_disk_size_gb = 20
 #Count for CPU VM master node #Kubernetes minimal 2
 global_master_cpu_count = 2
 #Count for CPU VM worker node #Kubernetes minimal 2
-global_vm_cpu_count = 2
+global_vm_cpu_count = 4
 #Count for MEM VM master node #Kubernetes minimal 2
 global_master_memory_size_gb = 2
 #Count for CPU VM worker node #Kubernetes minimal 2
-global_vm_memory_size_gb = 2
+global_vm_memory_size_gb = 8
 #Lables for VM master node
 global_master_labels = {
   "ntmax.ca/cloud-platform" = "xcp-ng"
@@ -157,3 +160,15 @@ global_k8s_cni_isDefaultGateway = true
 global_k8s_cni_Backend_Type = "vxlan"
 #NodePort for Kube-dashboard
 global_kube-dashboard_nodePort = 30100
+#SSD LVM Storage type for Linstore Thin or Thick
+global_ssd_k8s_stor_pool_type = "thin"
+#SSD LVM Storage name prefix for Linstore
+global_ssd_k8s_stor_pool_name = "main"
+#NVME LVM Storage type for Linstore Thin or Thick
+global_nvme_k8s_stor_pool_type = "thin"
+#NVME LVM Storage name prefix for Linstore
+global_nvme_k8s_stor_pool_name = "main"
+#HDD LVM Storage type for Linstore Thin or Thick
+global_hdd_k8s_stor_pool_type = "thin"
+#HDD LVM Storage name prefix for Linstore
+global_hdd_k8s_stor_pool_name = "main"

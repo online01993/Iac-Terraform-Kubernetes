@@ -7,6 +7,7 @@ variable "vm_rsa_ssh_key_public" {
 variable "masters" {
   type = list(object({
     id      = number
+    netbios = string
     fqdn    = string
     address = string
   }))
@@ -14,13 +15,10 @@ variable "masters" {
 variable "nodes" {
   type = list(object({
     id      = number
+    netbios = string
     fqdn    = string
     address = string
   }))
-}
-variable "master_count" {
-  #default = 3
-  type = number
 }
 variable "version_containerd" {
   type = string
@@ -39,12 +37,8 @@ variable "master_node_address_start_ip" {
   #default = 11
   type = number
 }
-variable "pods_address_mask" {
-  #default = 10.244.0.
-  type = string
-}
 variable "pods_mask_cidr" {
-  #default = 16
+  #default = ""
   type = string
 }
 variable "k8s_api_endpoint_ip" {

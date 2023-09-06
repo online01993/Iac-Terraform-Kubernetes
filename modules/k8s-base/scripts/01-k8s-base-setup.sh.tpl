@@ -9,6 +9,10 @@ while [ ! -f /var/lib/cloud/instance/boot-finished ]; do
   echo -e "\033[1;36mWaiting for cloud-init..."
   sleep 10
 done
+#headers need to DRBD driver compile with PIRAEUS-operator container init 
+#https://github.com/piraeusdatastore/piraeus-operator/blob/debian-11/doc/host-setup.md#build-and-load-drbd-using-the-kernel-module-injection-image-preferred
+sudo bash -c 'apt-get install -y linux-headers-$(dpkg --print-architecture)'
+###
 sudo bash -c 'cat <<EOF > /etc/sysctl.d/11-kubernetes.conf
 net.bridge.bridge-nf-call-iptables = 1
 net.ipv4.ip_forward = 1

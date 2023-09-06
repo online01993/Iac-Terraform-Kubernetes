@@ -8,6 +8,29 @@ resource "terraform_data" "k8s-base-setup_01_resource_masters" {
     private_key = var.vm_rsa_ssh_key_private
     host        = each.value.address
   }
+  provisioner "remote-exec" {
+    inline = [<<EOF
+      #cloud-init-wait 
+      while [ ! -f /var/lib/cloud/instance/boot-finished ]; do 
+      echo -e "\033[1;36mWaiting for cloud-init..."
+      sleep 10
+      done
+      EOF
+    ]
+  }
+  provisioner "local-exec" {
+    command = <<EOF
+      echo "${var.vm_rsa_ssh_key_private}" > ./.robot_id_rsa_master_${each.value.id}.key
+      chmod 600 ./.robot_id_rsa_master_${each.value.id}.key
+      ssh -o StrictHostKeyChecking=no -i ./.robot_id_rsa_master_${each.value.id}.key -o ConnectTimeout=2 robot@${each.value.address} '(sleep 2; sudo reboot)&'; sleep 5      
+      until ssh -o StrictHostKeyChecking=no -i ./.robot_id_rsa_master_${each.value.id}.key -o ConnectTimeout=2 robot@${each.value.address} true 2> /dev/null
+      do
+        echo "Waiting for OS to reboot and become available..."
+        sleep 3
+      done
+      rm -rvf ./.robot_id_rsa_master_${each.value.id}.key
+    EOF
+  }
   provisioner "file" {
     destination = "/tmp/01-k8s-base-setup.sh"
     content = templatefile("${path.module}/scripts/01-k8s-base-setup.sh.tpl", {
@@ -33,6 +56,29 @@ resource "terraform_data" "k8s-base-setup_01_resource_nodes" {
     private_key = var.vm_rsa_ssh_key_private
     host        = each.value.address
   }
+  provisioner "remote-exec" {
+    inline = [<<EOF
+      #cloud-init-wait 
+      while [ ! -f /var/lib/cloud/instance/boot-finished ]; do 
+      echo -e "\033[1;36mWaiting for cloud-init..."
+      sleep 10
+      done
+      EOF
+    ]
+  }
+  provisioner "local-exec" {
+    command = <<EOF
+      echo "${var.vm_rsa_ssh_key_private}" > ./.robot_id_rsa_worker_${each.value.id}.key
+      chmod 600 ./.robot_id_rsa_worker_${each.value.id}.key
+      ssh -o StrictHostKeyChecking=no -i ./.robot_id_rsa_worker_${each.value.id}.key -o ConnectTimeout=2 robot@${each.value.address} '(sleep 2; sudo reboot)&'; sleep 5      
+      until ssh -o StrictHostKeyChecking=no -i ./.robot_id_rsa_worker_${each.value.id}.key -o ConnectTimeout=2 robot@${each.value.address} true 2> /dev/null
+      do
+        echo "Waiting for OS to reboot and become available..."
+        sleep 3
+      done
+      rm -rvf ./.robot_id_rsa_worker_${each.value.id}.key
+    EOF
+  }
   provisioner "file" {
     destination = "/tmp/01-k8s-base-setup.sh"
     content = templatefile("${path.module}/scripts/01-k8s-base-setup.sh.tpl", {
@@ -50,9 +96,9 @@ resource "terraform_data" "k8s-base-setup_01_resource_nodes" {
   }
 }
 resource "random_password" "k8s-vrrp_random_pass_resource" {
-  length           = 12
-  special          = false
-  numeric           = true
+  length  = 12
+  special = false
+  numeric = true
 }
 resource "terraform_data" "k8s-kubeadm_init_02_resource" {
   depends_on = [
@@ -69,10 +115,10 @@ resource "terraform_data" "k8s-kubeadm_init_02_resource" {
     destination = "/tmp/02-k8s-kubeadm_init.sh"
     content = templatefile("${path.module}/scripts/02-k8s-kubeadm_init.sh.tpl", {
       itterator                    = each.value.id
-      master_count                 = "${var.master_count}"
+      master_count                 = length(var.masters)
       master_network_mask          = "${var.master_node_address_mask}"
       master_node_address_start_ip = "${var.master_node_address_start_ip}"
-      pod-network-cidr             = "${var.pods_address_mask}/${var.pods_mask_cidr}"
+      pod-network-cidr             = "${var.pods_mask_cidr}"
       k8s_api_endpoint_ip          = "${var.k8s_api_endpoint_ip}"
       k8s_api_endpoint_port        = "${var.k8s_api_endpoint_port}"
       k8s-vrrp_random_pass         = "${random_password.k8s-vrrp_random_pass_resource.result}"
@@ -87,7 +133,6 @@ resource "terraform_data" "k8s-kubeadm_init_02_resource" {
   }
 }
 resource "terraform_data" "k8s-kubeadm_init_02_config_get_resource" {
-  
   depends_on = [
     terraform_data.k8s-kubeadm_init_02_resource
   ]
@@ -98,12 +143,6 @@ resource "terraform_data" "k8s-kubeadm_init_02_config_get_resource" {
       chmod 600 ./.robot_id_rsa_master_config_file.key
       ssh robot@${var.masters[0].address} -o StrictHostKeyChecking=no -i ./.robot_id_rsa_master_config_file.key "cat /home/robot/.kube/config" > ${path.module}/scripts/k8s-kubeadm_init_02_config_file.conf
       rm -rvf ./.robot_id_rsa_master_config_file.key
-    EOF
-  }
-  provisioner "local-exec" {
-    when    = destroy
-    command = <<EOF
-      rm -rvf ${path.module}/scripts/k8s-kubeadm_init_02_config_file.conf
     EOF
   }
 }
@@ -124,12 +163,6 @@ resource "terraform_data" "k8s-kubeadm_init_02_config_get_client-key-data_resour
       chmod 600 ${path.module}/scripts/k8s-kubeadm_init_02_config_get_client-key-data_file
     EOF
   }
-  provisioner "local-exec" {
-    when    = destroy
-    command = <<EOF
-      rm -rvf ${path.module}/scripts/k8s-kubeadm_init_02_config_get_client-key-data_file
-    EOF
-  }
 }
 data "local_sensitive_file" "k8s-kubeadm_init_02_config_get_client-key-data_file" {
   depends_on = [
@@ -148,12 +181,6 @@ resource "terraform_data" "k8s-kubeadm_init_02_config_get_client-certificate-dat
       chmod 600 ${path.module}/scripts/k8s-kubeadm_init_02_config_get_client-certificate-data_file
     EOF
   }
-  provisioner "local-exec" {
-    when    = destroy
-    command = <<EOF
-      rm -rvf ${path.module}/scripts/k8s-kubeadm_init_02_config_get_client-certificate-data_file
-    EOF
-  }
 }
 data "local_sensitive_file" "k8s-kubeadm_init_02_config_get_client-certificate-data_file" {
   depends_on = [
@@ -170,12 +197,6 @@ resource "terraform_data" "k8s-kubeadm_init_02_config_get_certificate-authority-
       rm -rvf ${path.module}/scripts/k8s-kubeadm_init_02_config_get_certificate-authority-data_file
       cat ${path.module}/scripts/k8s-kubeadm_init_02_config_file.conf | grep certificate-authority-data | sed 's/^\s*certificate-authority-data: //' > ${path.module}/scripts/k8s-kubeadm_init_02_config_get_certificate-authority-data_file
       chmod 600 ${path.module}/scripts/k8s-kubeadm_init_02_config_get_certificate-authority-data_file
-    EOF
-  }
-  provisioner "local-exec" {
-    when    = destroy
-    command = <<EOF
-      rm -rvf ${path.module}/scripts/k8s-kubeadm_init_02_config_get_certificate-authority-data_file
     EOF
   }
 }
@@ -260,7 +281,7 @@ resource "terraform_data" "k8s-kubeadm-join_masters_04_resource" {
     destination = "/tmp/04-k8s-kubeadm-join_masters.sh"
     content = templatefile("${path.module}/scripts/04-k8s-kubeadm-join_masters.sh.tpl", {
       kubeadm-join_string = "${data.local_sensitive_file.kubeadm_token_master_file.content}"
-      master_count        = "${var.master_count}"
+      master_count        = length(var.masters)
       itterator           = each.value.id
     })
   }

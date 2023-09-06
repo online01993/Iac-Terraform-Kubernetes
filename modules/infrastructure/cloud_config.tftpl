@@ -40,6 +40,7 @@ packages:
   - curl
   - gnupg
   - wget
+  - lvm2
 no_ssh_fingerprints: false
 ssh_deletekeys: 1
 ssh:
@@ -69,9 +70,22 @@ apt:
     deb http://deb.debian.org/debian-security $RELEASE-security main
     deb-src http://deb.debian.org/debian-security $RELEASE-security main
   conf: |
+    Acquire {
+      Retries "60";
+    };
+    DPkg {
+      Lock {
+        Timeout "60";
+      };
+    };
     APT {
       Get {
         Assume-Yes "true";
         Fix-Broken "true";
       };
     };
+#power_state:
+#  delay: '+1'
+#  mode: reboot
+#  condition: true
+#  message: "End cloud_config init"
