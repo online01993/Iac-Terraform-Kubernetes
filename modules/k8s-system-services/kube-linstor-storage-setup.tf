@@ -442,9 +442,18 @@ resource "kubernetes_storage_class" "storage_class_ssd_storage_replicated" {
     name = "storage-class-${var.ssd_k8s_stor_pool_type}-${var.ssd_k8s_stor_pool_name}-ssd-storage-replicated"
   }
   parameters = {
+    # CSI related parameters
+    # LINSTOR parameters
     "linstor.csi.linbit.com/placementCount" = "${length([for i in var.nodes: i if i.storage.ssd.present])}"
-    "linstor.csi.linbit.com/storagePool" = "${var.ssd_k8s_stor_pool_type}-${var.ssd_k8s_stor_pool_name}-ssd-pool"
-    "DrbdOptions/Net/max-buffers"        =  "10000"
+    "linstor.csi.linbit.com/storagePool"    = "${var.ssd_k8s_stor_pool_type}-${var.ssd_k8s_stor_pool_name}-ssd-pool"
+    #"disklessStoragePool"                   = "DfltDisklessStorPoolSsd"
+    "disklessOnRemaining"                   = "true"
+    "allowRemoteVolumeAccess"               = "true"
+    "encryption"                            = "true"
+    # Linstor properties
+    #property.linstor.csi.linbit.com/: <x>
+    # DRBD parameters
+    "DrbdOptions/Net/max-buffers"           =  "10000"
   }
   storage_provisioner    = "linstor.csi.linbit.com"
   allow_volume_expansion = true
@@ -473,9 +482,18 @@ resource "kubernetes_storage_class" "storage_class_nvme_storage_replicated" {
     name = "storage-class-${var.nvme_k8s_stor_pool_type}-${var.nvme_k8s_stor_pool_name}-nvme-storage-replicated"
   }
   parameters = {
+    # CSI related parameters
+    # LINSTOR parameters
     "linstor.csi.linbit.com/placementCount" = "${length([for i in var.nodes: i if i.storage.nvme.present])}"
     "linstor.csi.linbit.com/storagePool" = "${var.nvme_k8s_stor_pool_type}-${var.nvme_k8s_stor_pool_name}-nvme-pool"
-    "DrbdOptions/Net/max-buffers"        =  "10000"
+    #"disklessStoragePool"                   = "DfltDisklessStorPoolNvme"
+    "disklessOnRemaining"                   = "true"
+    "allowRemoteVolumeAccess"               = "true"
+    "encryption"                            = "true"
+    # Linstor properties
+    #property.linstor.csi.linbit.com/: <x>
+    # DRBD parameters
+    "DrbdOptions/Net/max-buffers"           =  "10000"
   }
   storage_provisioner    = "linstor.csi.linbit.com"
   allow_volume_expansion = true
@@ -504,9 +522,18 @@ resource "kubernetes_storage_class" "storage_class_hdd_storage_replicated" {
     name = "storage-class-${var.hdd_k8s_stor_pool_type}-${var.hdd_k8s_stor_pool_name}-hdd-storage-replicated"
   }
   parameters = {
+    # CSI related parameters
+    # LINSTOR parameters
     "linstor.csi.linbit.com/placementCount" = "${length([for i in var.nodes: i if i.storage.hdd.present])}"
     "linstor.csi.linbit.com/storagePool" = "${var.hdd_k8s_stor_pool_type}-${var.hdd_k8s_stor_pool_name}-hdd-pool"
-    "DrbdOptions/Net/max-buffers"        =  "10000"
+    #"disklessStoragePool"                   = "DfltDisklessStorPoolNvmeHdd"
+    "disklessOnRemaining"                   = "true"
+    "allowRemoteVolumeAccess"               = "true"
+    "encryption"                            = "true"
+    # Linstor properties
+    #property.linstor.csi.linbit.com/: <x>
+    # DRBD parameters
+    "DrbdOptions/Net/max-buffers"           =  "10000"
   }
   storage_provisioner    = "linstor.csi.linbit.com"
   allow_volume_expansion = true
