@@ -112,7 +112,7 @@ resource "xenorchestra_vm" "vm_master" {
     create = "20m"
   }
 }
-resource "xenorchestra_vm" "vm" {
+/* resource "xenorchestra_vm" "vm" {
   count                = var.node_count
   name_label           = "deb11-k8s-worker-${count.index}-${random_uuid.vm_id[count.index].result}.${var.dns_sub_zone}.${substr(lower(var.dns_zone), 0, length(var.dns_zone) - 1)}"
   cloud_config         = xenorchestra_cloud_config.bar_vm[count.index].template
@@ -132,6 +132,62 @@ resource "xenorchestra_vm" "vm" {
     name_label = "deb11-k8s-worker-${count.index}-${random_uuid.vm_id[count.index].result}.${var.dns_sub_zone}.${substr(lower(var.dns_zone), 0, length(var.dns_zone) - 1)}--kubernetes-data"
     size       = var.vm_storage_disk_size_gb * 1024 * 1024 * 1024 # GB to B
   }
+  cpus          = var.master_cpu_count
+  memory_max    = var.master_memory_size_gb * 1024 * 1024 * 1024 # GB to B
+  wait_for_ip   = true
+  tags          = concat(var.node_vm_tags, ["ntmax.ca/cloud-os:debian-11-focal", "ntmax.ca/failure-domain:${count.index % length(data.xenorchestra_hosts.all_hosts.hosts)}"])
+  affinity_host = data.xenorchestra_hosts.all_hosts.hosts[count.index % length(data.xenorchestra_hosts.all_hosts.hosts)].id
+  lifecycle {
+    ignore_changes = [disk, template]
+  }
+  timeouts {
+    create = "20m"
+  }
+  #depends_on = [
+  #  xenorchestra_vm.vm_master
+  #]
+} */
+
+locals {
+  disk_profiles = [{
+        label = "disk0",
+  size = 30
+  },{
+        label = "disk1",
+  size = 100,
+  }]
+}
+
+
+resource "xenorchestra_vm" "vm" {
+  count                = var.node_count
+  name_label           = "deb11-k8s-worker-${count.index}-${random_uuid.vm_id[count.index].result}.${var.dns_sub_zone}.${substr(lower(var.dns_zone), 0, length(var.dns_zone) - 1)}"
+  cloud_config         = xenorchestra_cloud_config.bar_vm[count.index].template
+  cloud_network_config = xenorchestra_cloud_config.cloud_network_config_workers[count.index].template
+  template             = data.xenorchestra_template.vm.id
+  auto_poweron         = true
+  network {
+    network_id = data.xenorchestra_network.net.id
+  }
+  disk {
+    sr_id      = var.xen_sr_id[count.index % length(var.xen_sr_id)]
+    name_label = "deb11-k8s-worker-${count.index}-${random_uuid.vm_id[count.index].result}.${var.dns_sub_zone}.${substr(lower(var.dns_zone), 0, length(var.dns_zone) - 1)}--system"
+    size       = var.vm_disk_size_gb * 1024 * 1024 * 1024 # GB to B
+  }
+  dynamic "disk" {
+  for_each = local.disk_profiles
+    content {
+        sr_id = disk.value.label
+        name_label = disk.value.label
+        size  = disk.value.size
+      }
+  }
+
+/*   disk {
+    sr_id      = var.xen_large_sr_id[count.index % length(var.xen_large_sr_id)]
+    name_label = "deb11-k8s-worker-${count.index}-${random_uuid.vm_id[count.index].result}.${var.dns_sub_zone}.${substr(lower(var.dns_zone), 0, length(var.dns_zone) - 1)}--kubernetes-data"
+    size       = var.vm_storage_disk_size_gb * 1024 * 1024 * 1024 # GB to B
+  } */
   cpus          = var.master_cpu_count
   memory_max    = var.master_memory_size_gb * 1024 * 1024 * 1024 # GB to B
   wait_for_ip   = true
