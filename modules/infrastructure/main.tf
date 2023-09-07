@@ -210,9 +210,19 @@ resource "xenorchestra_vm" "vm" {
     name_label = "deb11-k8s-worker-${count.index}-${random_uuid.vm_id[count.index].result}.${var.dns_sub_zone}.${substr(lower(var.dns_zone), 0, length(var.dns_zone) - 1)}--system"
     size       = var.vm_disk_size_gb * 1024 * 1024 * 1024 # GB to B
   }
-  #Dynamic SSD disk
+/*   #Dynamic SSD disk
   dynamic "disk" {
   for_each = { for i in var.node_count : i.label => i if i.label == "disk1" }
+    content {
+        sr_id = disk.value.label
+        name_label = disk.value.label
+        size  = disk.value.size
+      }
+  } */
+
+  #Dynamic SSD disk
+  dynamic "disk" {
+  for_each = count.index => 2 ? range(0,1) : []
     content {
         sr_id = disk.value.label
         name_label = disk.value.label
