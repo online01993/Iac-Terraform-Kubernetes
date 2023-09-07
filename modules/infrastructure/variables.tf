@@ -141,7 +141,7 @@ variable "vm_rsa_ssh_key" {
   type = string
 }
 variable "node_storage_request" {
-  type = list(object({
+  type = object({
     storage = object({
       system   = object({
         hostPath = string,
@@ -173,5 +173,5 @@ variable "node_storage_request" {
         count = number
       })
     })
-  }))
+  })
 }
