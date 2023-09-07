@@ -101,7 +101,6 @@ global_master_memory_size_gb = 2
 global_vm_memory_size_gb = 8
 #Global request for storage and linstor replication
 node_storage_request = {
-  {
     "storage" = {
       "system"   = {
         "hostPath" = "/dev/xvda",
@@ -131,7 +130,6 @@ node_storage_request = {
       }
     }
   }
-}
 #Lables for VM master node
 global_master_labels = {
   "ntmax.ca/cloud-platform" = "xcp-ng"
