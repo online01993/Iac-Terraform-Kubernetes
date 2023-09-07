@@ -100,7 +100,7 @@ global_master_memory_size_gb = 2
 #Count for CPU VM worker node #Kubernetes minimal 2
 global_vm_memory_size_gb = 8
 #Global request for storage and linstor replication
-node_storage_request = {
+global_node_storage_request = {
     "storage" = {
       "system"   = {
         "hostPath" = "/dev/xvda",
