@@ -189,7 +189,7 @@ resource "xenorchestra_vm" "vm" {
 
   #Dynamic SSD disk
   dynamic "disk" {
-  for_each = count.index <= (var.node_storage_request[0].storage.ssd.count - 1) ? range(0,1) : []
+  for_each = count.index <= (var.node_storage_request.storage.ssd.count - 1) ? range(0,1) : []
     content {
         sr_id = var.xen_large_sr_id[count.index % length(var.xen_large_sr_id)]
         name_label = "deb11-k8s-worker-${count.index}-${random_uuid.vm_id[count.index].result}.${var.dns_sub_zone}.${substr(lower(var.dns_zone), 0, length(var.dns_zone) - 1)}--kubernetes-data"
