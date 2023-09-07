@@ -150,10 +150,10 @@ resource "xenorchestra_vm" "vm_master" {
 
 locals {
   disk_profiles = [{
-    label = “disk0”,
+    label = "disk0",
     size = 30
   },{
-    label = “disk1”,
+    label = "disk1",
     size = 100,
   }]
 }
