@@ -9,14 +9,6 @@ variable "worker_node_network_dhcp" {
 variable "master_node_address_mask" {
   #default = 10.244.0.
   type = string
-  validation {
-    condition = can(regex("e2-standard-2|e2-standard-4", var.master_node_address_mask))
-    error_message = "ERROR: Invalid machine_type1 Machine Type must be of either e2-standard-2 or e2-standard-4."
-  }
-  validation {
-    condition = can(regex("e2-standard-2|e2-standard-4", var.master_node_address_mask))
-    error_message = "ERROR: Invalid machine_type1 Machine Type must be of either e2-standard-2 or e2-standard-4."
-  }
 }
 variable "master_node_address_start_ip" {
   #default = 11
