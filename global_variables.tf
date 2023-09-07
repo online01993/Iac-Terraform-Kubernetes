@@ -9,6 +9,7 @@ variable "global_xen_xoa_username" {}
 variable "global_xen_xoa_password" {}
 variable "global_xen_xoa_insecure" {}
 variable "global_node_count" {}
+variable "node_storage_request" {}
 variable "global_master_disk_size_gb" {}
 variable "global_vm_disk_size_gb" {}
 variable "global_master_memory_size_gb" {}

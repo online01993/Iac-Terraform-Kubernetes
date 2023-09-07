@@ -158,40 +158,7 @@ locals {
   }]
 }
 
-/* variable "node_storage_request" {
-  type = list(object({
-    storage = object({
-      system   = object({
-        hostPath = string,
-        sr_ids  = string
-      })
-      diskless   = object({
-        present = bool,
-        count = number
-      })
-      ssd   = object({
-        present = bool,
-        hostPath = string,
-        volume  = number,
-        sr_ids  = string,
-        count = number
-      })
-      nvme   = object({
-        present = bool,
-        hostPath = string,
-        volume  = number,
-        sr_ids  = string,
-        count = number
-      })
-      hdd   = object({
-        present = bool,
-        hostPath = string,
-        volume  = number,
-        sr_ids  = string,
-        count = number
-      })
-    })
-  }))
+/* 
 } */
 
 resource "xenorchestra_vm" "vm" {
@@ -222,7 +189,7 @@ resource "xenorchestra_vm" "vm" {
 
   #Dynamic SSD disk
   dynamic "disk" {
-  for_each = count.index <= (2-1) ? range(0,1) : []
+  for_each = count.index <= (var.node_storage_request.storage.ssd.count - 1) ? range(0,1) : []
     content {
         sr_id = var.xen_large_sr_id[count.index % length(var.xen_large_sr_id)]
         name_label = "deb11-k8s-worker-${count.index}-${random_uuid.vm_id[count.index].result}.${var.dns_sub_zone}.${substr(lower(var.dns_zone), 0, length(var.dns_zone) - 1)}--kubernetes-data"

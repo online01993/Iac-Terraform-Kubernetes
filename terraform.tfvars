@@ -99,6 +99,39 @@ global_vm_cpu_count = 4
 global_master_memory_size_gb = 2
 #Count for CPU VM worker node #Kubernetes minimal 2
 global_vm_memory_size_gb = 8
+#Global request for storage and linstor replication
+node_storage_request = {
+  {
+    "storage" = {
+      "system"   = {
+        "hostPath" = "/dev/xvda",
+        "volume"  = 8 * 1024 * 1024 * 1024, # GB to B
+        "sr_ids"  = "0714cdc3-2eea-f339-f10c-4777c715400a"
+      }
+      "diskless"   = {
+        "count" = 0
+      }
+      "ssd"   = {
+        "hostPath" = "/dev/xvdb",
+        "volume"  = 8 * 1024 * 1024 * 1024, # GB to B
+        "sr_ids"  = "0714cdc3-2eea-f339-f10c-4777c715400a",
+        "count" = 2
+      }
+      "nvme"   = {
+        "hostPath" = "/dev/xvdc",
+        "volume"  = 8 * 1024 * 1024 * 1024, # GB to B
+        "sr_ids"  = "0714cdc3-2eea-f339-f10c-4777c715400a",
+        "count" = 2
+      }
+      "hdd"   = {
+        "hostPath" = "/dev/xvdd",
+        "volume"  = 8 * 1024 * 1024 * 1024, # GB to B
+        "sr_ids"  = "0714cdc3-2eea-f339-f10c-4777c715400a",
+        "count" = 4
+      }
+    }
+  }
+}
 #Lables for VM master node
 global_master_labels = {
   "ntmax.ca/cloud-platform" = "xcp-ng"

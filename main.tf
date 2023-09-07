@@ -6,6 +6,7 @@ module "infrastructure" {
   xen_vm_template_name         = var.global_xen_vm_template_name
   xen_pool_name                = var.global_xen_pool_name
   node_count                   = var.global_node_count
+  node_storage_request         = var.global_node_storage_request
   master_count                 = var.global_master_node_high_availability == true ? 3 : 1
   master_disk_size_gb          = var.global_master_disk_size_gb
   vm_disk_size_gb              = var.global_vm_disk_size_gb

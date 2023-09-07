@@ -140,3 +140,38 @@ variable "xen_pool_name" {
 variable "vm_rsa_ssh_key" {
   type = string
 }
+variable "node_storage_request" {
+  type = list(object({
+    storage = object({
+      system   = object({
+        hostPath = string,
+        sr_ids  = string
+      })
+      diskless   = object({
+        present = bool,
+        count = number
+      })
+      ssd   = object({
+        present = bool,
+        hostPath = string,
+        volume  = number,
+        sr_ids  = string,
+        count = number
+      })
+      nvme   = object({
+        present = bool,
+        hostPath = string,
+        volume  = number,
+        sr_ids  = string,
+        count = number
+      })
+      hdd   = object({
+        present = bool,
+        hostPath = string,
+        volume  = number,
+        sr_ids  = string,
+        count = number
+      })
+    })
+  }))
+}
