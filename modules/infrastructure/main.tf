@@ -222,7 +222,7 @@ resource "xenorchestra_vm" "vm" {
 
   #Dynamic SSD disk
   dynamic "disk" {
-  for_each = count.index > 2 ? range(0,1) : []
+  for_each = count.index >= 2 ? range(0,1) : []
     content {
         sr_id = disk.value.label
         name_label = disk.value.label
