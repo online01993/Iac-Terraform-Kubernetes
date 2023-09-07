@@ -149,18 +149,13 @@ resource "xenorchestra_vm" "vm_master" {
 } */
 
 locals {
-  disk_profiles = [
-    {
-    "system" = {
-      label = "disk0",
-      size = 30
-      }
-    {
-      label = "disk1",
-      size = 100,
-    }
-    }
-  ]
+  disk_profiles = [{
+    label = “disk0”,
+    size = 30
+  },{
+    label = “disk1”,
+    size = 100,
+  }]
 }
 
 /* variable "node_storage_request" {
