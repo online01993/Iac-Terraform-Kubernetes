@@ -149,15 +149,55 @@ resource "xenorchestra_vm" "vm_master" {
 } */
 
 locals {
-  disk_profiles = [{
-  label = "disk0",
-  size = 30
-  },{
-  label = "disk1",
-  size = 100,
-  }]
+  disk_profiles = [
+    {
+    "system" = {
+      label = "disk0",
+      size = 30
+      }
+    {
+      label = "disk1",
+      size = 100,
+    }
+    }
+  ]
 }
 
+/* variable "node_storage_request" {
+  type = list(object({
+    storage = object({
+      system   = object({
+        hostPath = string,
+        sr_ids  = string
+      })
+      diskless   = object({
+        present = bool,
+        count = number
+      })
+      ssd   = object({
+        present = bool,
+        hostPath = string,
+        volume  = number,
+        sr_ids  = string,
+        count = number
+      })
+      nvme   = object({
+        present = bool,
+        hostPath = string,
+        volume  = number,
+        sr_ids  = string,
+        count = number
+      })
+      hdd   = object({
+        present = bool,
+        hostPath = string,
+        volume  = number,
+        sr_ids  = string,
+        count = number
+      })
+    })
+  }))
+} */
 
 resource "xenorchestra_vm" "vm" {
   count                = var.node_count
@@ -177,7 +217,7 @@ resource "xenorchestra_vm" "vm" {
   }
   #Dynamic SSD disk
   dynamic "disk" {
-  for_each = { for i in local.disk_profiles : i.label => i if i.label == "disk1" }
+  for_each = { for i in var.node_count : i.label => i if i.label == "disk1" }
     content {
         sr_id = disk.value.label
         name_label = disk.value.label
