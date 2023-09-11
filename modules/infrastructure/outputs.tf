@@ -32,19 +32,19 @@ output "nodes" {
       "address" = xenorchestra_vm.vm[i].ipv4_addresses[0]
       "storage" = ({
       "ssd"   = ({
-        "present" = true,
-        "hostPath" = "/dev/xvdb",
-        "volume"  = var.vm_storage_disk_size_gb * 1024 * 1024 * 1024
+        "present" = var.xen_infra_settings.node_storage_request.storage.ssd.count > 0 ? true : false,
+        "hostPath" = var.xen_infra_settings.node_storage_request.storage.ssd.count > 0 ? var.xen_infra_settings.node_storage_request.storage.ssd.hostPath : "",
+        "volume"  = var.xen_infra_settings.node_storage_request.storage.ssd.count > 0 ? var.xen_infra_settings.node_storage_request.storage.ssd.volume : ""
       })
       "nvme"   = ({
-        "present" = true,
-        "hostPath" = "/dev/xvdd",
-        "volume"  = 0
+        "present" = var.xen_infra_settings.node_storage_request.storage.nvme.count > 0 ? true : false,
+        "hostPath" = var.xen_infra_settings.node_storage_request.storage.nvme.count > 0 ? var.xen_infra_settings.node_storage_request.storage.ssd.hostPath : "",
+        "volume"  = var.xen_infra_settings.node_storage_request.storage.nvme.count > 0 ? var.xen_infra_settings.node_storage_request.storage.nvme.volume : ""
       })
       "hdd"   = ({
-        "present" = true,
-        "hostPath" = "/dev/xvdc",
-        "volume"  = 0
+        "present" = var.xen_infra_settings.node_storage_request.storage.nvme.count > 0 ? true : false,
+        "hostPath" = var.xen_infra_settings.node_storage_request.storage.nvme.count > 0 ? var.xen_infra_settings.node_storage_request.storage.ssd.hostPath : "",
+        "volume"  = var.xen_infra_settings.node_storage_request.storage.nvme.count > 0 ? var.xen_infra_settings.node_storage_request.storage.hdd.volume : ""
       })
     })
     }
