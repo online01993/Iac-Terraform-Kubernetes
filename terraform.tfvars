@@ -135,6 +135,9 @@ global_xen_infra_settings = {
 }
 
 #Kubernetes settings
+global_pods_address_mask = "10.244.0.0"
+#Nodes mask in CIDR format, default 16
+global_pods_mask_cidr = 16
 #Runtime containerd version
 #https://github.com/containerd/containerd/releases
 global_version_containerd = "1.7.2"
