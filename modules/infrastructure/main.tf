@@ -27,11 +27,11 @@ data "xenorchestra_hosts" "all_hosts" {
   sort_order = "asc"
 }
 data "xenorchestra_network" "net" {
-  name_label = var.var.xen_infra_settings.xen_servers_settings.xen_network_name
+  name_label = var.xen_infra_settings.xen_servers_settings.xen_network_name
   pool_id    = data.xenorchestra_pool.pool.id
 }
 data "xenorchestra_template" "vm" {
-  name_label = var.var.xen_infra_settings.xen_servers_settings.xen_vm_template_name
+  name_label = var.xen_infra_settings.xen_servers_settings.xen_vm_template_name
 }
 resource "random_uuid" "vm_master_id" {
   for_each = range(0, var.xen_infra_settings.master_vm_request.vm_settings.count - 1)
