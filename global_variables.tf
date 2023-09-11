@@ -9,6 +9,8 @@ variable "global_xen_infra_settings" {}
 
 variable "global_pods_address_mask" {}
 variable "global_pods_mask_cidr" {}
+variable "global_master_node_address_mask" {}
+variable "global_master_node_address_start_ip" {}
 variable "global_version_containerd" {}
 variable "global_version_runc" {}
 variable "global_version_cni-plugin" {}
