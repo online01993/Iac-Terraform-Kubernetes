@@ -135,6 +135,9 @@ global_xen_infra_settings = {
 }
 
 #Kubernetes settings
+global_master_node_address_mask = "10.200.0."
+global_master_node_address_start_ip = "11"
+
 global_pods_address_mask = "10.244.0.0"
 #Nodes mask in CIDR format, default 16
 global_pods_mask_cidr = 16
