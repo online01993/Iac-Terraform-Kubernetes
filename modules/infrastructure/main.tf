@@ -189,7 +189,7 @@ resource "xenorchestra_vm" "vm" {
   disk {
     sr_id      = var.xen_infra_settings.node_storage_request.storage.system.sr_ids[each.key % length(var.xen_infra_settings.node_storage_request.storage.system.sr_ids)]
     name_label = "deb11-k8s-worker-${each.key}-${random_uuid.vm_id[each.key].result}.${var.xen_infra_settings.dns_request.dns_sub_zone}.${substr(lower(var.xen_infra_settings.dns_request.dns_zone), 0, length(var.xen_infra_settings.dns_request.dns_zone) - 1)}--system"
-    size       = var.xen_infra_settings.node_storage_request.storage.system.sr_ids
+    size       = var.xen_infra_settings.node_storage_request.storage.system.volume
   }
   #Dynamic SSD disk
   dynamic "disk" {
@@ -221,7 +221,7 @@ resource "xenorchestra_vm" "vm" {
   cpus          = var.xen_infra_settings.worker_vm_request.vm_settings.cpu_count
   memory_max    = var.xen_infra_settings.worker_vm_request.vm_settings.memory_size_gb * 1024 * 1024 * 1024 # GB to B
   wait_for_ip   = true
-  tags          = concat(var.xen_infra_settings.worker_vm_request.vm_settings.node_vm_tags, ["ntmax.ca/cloud-os:debian-11-focal", "ntmax.ca/failure-domain:${each.key % length(data.xenorchestra_hosts.all_hosts.hosts)}"])
+  tags          = concat(var.xen_infra_settings.worker_vm_request.vm_settings.vm_tags, ["ntmax.ca/cloud-os:debian-11-focal", "ntmax.ca/failure-domain:${each.key % length(data.xenorchestra_hosts.all_hosts.hosts)}"])
   affinity_host = data.xenorchestra_hosts.all_hosts.hosts[each.key % length(data.xenorchestra_hosts.all_hosts.hosts)].id
   lifecycle {
     ignore_changes = [disk, affinity_host, template]
