@@ -72,7 +72,7 @@ variable "xen_infra_settings" {
     })
     dns_request = object({
       dns_key_name = string,
-      dns_key_secret = sensitive(string),
+      dns_key_secret = string,
       dns_server = string,
       dns_zone = string,
       dns_sub_zone = string,
