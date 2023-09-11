@@ -1,4 +1,4 @@
-variable "xen_infra_settings" = object({
+variable xen_infra_settings = object({
   xen_servers_settings = object({
     xen_network_name = string,
     xen_vm_template_name = string,
