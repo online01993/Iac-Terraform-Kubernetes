@@ -34,7 +34,11 @@ data "xenorchestra_template" "vm" {
   name_label = var.xen_infra_settings.xen_servers_settings.xen_vm_template_name
 }
 resource "random_uuid" "vm_master_id" {
-  for_each = tomap(range(0, var.xen_infra_settings.master_vm_request.vm_settings.count - 1))
+  for_each = tomap([
+    for i in range(0, var.xen_infra_settings.master_vm_request.vm_settings.count - 1) :
+    "key" = i
+    "uuid" = random_uuid.vm_master_id[each.key].result
+    ])
 }
 resource "random_uuid" "vm_id" {
   for_each = range(0, var.xen_infra_settings.worker_vm_request.vm_settings.count - 1)
