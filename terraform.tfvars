@@ -33,7 +33,7 @@ global_xen_infra_settings = {
         "ntmax.ca/cloud-platform" = "xcp-ng"
         "ntmax.ca/cloud-os"       = "debian-11-focal"
         "ntmax.ca/region"         = "mtl-south-1"
-      },
+      }
       "vm_tags" = [
           "ntmax.ca/cloud-os:debian-11-focal",
           "ntmax.ca/middleware:kubernetes",
@@ -60,7 +60,7 @@ global_xen_infra_settings = {
         "ntmax.ca/cloud-platform" = "xcp-ng"
         "ntmax.ca/cloud-os"       = "debian-11-focal"
         "ntmax.ca/region"         = "mtl-south-1"
-      },
+      }
       "vm_tags" = [
         "ntmax.ca/cloud-os:debian-11-focal",
         "ntmax.ca/middleware:kubernetes",
