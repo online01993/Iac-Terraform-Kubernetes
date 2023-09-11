@@ -114,7 +114,7 @@ global_xen_infra_settings = {
     "dns_server" = "wsus.its.local",
     "dns_zone" = "its.local.",
     "dns_sub_zone" = "k8s",
-    "dns_ttl" = "number" 
+    "dns_ttl" = 600 
   }
   "certificate_request" = {
     "organization"        = "lopati-magazin",
