@@ -8,6 +8,7 @@ variable "xen_infra_settings" {
     })
     master_vm_request    = object({
       vm_settings = object({
+        name_label_prefix = string,
         count = number,
         cpu_count = number,
         memory_size_gb = number,
@@ -25,6 +26,7 @@ variable "xen_infra_settings" {
     })  
     worker_vm_request    = object({
       vm_settings = object({
+        name_label_prefix = string,
         count = number,
         cpu_count = number,
         memory_size_gb = number,

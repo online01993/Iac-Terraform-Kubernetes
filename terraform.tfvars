@@ -26,6 +26,7 @@ global_xen_infra_settings = {
   }
   "master_vm_request"    = {
     "vm_settings" = {
+      "name_label_prefix" = "deb11-k8s-master",
       "count" = 3,
       "cpu_count" = 2,
       "memory_size_gb" = 2 * 1024 * 1024 * 1024, # GB to B,
@@ -53,6 +54,7 @@ global_xen_infra_settings = {
   }  
   "worker_vm_request"    = {
     "vm_settings" = {
+      "name_label_prefix" = "deb11-k8s-worker",
       "count" = 2,
       "cpu_count" = 4,
       "memory_size_gb" = 8 * 1024 * 1024 * 1024, # GB to B,
