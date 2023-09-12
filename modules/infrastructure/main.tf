@@ -34,7 +34,7 @@ data "xenorchestra_template" "vm" {
   name_label = var.xen_infra_settings.xen_servers_settings.xen_vm_template_name
 }
 resource "random_uuid" "vm_master_id" {
-  for_each = [ for i in range(0,3) : i ]
+  for_each = tolist([ for i in range(0,3) : i ])
 }
 resource "random_uuid" "vm_id" {
   for_each = range(0, var.xen_infra_settings.worker_vm_request.vm_settings.count - 1)
