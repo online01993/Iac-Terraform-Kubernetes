@@ -221,13 +221,13 @@ resource "xenorchestra_vm" "vm" {
   for_each = { 
     for i in toset([ 
       for index, i in range(0,var.xen_infra_settings.worker_vm_request.vm_settings.count) : {
-        "id" = index, "value" = i
+        "id" = index
       } 
     ]) : i.id => i 
   }
   name_label           = "deb11-k8s-worker-${each.key}-${random_uuid.vm_id[each.key].result}.${var.xen_infra_settings.dns_request.dns_sub_zone}.${substr(lower(var.xen_infra_settings.dns_request.dns_zone), 0, length(var.xen_infra_settings.dns_request.dns_zone) - 1)}"
   cloud_config         = xenorchestra_cloud_config.bar_vm[each.key].template
-  cloud_network_config = xenorchestra_cloud_config.cloud_network_config_workers[each.key].template
+  cloud_network_config = xenorchestra_cloud_config.cloud_network_config_workers[each.value.id].template
   template             = data.xenorchestra_template.vm.id
   auto_poweron         = true
   network {
