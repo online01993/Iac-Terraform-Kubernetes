@@ -106,7 +106,7 @@ resource "xenorchestra_cloud_config" "bar_vm" {
 resource "xenorchestra_cloud_config" "cloud_network_config_workers" {
   for_each = { 
     for i in toset([ 
-      for index, i in range(0,var.xen_infra_settings.worker_vm_request.vm_settings.count - 1) : {
+      for index, i in range(0,var.xen_infra_settings.worker_vm_request.vm_settings.count) : {
         "id" = index, "value" = i
       } 
     ]) : i.id => i 
