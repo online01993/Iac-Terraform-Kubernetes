@@ -34,16 +34,34 @@ data "xenorchestra_template" "vm" {
   name_label = var.xen_infra_settings.xen_servers_settings.xen_vm_template_name
 }
 resource "random_uuid" "vm_master_id" {
-  for_each = { for i in toset([ for index, i in range(0,3) : {"id" = index, "value" = i} ]) : i.id => i }
+  for_each = { 
+    for i in toset([ 
+      for index, i in range(0,var.xen_infra_settings.master_vm_request.vm_settings.count - 1) : {
+        "id" = index, "value" = i
+      } 
+    ]) : i.id => i 
+  }
 }
 resource "random_uuid" "vm_id" {
-  for_each = range(0, var.xen_infra_settings.worker_vm_request.vm_settings.count - 1)
+  for_each = { 
+    for i in toset([ 
+      for index, i in range(0,var.xen_infra_settings.worker_vm_request.vm_settings.count - 1) : {
+        "id" = index, "value" = i
+      } 
+    ]) : i.id => i 
+  }
 }
 resource "xenorchestra_cloud_config" "bar_vm_master" {
   depends_on = [
     tls_private_key.terrafrom_generated_private_key
   ]
-  for_each = range(0, var.xen_infra_settings.master_vm_request.vm_settings.count - 1)
+  for_each = { 
+    for i in toset([ 
+      for index, i in range(0,var.xen_infra_settings.master_vm_request.vm_settings.count - 1) : {
+        "id" = index, "value" = i
+      } 
+    ]) : i.id => i 
+  }
   name  = "debian-base-config-master-${each.key}"
   template = templatefile("${path.module}/cloud_config.tftpl", {
     hostname       = "deb11-k8s-master-${each.key}-${random_uuid.vm_master_id[each.key].result}.${lower(var.xen_infra_settings.dns_request.dns_sub_zone)}.${substr(lower(var.xen_infra_settings.dns_request.dns_zone), 0, length(var.xen_infra_settings.dns_request.dns_zone) - 1)}"
@@ -51,7 +69,13 @@ resource "xenorchestra_cloud_config" "bar_vm_master" {
   })
 }
 resource "xenorchestra_cloud_config" "cloud_network_config_masters" {
-  for_each = range(0, var.xen_infra_settings.master_vm_request.vm_settings.count - 1)
+  for_each = { 
+    for i in toset([ 
+      for index, i in range(0,var.xen_infra_settings.master_vm_request.vm_settings.count - 1) : {
+        "id" = index, "value" = i
+      } 
+    ]) : i.id => i 
+  }
   name  = "debian-network-base-config-master-${each.key}"
   #template = "cloud_network_dhcp.yaml"
   template = var.xen_infra_settings.master_vm_request.network_settings.node_network_dhcp == false ? templatefile("${path.module}/cloud_network_static.yaml", {
@@ -66,7 +90,13 @@ resource "xenorchestra_cloud_config" "bar_vm" {
   depends_on = [
     tls_private_key.terrafrom_generated_private_key
   ]
-  for_each = range(0, var.xen_infra_settings.worker_vm_request.vm_settings.count - 1)
+  for_each = { 
+    for i in toset([ 
+      for index, i in range(0,var.xen_infra_settings.worker_vm_request.vm_settings.count - 1) : {
+        "id" = index, "value" = i
+      } 
+    ]) : i.id => i 
+  }
   name  = "debian-base-config-node-${each.key}"
   template = templatefile("${path.module}/cloud_config.tftpl", {
     hostname       = "deb11-k8s-worker-${each.key}-${random_uuid.vm_id[each.key].result}.${lower(var.xen_infra_settings.dns_request.dns_sub_zone)}.${substr(lower(var.xen_infra_settings.dns_request.dns_zone), 0, length(var.xen_infra_settings.dns_request.dns_zone) - 1)}"
@@ -74,7 +104,13 @@ resource "xenorchestra_cloud_config" "bar_vm" {
   })
 }
 resource "xenorchestra_cloud_config" "cloud_network_config_workers" {
-  for_each = range(0, var.xen_infra_settings.worker_vm_request.vm_settings.count - 1)
+  for_each = { 
+    for i in toset([ 
+      for index, i in range(0,var.xen_infra_settings.worker_vm_request.vm_settings.count - 1) : {
+        "id" = index, "value" = i
+      } 
+    ]) : i.id => i 
+  }
   name  = "debian-network-base-config-node-${each.key}"
   #template = "cloud_network_dhcp.yaml"
   template = var.xen_infra_settings.worker_vm_request.network_settings.node_network_dhcp == false ? templatefile("${path.module}/cloud_network_static.yaml", {
@@ -148,7 +184,13 @@ resource "xenorchestra_cloud_config" "cloud_network_config_workers" {
   #]
 } */
 resource "xenorchestra_vm" "vm_master" {
-  for_each = range(0, var.xen_infra_settings.master_vm_request.vm_settings.count - 1)
+  for_each = { 
+    for i in toset([ 
+      for index, i in range(0,var.xen_infra_settings.master_vm_request.vm_settings.count - 1) : {
+        "id" = index, "value" = i
+      } 
+    ]) : i.id => i 
+  }
   name_label           = "deb11-k8s-master-${each.key}-${random_uuid.vm_master_id[each.key].result}.${var.xen_infra_settings.dns_request.dns_sub_zone}.${substr(lower(var.xen_infra_settings.dns_request.dns_zone), 0, length(var.xen_infra_settings.dns_request.dns_zone) - 1)}"
   cloud_config         = xenorchestra_cloud_config.bar_vm_master[each.key].template
   cloud_network_config = xenorchestra_cloud_config.cloud_network_config_masters[each.key].template
@@ -176,7 +218,13 @@ resource "xenorchestra_vm" "vm_master" {
   }
 }
 resource "xenorchestra_vm" "vm" {
-  for_each = range(0, var.xen_infra_settings.worker_vm_request.vm_settings.count - 1)
+  for_each = { 
+    for i in toset([ 
+      for index, i in range(0,var.xen_infra_settings.worker_vm_request.vm_settings.count - 1) : {
+        "id" = index, "value" = i
+      } 
+    ]) : i.id => i 
+  }
   name_label           = "deb11-k8s-worker-${each.key}-${random_uuid.vm_id[each.key].result}.${var.xen_infra_settings.dns_request.dns_sub_zone}.${substr(lower(var.xen_infra_settings.dns_request.dns_zone), 0, length(var.xen_infra_settings.dns_request.dns_zone) - 1)}"
   cloud_config         = xenorchestra_cloud_config.bar_vm[each.key].template
   cloud_network_config = xenorchestra_cloud_config.cloud_network_config_workers[each.key].template
