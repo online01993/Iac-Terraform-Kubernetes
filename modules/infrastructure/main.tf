@@ -267,7 +267,7 @@ resource "xenorchestra_vm" "vm" {
       }
   }
   cpus          = var.xen_infra_settings.worker_vm_request.vm_settings.cpu_count
-  memory_max    = var.xen_infra_settings.worker_vm_request.vm_settings.memory_size_gb * 1024 * 1024 * 1024 # GB to B
+  memory_max    = var.xen_infra_settings.worker_vm_request.vm_settings.memory_size_gb
   wait_for_ip   = true
   tags          = concat(var.xen_infra_settings.worker_vm_request.vm_settings.vm_tags, ["ntmax.ca/cloud-os:debian-11-focal", "ntmax.ca/failure-domain:${each.key % length(data.xenorchestra_hosts.all_hosts.hosts)}"])
   affinity_host = data.xenorchestra_hosts.all_hosts.hosts[each.key % length(data.xenorchestra_hosts.all_hosts.hosts)].id
