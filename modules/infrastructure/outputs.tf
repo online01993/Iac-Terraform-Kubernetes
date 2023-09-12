@@ -38,13 +38,13 @@ output "nodes" {
       })
       "nvme"   = ({
         "present" = var.xen_infra_settings.node_storage_request.storage.nvme.count > 0 ? true : false,
-        "hostPath" = var.xen_infra_settings.node_storage_request.storage.nvme.count > 0 ? var.xen_infra_settings.node_storage_request.storage.ssd.hostPath : "",
+        "hostPath" = var.xen_infra_settings.node_storage_request.storage.nvme.count > 0 ? var.xen_infra_settings.node_storage_request.storage.nvme.hostPath : "",
         "volume"  = var.xen_infra_settings.node_storage_request.storage.nvme.count > 0 ? var.xen_infra_settings.node_storage_request.storage.nvme.volume : ""
       })
       "hdd"   = ({
-        "present" = var.xen_infra_settings.node_storage_request.storage.nvme.count > 0 ? true : false,
-        "hostPath" = var.xen_infra_settings.node_storage_request.storage.nvme.count > 0 ? var.xen_infra_settings.node_storage_request.storage.ssd.hostPath : "",
-        "volume"  = var.xen_infra_settings.node_storage_request.storage.nvme.count > 0 ? var.xen_infra_settings.node_storage_request.storage.hdd.volume : ""
+        "present" = var.xen_infra_settings.node_storage_request.storage.hdd.count > 0 ? true : false,
+        "hostPath" = var.xen_infra_settings.node_storage_request.storage.hdd.count > 0 ? var.xen_infra_settings.node_storage_request.storage.hdd.hostPath : "",
+        "volume"  = var.xen_infra_settings.node_storage_request.storage.hdd.count > 0 ? var.xen_infra_settings.node_storage_request.storage.hdd.volume : ""
       })
     })
     }
