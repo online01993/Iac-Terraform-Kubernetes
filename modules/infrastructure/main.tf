@@ -191,6 +191,7 @@ resource "xenorchestra_vm" "vm_master" {
       } 
     ]) : i.id => i 
   }
+  destroyCloudConfigVdiAfterBoot = true
   name_label           = "deb11-k8s-master-${each.value.id}-${random_uuid.vm_master_id[each.value.id].result}.${var.xen_infra_settings.dns_request.dns_sub_zone}.${substr(lower(var.xen_infra_settings.dns_request.dns_zone), 0, length(var.xen_infra_settings.dns_request.dns_zone) - 1)}"
   cloud_config         = xenorchestra_cloud_config.bar_vm_master[each.value.id].template
   cloud_network_config = xenorchestra_cloud_config.cloud_network_config_masters[each.value.id].template
@@ -225,6 +226,7 @@ resource "xenorchestra_vm" "vm" {
       } 
     ]) : i.id => i 
   }
+  destroyCloudConfigVdiAfterBoot = true
   name_label           = "deb11-k8s-worker-${each.value.id}-${random_uuid.vm_id[each.value.id].result}.${var.xen_infra_settings.dns_request.dns_sub_zone}.${substr(lower(var.xen_infra_settings.dns_request.dns_zone), 0, length(var.xen_infra_settings.dns_request.dns_zone) - 1)}"
   cloud_config         = xenorchestra_cloud_config.bar_vm[each.value.id].template
   cloud_network_config = xenorchestra_cloud_config.cloud_network_config_workers[each.value.id].template
