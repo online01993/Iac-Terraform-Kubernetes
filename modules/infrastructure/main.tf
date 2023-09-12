@@ -36,7 +36,7 @@ data "xenorchestra_template" "vm" {
 resource "random_uuid" "vm_master_id" {
   for_each = { 
     for i in toset([ 
-      for index, i in range(0,var.xen_infra_settings.master_vm_request.vm_settings.count - 1) : {
+      for index, i in range(0,var.xen_infra_settings.master_vm_request.vm_settings.count) : {
         "id" = index, "value" = i
       } 
     ]) : i.id => i 
@@ -45,7 +45,7 @@ resource "random_uuid" "vm_master_id" {
 resource "random_uuid" "vm_id" {
   for_each = { 
     for i in toset([ 
-      for index, i in range(0,var.xen_infra_settings.worker_vm_request.vm_settings.count - 1) : {
+      for index, i in range(0,var.xen_infra_settings.worker_vm_request.vm_settings.count) : {
         "id" = index, "value" = i
       } 
     ]) : i.id => i 
@@ -57,7 +57,7 @@ resource "xenorchestra_cloud_config" "bar_vm_master" {
   ]
   for_each = { 
     for i in toset([ 
-      for index, i in range(0,var.xen_infra_settings.master_vm_request.vm_settings.count - 1) : {
+      for index, i in range(0,var.xen_infra_settings.master_vm_request.vm_settings.count) : {
         "id" = index, "value" = i
       } 
     ]) : i.id => i 
@@ -71,7 +71,7 @@ resource "xenorchestra_cloud_config" "bar_vm_master" {
 resource "xenorchestra_cloud_config" "cloud_network_config_masters" {
   for_each = { 
     for i in toset([ 
-      for index, i in range(0,var.xen_infra_settings.master_vm_request.vm_settings.count - 1) : {
+      for index, i in range(0,var.xen_infra_settings.master_vm_request.vm_settings.count) : {
         "id" = index, "value" = i
       } 
     ]) : i.id => i 
@@ -92,7 +92,7 @@ resource "xenorchestra_cloud_config" "bar_vm" {
   ]
   for_each = { 
     for i in toset([ 
-      for index, i in range(0,var.xen_infra_settings.worker_vm_request.vm_settings.count - 1) : {
+      for index, i in range(0,var.xen_infra_settings.worker_vm_request.vm_settings.count) : {
         "id" = index, "value" = i
       } 
     ]) : i.id => i 
@@ -186,7 +186,7 @@ resource "xenorchestra_cloud_config" "cloud_network_config_workers" {
 resource "xenorchestra_vm" "vm_master" {
   for_each = { 
     for i in toset([ 
-      for index, i in range(0,var.xen_infra_settings.master_vm_request.vm_settings.count - 1) : {
+      for index, i in range(0,var.xen_infra_settings.master_vm_request.vm_settings.count) : {
         "id" = index, "value" = i
       } 
     ]) : i.id => i 
@@ -206,7 +206,7 @@ resource "xenorchestra_vm" "vm_master" {
     size       = var.xen_infra_settings.node_storage_request.storage.system.volume
   }
   cpus          = var.xen_infra_settings.master_vm_request.vm_settings.cpu_count
-  memory_max    = var.xen_infra_settings.master_vm_request.vm_settings.memory_size_gb * 1024 * 1024 * 1024 # GB to B
+  memory_max    = var.xen_infra_settings.master_vm_request.vm_settings.memory_size_gb
   wait_for_ip   = true
   tags          = concat(var.xen_infra_settings.master_vm_request.vm_settings.vm_tags, ["ntmax.ca/cloud-os:debian-11-focal", "ntmax.ca/failure-domain:${each.key % length(data.xenorchestra_hosts.all_hosts.hosts)}"])
   affinity_host = data.xenorchestra_hosts.all_hosts.hosts[each.key % length(data.xenorchestra_hosts.all_hosts.hosts)].id
@@ -220,7 +220,7 @@ resource "xenorchestra_vm" "vm_master" {
 resource "xenorchestra_vm" "vm" {
   for_each = { 
     for i in toset([ 
-      for index, i in range(0,var.xen_infra_settings.worker_vm_request.vm_settings.count - 1) : {
+      for index, i in range(0,var.xen_infra_settings.worker_vm_request.vm_settings.count) : {
         "id" = index, "value" = i
       } 
     ]) : i.id => i 
