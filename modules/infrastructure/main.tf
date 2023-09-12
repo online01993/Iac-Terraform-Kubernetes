@@ -37,7 +37,7 @@ resource "random_uuid" "vm_master_id" {
   for_each = { 
     for i in toset([ 
       for index, i in range(0,var.xen_infra_settings.master_vm_request.vm_settings.count) : {
-        "id" = index, "value" = i
+        "id" = index
       } 
     ]) : i.id => i 
   }
@@ -46,7 +46,7 @@ resource "random_uuid" "vm_id" {
   for_each = { 
     for i in toset([ 
       for index, i in range(0,var.xen_infra_settings.worker_vm_request.vm_settings.count) : {
-        "id" = index, "value" = i
+        "id" = index
       } 
     ]) : i.id => i 
   }
@@ -58,7 +58,7 @@ resource "xenorchestra_cloud_config" "bar_vm_master" {
   for_each = { 
     for i in toset([ 
       for index, i in range(0,var.xen_infra_settings.master_vm_request.vm_settings.count) : {
-        "id" = index, "value" = i
+        "id" = index
       } 
     ]) : i.id => i 
   }
@@ -72,7 +72,7 @@ resource "xenorchestra_cloud_config" "cloud_network_config_masters" {
   for_each = { 
     for i in toset([ 
       for index, i in range(0,var.xen_infra_settings.master_vm_request.vm_settings.count) : {
-        "id" = index, "value" = i
+        "id" = index
       } 
     ]) : i.id => i 
   }
@@ -93,7 +93,7 @@ resource "xenorchestra_cloud_config" "bar_vm" {
   for_each = { 
     for i in toset([ 
       for index, i in range(0,var.xen_infra_settings.worker_vm_request.vm_settings.count) : {
-        "id" = index, "value" = i
+        "id" = index
       } 
     ]) : i.id => i 
   }
@@ -107,7 +107,7 @@ resource "xenorchestra_cloud_config" "cloud_network_config_workers" {
   for_each = { 
     for i in toset([ 
       for index, i in range(0,var.xen_infra_settings.worker_vm_request.vm_settings.count) : {
-        "id" = index, "value" = i
+        "id" = index
       } 
     ]) : i.id => i 
   }
@@ -187,7 +187,7 @@ resource "xenorchestra_vm" "vm_master" {
   for_each = { 
     for i in toset([ 
       for index, i in range(0,var.xen_infra_settings.master_vm_request.vm_settings.count) : {
-        "id" = index, "value" = i
+        "id" = index
       } 
     ]) : i.id => i 
   }
