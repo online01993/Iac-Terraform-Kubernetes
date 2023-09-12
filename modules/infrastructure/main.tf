@@ -62,9 +62,9 @@ resource "xenorchestra_cloud_config" "bar_vm_master" {
       } 
     ]) : i.id => i 
   }
-  name  = "debian-base-config-master-${each.key}"
+  name  = "debian-base-config-master-${each.value.id}"
   template = templatefile("${path.module}/cloud_config.tftpl", {
-    hostname       = "deb11-k8s-master-${each.key}-${random_uuid.vm_master_id[each.key].result}.${lower(var.xen_infra_settings.dns_request.dns_sub_zone)}.${substr(lower(var.xen_infra_settings.dns_request.dns_zone), 0, length(var.xen_infra_settings.dns_request.dns_zone) - 1)}"
+    hostname       = "deb11-k8s-master-${each.value.id}-${random_uuid.vm_master_id[each.value.id].result}.${lower(var.xen_infra_settings.dns_request.dns_sub_zone)}.${substr(lower(var.xen_infra_settings.dns_request.dns_zone), 0, length(var.xen_infra_settings.dns_request.dns_zone) - 1)}"
     vm_rsa_ssh_key = "${tls_private_key.terrafrom_generated_private_key.public_key_openssh}"
   })
 }
@@ -76,10 +76,10 @@ resource "xenorchestra_cloud_config" "cloud_network_config_masters" {
       } 
     ]) : i.id => i 
   }
-  name  = "debian-network-base-config-master-${each.key}"
+  name  = "debian-network-base-config-master-${each.value.id}"
   #template = "cloud_network_dhcp.yaml"
   template = var.xen_infra_settings.master_vm_request.network_settings.node_network_dhcp == false ? templatefile("${path.module}/cloud_network_static.yaml", {
-    node_address     = "${var.xen_infra_settings.master_vm_request.network_settings.node_address_mask}${each.key + var.xen_infra_settings.master_vm_request.network_settings.node_address_start_ip}"
+    node_address     = "${var.xen_infra_settings.master_vm_request.network_settings.node_address_mask}${each.value.id + var.xen_infra_settings.master_vm_request.network_settings.node_address_start_ip}"
     node_mask        = "${var.xen_infra_settings.master_vm_request.network_settings.nodes_mask}"
     node_gateway     = "${var.xen_infra_settings.master_vm_request.network_settings.nodes_gateway}"
     node_dns_address = "${var.xen_infra_settings.master_vm_request.network_settings.nodes_dns_address}"
@@ -97,9 +97,9 @@ resource "xenorchestra_cloud_config" "bar_vm" {
       } 
     ]) : i.id => i 
   }
-  name  = "debian-base-config-node-${each.key}"
+  name  = "debian-base-config-node-${each.value.id}"
   template = templatefile("${path.module}/cloud_config.tftpl", {
-    hostname       = "deb11-k8s-worker-${each.key}-${random_uuid.vm_id[each.key].result}.${lower(var.xen_infra_settings.dns_request.dns_sub_zone)}.${substr(lower(var.xen_infra_settings.dns_request.dns_zone), 0, length(var.xen_infra_settings.dns_request.dns_zone) - 1)}"
+    hostname       = "deb11-k8s-worker-${each.value.id}-${random_uuid.vm_id[each.value.id].result}.${lower(var.xen_infra_settings.dns_request.dns_sub_zone)}.${substr(lower(var.xen_infra_settings.dns_request.dns_zone), 0, length(var.xen_infra_settings.dns_request.dns_zone) - 1)}"
     vm_rsa_ssh_key = "${tls_private_key.terrafrom_generated_private_key.public_key_openssh}"
   })
 }
@@ -111,10 +111,10 @@ resource "xenorchestra_cloud_config" "cloud_network_config_workers" {
       } 
     ]) : i.id => i 
   }
-  name  = "debian-network-base-config-node-${each.key}"
+  name  = "debian-network-base-config-node-${each.value.id}"
   #template = "cloud_network_dhcp.yaml"
   template = var.xen_infra_settings.worker_vm_request.network_settings.node_network_dhcp == false ? templatefile("${path.module}/cloud_network_static.yaml", {
-    node_address     = "${var.xen_infra_settings.worker_vm_request.network_settings.node_address_mask}${each.key + var.xen_infra_settings.worker_vm_request.network_settings.node_address_start_ip}"
+    node_address     = "${var.xen_infra_settings.worker_vm_request.network_settings.node_address_mask}${each.value.id + var.xen_infra_settings.worker_vm_request.network_settings.node_address_start_ip}"
     node_mask        = "${var.xen_infra_settings.worker_vm_request.network_settings.nodes_mask}"
     node_gateway     = "${var.xen_infra_settings.worker_vm_request.network_settings.nodes_gateway}"
     node_dns_address = "${var.xen_infra_settings.worker_vm_request.network_settings.nodes_dns_address}"
@@ -191,9 +191,9 @@ resource "xenorchestra_vm" "vm_master" {
       } 
     ]) : i.id => i 
   }
-  name_label           = "deb11-k8s-master-${each.key}-${random_uuid.vm_master_id[each.key].result}.${var.xen_infra_settings.dns_request.dns_sub_zone}.${substr(lower(var.xen_infra_settings.dns_request.dns_zone), 0, length(var.xen_infra_settings.dns_request.dns_zone) - 1)}"
-  cloud_config         = xenorchestra_cloud_config.bar_vm_master[each.key].template
-  cloud_network_config = xenorchestra_cloud_config.cloud_network_config_masters[each.key].template
+  name_label           = "deb11-k8s-master-${each.value.id}-${random_uuid.vm_master_id[each.value.id].result}.${var.xen_infra_settings.dns_request.dns_sub_zone}.${substr(lower(var.xen_infra_settings.dns_request.dns_zone), 0, length(var.xen_infra_settings.dns_request.dns_zone) - 1)}"
+  cloud_config         = xenorchestra_cloud_config.bar_vm_master[each.value.id].template
+  cloud_network_config = xenorchestra_cloud_config.cloud_network_config_masters[each.value.id].template
   template             = data.xenorchestra_template.vm.id
   auto_poweron         = true
   network {
@@ -201,15 +201,15 @@ resource "xenorchestra_vm" "vm_master" {
   }
   #System disk
   disk {
-    sr_id      = var.xen_infra_settings.node_storage_request.storage.system.sr_ids[each.key % length(var.xen_infra_settings.node_storage_request.storage.system.sr_ids)]
-    name_label = "deb11-k8s-master-${each.key}-${random_uuid.vm_master_id[each.key].result}.${var.xen_infra_settings.dns_request.dns_sub_zone}.${substr(lower(var.xen_infra_settings.dns_request.dns_zone), 0, length(var.xen_infra_settings.dns_request.dns_zone) - 1)}--system"
+    sr_id      = var.xen_infra_settings.node_storage_request.storage.system.sr_ids[each.value.id % length(var.xen_infra_settings.node_storage_request.storage.system.sr_ids)]
+    name_label = "deb11-k8s-master-${each.value.id}-${random_uuid.vm_master_id[each.value.id].result}.${var.xen_infra_settings.dns_request.dns_sub_zone}.${substr(lower(var.xen_infra_settings.dns_request.dns_zone), 0, length(var.xen_infra_settings.dns_request.dns_zone) - 1)}--system"
     size       = var.xen_infra_settings.node_storage_request.storage.system.volume
   }
   cpus          = var.xen_infra_settings.master_vm_request.vm_settings.cpu_count
   memory_max    = var.xen_infra_settings.master_vm_request.vm_settings.memory_size_gb
   wait_for_ip   = true
-  tags          = concat(var.xen_infra_settings.master_vm_request.vm_settings.vm_tags, ["ntmax.ca/cloud-os:debian-11-focal", "ntmax.ca/failure-domain:${each.key % length(data.xenorchestra_hosts.all_hosts.hosts)}"])
-  affinity_host = data.xenorchestra_hosts.all_hosts.hosts[each.key % length(data.xenorchestra_hosts.all_hosts.hosts)].id
+  tags          = concat(var.xen_infra_settings.master_vm_request.vm_settings.vm_tags, ["ntmax.ca/cloud-os:debian-11-focal", "ntmax.ca/failure-domain:${each.value.id % length(data.xenorchestra_hosts.all_hosts.hosts)}"])
+  affinity_host = data.xenorchestra_hosts.all_hosts.hosts[each.value.id % length(data.xenorchestra_hosts.all_hosts.hosts)].id
   lifecycle {
     ignore_changes = [disk, affinity_host, template]
   }
@@ -225,8 +225,8 @@ resource "xenorchestra_vm" "vm" {
       } 
     ]) : i.id => i 
   }
-  name_label           = "deb11-k8s-worker-${each.key}-${random_uuid.vm_id[each.key].result}.${var.xen_infra_settings.dns_request.dns_sub_zone}.${substr(lower(var.xen_infra_settings.dns_request.dns_zone), 0, length(var.xen_infra_settings.dns_request.dns_zone) - 1)}"
-  cloud_config         = xenorchestra_cloud_config.bar_vm[each.key].template
+  name_label           = "deb11-k8s-worker-${each.value.id}-${random_uuid.vm_id[each.value.id].result}.${var.xen_infra_settings.dns_request.dns_sub_zone}.${substr(lower(var.xen_infra_settings.dns_request.dns_zone), 0, length(var.xen_infra_settings.dns_request.dns_zone) - 1)}"
+  cloud_config         = xenorchestra_cloud_config.bar_vm[each.value.id].template
   cloud_network_config = xenorchestra_cloud_config.cloud_network_config_workers[each.value.id].template
   template             = data.xenorchestra_template.vm.id
   auto_poweron         = true
@@ -235,42 +235,42 @@ resource "xenorchestra_vm" "vm" {
   }
   #System disk
   disk {
-    sr_id      = var.xen_infra_settings.node_storage_request.storage.system.sr_ids[each.key % length(var.xen_infra_settings.node_storage_request.storage.system.sr_ids)]
-    name_label = "deb11-k8s-worker-${each.key}-${random_uuid.vm_id[each.key].result}.${var.xen_infra_settings.dns_request.dns_sub_zone}.${substr(lower(var.xen_infra_settings.dns_request.dns_zone), 0, length(var.xen_infra_settings.dns_request.dns_zone) - 1)}--system"
+    sr_id      = var.xen_infra_settings.node_storage_request.storage.system.sr_ids[each.value.id % length(var.xen_infra_settings.node_storage_request.storage.system.sr_ids)]
+    name_label = "deb11-k8s-worker-${each.value.id}-${random_uuid.vm_id[each.value.id].result}.${var.xen_infra_settings.dns_request.dns_sub_zone}.${substr(lower(var.xen_infra_settings.dns_request.dns_zone), 0, length(var.xen_infra_settings.dns_request.dns_zone) - 1)}--system"
     size       = var.xen_infra_settings.node_storage_request.storage.system.volume
   }
   #Dynamic SSD disk
   dynamic "disk" {
-    for_each = each.key <= (var.xen_infra_settings.node_storage_request.storage.ssd.count - 1) ? range(0, 1) : []
+    for_each = each.value.id <= (var.xen_infra_settings.node_storage_request.storage.ssd.count - 1) ? range(0, 1) : []
     content {
-        sr_id = var.xen_infra_settings.node_storage_request.storage.ssd.sr_ids[each.key % length(var.xen_infra_settings.node_storage_request.storage.ssd.sr_ids)]
-        name_label = "deb11-k8s-worker-${each.key}-${random_uuid.vm_id[each.key].result}.${var.xen_infra_settings.dns_request.dns_sub_zone}.${substr(lower(var.xen_infra_settings.dns_request.dns_zone), 0, length(var.xen_infra_settings.dns_request.dns_zone) - 1)}--ssd-data"
+        sr_id = var.xen_infra_settings.node_storage_request.storage.ssd.sr_ids[each.value.id % length(var.xen_infra_settings.node_storage_request.storage.ssd.sr_ids)]
+        name_label = "deb11-k8s-worker-${each.value.id}-${random_uuid.vm_id[each.value.id].result}.${var.xen_infra_settings.dns_request.dns_sub_zone}.${substr(lower(var.xen_infra_settings.dns_request.dns_zone), 0, length(var.xen_infra_settings.dns_request.dns_zone) - 1)}--ssd-data"
         size  = var.xen_infra_settings.node_storage_request.storage.ssd.volume
       }
   }
   #Dynamic NVMe disk
   dynamic "disk" {
-    for_each = each.key <= (var.xen_infra_settings.node_storage_request.storage.nvme.count - 1) ? range(0, 1) : []
+    for_each = each.value.id <= (var.xen_infra_settings.node_storage_request.storage.nvme.count - 1) ? range(0, 1) : []
     content {
-        sr_id = var.xen_infra_settings.node_storage_request.storage.nvme.sr_ids[each.key % length(var.xen_infra_settings.node_storage_request.storage.nvme.sr_ids)]
-        name_label = "deb11-k8s-worker-${each.key}-${random_uuid.vm_id[each.key].result}.${var.xen_infra_settings.dns_request.dns_sub_zone}.${substr(lower(var.xen_infra_settings.dns_request.dns_zone), 0, length(var.xen_infra_settings.dns_request.dns_zone) - 1)}--nvme-data"
+        sr_id = var.xen_infra_settings.node_storage_request.storage.nvme.sr_ids[each.value.id % length(var.xen_infra_settings.node_storage_request.storage.nvme.sr_ids)]
+        name_label = "deb11-k8s-worker-${each.value.id}-${random_uuid.vm_id[each.value.id].result}.${var.xen_infra_settings.dns_request.dns_sub_zone}.${substr(lower(var.xen_infra_settings.dns_request.dns_zone), 0, length(var.xen_infra_settings.dns_request.dns_zone) - 1)}--nvme-data"
         size  = var.xen_infra_settings.node_storage_request.storage.nvme.volume
       }
   }
  #Dynamic HDD disk
   dynamic "disk" {
-    for_each = each.key <= (var.xen_infra_settings.node_storage_request.storage.hdd.count - 1) ? range(0, 1) : []
+    for_each = each.value.id <= (var.xen_infra_settings.node_storage_request.storage.hdd.count - 1) ? range(0, 1) : []
     content {
-        sr_id = var.xen_infra_settings.node_storage_request.storage.hdd.sr_ids[each.key % length(var.xen_infra_settings.node_storage_request.storage.hdd.sr_ids)]
-        name_label = "deb11-k8s-worker-${each.key}-${random_uuid.vm_id[each.key].result}.${var.xen_infra_settings.dns_request.dns_sub_zone}.${substr(lower(var.xen_infra_settings.dns_request.dns_zone), 0, length(var.xen_infra_settings.dns_request.dns_zone) - 1)}--hdd-data"
+        sr_id = var.xen_infra_settings.node_storage_request.storage.hdd.sr_ids[each.value.id % length(var.xen_infra_settings.node_storage_request.storage.hdd.sr_ids)]
+        name_label = "deb11-k8s-worker-${each.value.id}-${random_uuid.vm_id[each.value.id].result}.${var.xen_infra_settings.dns_request.dns_sub_zone}.${substr(lower(var.xen_infra_settings.dns_request.dns_zone), 0, length(var.xen_infra_settings.dns_request.dns_zone) - 1)}--hdd-data"
         size  = var.xen_infra_settings.node_storage_request.storage.hdd.volume
       }
   }
   cpus          = var.xen_infra_settings.worker_vm_request.vm_settings.cpu_count
   memory_max    = var.xen_infra_settings.worker_vm_request.vm_settings.memory_size_gb
   wait_for_ip   = true
-  tags          = concat(var.xen_infra_settings.worker_vm_request.vm_settings.vm_tags, ["ntmax.ca/cloud-os:debian-11-focal", "ntmax.ca/failure-domain:${each.key % length(data.xenorchestra_hosts.all_hosts.hosts)}"])
-  affinity_host = data.xenorchestra_hosts.all_hosts.hosts[each.key % length(data.xenorchestra_hosts.all_hosts.hosts)].id
+  tags          = concat(var.xen_infra_settings.worker_vm_request.vm_settings.vm_tags, ["ntmax.ca/cloud-os:debian-11-focal", "ntmax.ca/failure-domain:${each.value.id % length(data.xenorchestra_hosts.all_hosts.hosts)}"])
+  affinity_host = data.xenorchestra_hosts.all_hosts.hosts[each.value.id % length(data.xenorchestra_hosts.all_hosts.hosts)].id
   lifecycle {
     ignore_changes = [disk, affinity_host, template]
   }
