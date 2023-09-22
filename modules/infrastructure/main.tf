@@ -5,16 +5,16 @@ resource "tls_private_key" "terrafrom_generated_private_key" {
   provisioner "local-exec" {
     command = <<EOF
       mkdir -p .ssh-robot-access/
-      echo "${tls_private_key.terrafrom_generated_private_key.private_key_openssh}" > .ssh-robot-access/robot_id_rsa.key
-      echo "${tls_private_key.terrafrom_generated_private_key.public_key_openssh}" > .ssh-robot-access/robot_id_rsa.pub
-      chmod 400 .ssh-robot-access/robot_id_rsa.key
-      chmod 400 .ssh-robot-access/robot_id_rsa.pub
+      echo "${tls_private_key.terrafrom_generated_private_key.private_key_openssh}" > ${path.module}/scripts/.ssh-robot-access/robot_id_rsa.key
+      echo "${tls_private_key.terrafrom_generated_private_key.public_key_openssh}" > ${path.module}/scripts/.ssh-robot-access/robot_id_rsa.pub
+      chmod 400 ${path.module}/scripts/.ssh-robot-access/robot_id_rsa.key
+      chmod 400 ${path.module}/scripts/.ssh-robot-access/robot_id_rsa.pub
     EOF
   }
   provisioner "local-exec" {
     when    = destroy
     command = <<EOF
-      rm -rvf .ssh-robot-access/
+      rm -rvf ${path.module}/scripts/.ssh-robot-access/
     EOF
   }
 }
@@ -63,7 +63,7 @@ resource "xenorchestra_cloud_config" "bar_vm_master" {
     ]) : i.id => i 
   }
   name  = "${var.xen_infra_settings.master_vm_request.vm_settings.name_label_prefix}-cloud_config-${each.value.id}"
-  template = templatefile("${path.module}/cloud_config.tftpl", {
+  template = templatefile("${path.module}/scripts/cloud_config.tftpl", {
     hostname       = "${var.xen_infra_settings.master_vm_request.vm_settings.name_label_prefix}-${each.value.id}-${random_uuid.vm_master_id[each.value.id].result}.${lower(var.xen_infra_settings.dns_request.dns_sub_zone)}.${substr(lower(var.xen_infra_settings.dns_request.dns_zone), 0, length(var.xen_infra_settings.dns_request.dns_zone) - 1)}"
     vm_rsa_ssh_key = "${tls_private_key.terrafrom_generated_private_key.public_key_openssh}"
   })
@@ -77,13 +77,13 @@ resource "xenorchestra_cloud_config" "cloud_network_config_masters" {
     ]) : i.id => i 
   }
   name  = "${var.xen_infra_settings.master_vm_request.vm_settings.name_label_prefix}-cloud_config_network-${each.value.id}"
-  template = var.xen_infra_settings.master_vm_request.network_settings.node_network_dhcp == false ? templatefile("${path.module}/cloud_network_static.yaml", {
+  template = var.xen_infra_settings.master_vm_request.network_settings.node_network_dhcp == false ? templatefile("${path.module}/scripts/cloud_network_static.yaml", {
     node_address     = "${var.xen_infra_settings.master_vm_request.network_settings.node_address_mask}${each.value.id + var.xen_infra_settings.master_vm_request.network_settings.node_address_start_ip}"
     node_mask        = "${var.xen_infra_settings.master_vm_request.network_settings.nodes_mask}"
     node_gateway     = "${var.xen_infra_settings.master_vm_request.network_settings.nodes_gateway}"
     node_dns_address = "${var.xen_infra_settings.master_vm_request.network_settings.nodes_dns_address}"
     node_dns_search  = "${substr(lower(var.xen_infra_settings.dns_request.dns_zone), 0, length(var.xen_infra_settings.dns_request.dns_zone) - 1)}"
-  }) : templatefile("${path.module}/cloud_network_dhcp.yaml", {})
+  }) : templatefile("${path.module}/scripts/cloud_network_dhcp.yaml", {})
 }
 resource "xenorchestra_cloud_config" "bar_vm" {
   depends_on = [
@@ -97,7 +97,7 @@ resource "xenorchestra_cloud_config" "bar_vm" {
     ]) : i.id => i 
   }
   name  = "${var.xen_infra_settings.worker_vm_request.vm_settings.name_label_prefix}-cloud_config-${each.value.id}"
-  template = templatefile("${path.module}/cloud_config.tftpl", {
+  template = templatefile("${path.module}/scripts/cloud_config.tftpl", {
     hostname       = "${var.xen_infra_settings.worker_vm_request.vm_settings.name_label_prefix}-${each.value.id}-${random_uuid.vm_id[each.value.id].result}.${lower(var.xen_infra_settings.dns_request.dns_sub_zone)}.${substr(lower(var.xen_infra_settings.dns_request.dns_zone), 0, length(var.xen_infra_settings.dns_request.dns_zone) - 1)}"
     vm_rsa_ssh_key = "${tls_private_key.terrafrom_generated_private_key.public_key_openssh}"
   })
@@ -111,13 +111,13 @@ resource "xenorchestra_cloud_config" "cloud_network_config_workers" {
     ]) : i.id => i 
   }
   name  = "${var.xen_infra_settings.worker_vm_request.vm_settings.name_label_prefix}-cloud_config_network-${each.value.id}"
-  template = var.xen_infra_settings.worker_vm_request.network_settings.node_network_dhcp == false ? templatefile("${path.module}/cloud_network_static.yaml", {
+  template = var.xen_infra_settings.worker_vm_request.network_settings.node_network_dhcp == false ? templatefile("${path.module}/scripts/cloud_network_static.yaml", {
     node_address     = "${var.xen_infra_settings.worker_vm_request.network_settings.node_address_mask}${each.value.id + var.xen_infra_settings.worker_vm_request.network_settings.node_address_start_ip}"
     node_mask        = "${var.xen_infra_settings.worker_vm_request.network_settings.nodes_mask}"
     node_gateway     = "${var.xen_infra_settings.worker_vm_request.network_settings.nodes_gateway}"
     node_dns_address = "${var.xen_infra_settings.worker_vm_request.network_settings.nodes_dns_address}"
     node_dns_search  = "${substr(lower(var.xen_infra_settings.dns_request.dns_zone), 0, length(var.xen_infra_settings.dns_request.dns_zone) - 1)}"
-  }) : templatefile("${path.module}/cloud_network_dhcp.yaml", {})
+  }) : templatefile("${path.module}/scripts/cloud_network_dhcp.yaml", {})
 }
 resource "xenorchestra_vm" "vm_master" {
   for_each = { 
@@ -228,30 +228,33 @@ resource "terraform_data" "get_ssd_device_path_workers" {
   }
   provisioner "local-exec" {
     command = <<EOF
-      echo "${tls_private_key.terrafrom_generated_private_key.private_key_openssh}" > ./.robot_id_rsa_worker_${each.value.id}.key
-      chmod 600 ./.robot_id_rsa_worker_${each.value.id}.key
-      ssh -o StrictHostKeyChecking=no -i ./.robot_id_rsa_worker_${each.value.id}.key -o ConnectTimeout=2 robot@${each.value.ipv4_addresses[0]} '(sleep 2; sudo reboot)&'; sleep 5      
-      until ssh -o StrictHostKeyChecking=no -i ./.robot_id_rsa_worker_${each.value.id}.key -o ConnectTimeout=2 robot@${each.value.ipv4_addresses[0]} true 2> /dev/null
+      echo "${tls_private_key.terrafrom_generated_private_key.private_key_openssh}" > ${path.module}/scripts/.robot_id_rsa_worker_${each.value.id}.key
+      chmod 600 ${path.module}/scripts/.robot_id_rsa_worker_${each.value.id}.key
+      ssh -o StrictHostKeyChecking=no -i ${path.module}/scripts/.robot_id_rsa_worker_${each.value.id}.key -o ConnectTimeout=2 robot@${each.value.ipv4_addresses[0]} '(sleep 2; sudo reboot)&'; sleep 5      
+      until ssh -o StrictHostKeyChecking=no -i ${path.module}/scripts/.robot_id_rsa_worker_${each.value.id}.key -o ConnectTimeout=2 robot@${each.value.ipv4_addresses[0]} true 2> /dev/null
       do
         echo "Waiting for OS to reboot and become available..."
         sleep 3
       done
-      rm -rvf ./.robot_id_rsa_worker_${each.value.id}.key
+      rm -rvf ${path.module}/scripts/.robot_id_rsa_worker_${each.value.id}.key
     EOF
   }
   #SSD
   provisioner "local-exec" {
     command = <<EOF
-      rm -rvf ${path.module}/scripts/k8s-kubeadm_init_02_config_file.conf
-      echo "${tls_private_key.terrafrom_generated_private_key.private_key_openssh}" > ./.robot_id_rsa_worker_${each.value.id}.key
-      chmod 600 ./.robot_id_rsa_worker_${each.value.id}.key
-      ssh robot@${each.value.ipv4_addresses[0]} -o StrictHostKeyChecking=no -i ./.robot_id_rsa_worker_${each.value.id}.key "sudo fdisk -l | grep ${var.xen_infra_settings.node_storage_request.storage.ssd.volume} | awk '{print $2}' | tr -d" > ${path.module}/scripts/get_ssd_device_path_worker_${each.value.id}
-      rm -rvf ./.robot_id_rsa_worker_${each.value.id}.key
+      rm -rvf ${path.module}/scripts/get_ssd_device_path_worker_${each.value.id}
+      echo "${tls_private_key.terrafrom_generated_private_key.private_key_openssh}" > ${path.module}/scripts/.robot_id_rsa_worker_${each.value.id}.key
+      chmod 600 ${path.module}/scripts/.robot_id_rsa_worker_${each.value.id}.key
+      ssh robot@${each.value.ipv4_addresses[0]} -o StrictHostKeyChecking=no -i ${path.module}/scripts/.robot_id_rsa_worker_${each.value.id}.key "sudo fdisk -l | grep ${var.xen_infra_settings.node_storage_request.storage.ssd.volume} | awk '{print $2}' | tr -d" > ${path.module}/scripts/get_ssd_device_path_worker_${each.value.id}
+      rm -rvf ${path.module}/scripts/.robot_id_rsa_worker_${each.value.id}.key
     EOF
   }
 }
 data "local_file" "disk_ssd_path_workers" {
   depends_on = [
+    terraform_data.get_ssd_device_path_workers
+  ]
+  triggers_replace = [
     terraform_data.get_ssd_device_path_workers
   ]
   for_each = { for i in xenorchestra_vm.vm : i.id => i }
