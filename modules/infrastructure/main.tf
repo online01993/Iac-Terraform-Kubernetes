@@ -254,9 +254,11 @@ data "local_file" "disk_ssd_path_workers" {
   depends_on = [
     terraform_data.get_ssd_device_path_workers
   ]
-  triggers_replace = [
-    terraform_data.get_ssd_device_path_workers
-  ]
+  lifecycle {
+    replace_triggered_by = [
+      terraform_data.get_ssd_device_path_workers
+    ]
+  }
   for_each = { for i in xenorchestra_vm.vm : i.id => i }
   filename = "${path.module}/scripts/get_ssd_device_path_worker_${each.value.id}"
 }
