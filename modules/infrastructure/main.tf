@@ -219,7 +219,13 @@ resource "terraform_data" "get_ssd_device_path_workers" {
   depends_on = [
     xenorchestra_vm.vm
   ]
-  for_each = { for i in xenorchestra_vm.vm : i.id => i }
+  for_each = { 
+    for i in toset([ 
+      for index, i in range(0,var.xen_infra_settings.worker_vm_request.vm_settings.count) : {
+        "id" = index
+      } 
+    ]) : i.id => i 
+  }
   connection {
     type        = "ssh"
     user        = "robot"
