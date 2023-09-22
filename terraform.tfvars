@@ -55,7 +55,7 @@ global_xen_infra_settings = {
   "worker_vm_request"    = {
     "vm_settings" = {
       "name_label_prefix" = "deb11-k8s-worker",
-      "count" = 5,
+      "count" = 3,
       "cpu_count" = 4,
       "memory_size_gb" = 8 * 1024 * 1024 * 1024, # GB to B,
       "labels" = {
@@ -100,13 +100,13 @@ global_xen_infra_settings = {
         "hostPath" = "/dev/xvdc",
         "volume"  = 8 * 1024 * 1024 * 1024, # GB to B
         "sr_ids"  = ["0714cdc3-2eea-f339-f10c-4777c715400a"],
-        "count" = 2
+        "count" = 1
       }
       "hdd"   = {
         "hostPath" = "/dev/xvdd",
         "volume"  = 8 * 1024 * 1024 * 1024, # GB to B
         "sr_ids"  = ["0714cdc3-2eea-f339-f10c-4777c715400a"],
-        "count" = 4
+        "count" = 3
       }
     }
   }
