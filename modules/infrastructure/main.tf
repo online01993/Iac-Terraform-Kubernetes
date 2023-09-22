@@ -214,3 +214,46 @@ resource "xenorchestra_vm" "vm" {
     create = "20m"
   }
 }
+#####
+resource "terraform_data" "get_ssd_device_path_workers" {
+  depends_on = [
+    xenorchestra_vm.vm
+  ]
+  for_each = { for i in xenorchestra_vm.vm : i.id => i }
+  connection {
+    type        = "ssh"
+    user        = "robot"
+    private_key = tls_private_key.terrafrom_generated_private_key.private_key_openssh
+    host        = each.value.ipv4_addresses[0]
+  }
+  provisioner "local-exec" {
+    command = <<EOF
+      echo "${tls_private_key.terrafrom_generated_private_key.private_key_openssh}" > ./.robot_id_rsa_worker_${each.value.id}.key
+      chmod 600 ./.robot_id_rsa_worker_${each.value.id}.key
+      ssh -o StrictHostKeyChecking=no -i ./.robot_id_rsa_worker_${each.value.id}.key -o ConnectTimeout=2 robot@${each.value.ipv4_addresses[0]} '(sleep 2; sudo reboot)&'; sleep 5      
+      until ssh -o StrictHostKeyChecking=no -i ./.robot_id_rsa_worker_${each.value.id}.key -o ConnectTimeout=2 robot@${each.value.ipv4_addresses[0]} true 2> /dev/null
+      do
+        echo "Waiting for OS to reboot and become available..."
+        sleep 3
+      done
+      rm -rvf ./.robot_id_rsa_worker_${each.value.id}.key
+    EOF
+  }
+  #SSD
+  provisioner "local-exec" {
+    command = <<EOF
+      rm -rvf ${path.module}/scripts/k8s-kubeadm_init_02_config_file.conf
+      echo "${tls_private_key.terrafrom_generated_private_key.private_key_openssh}" > ./.robot_id_rsa_worker_${each.value.id}.key
+      chmod 600 ./.robot_id_rsa_worker_${each.value.id}.key
+      ssh robot@${each.value.ipv4_addresses[0]} -o StrictHostKeyChecking=no -i ./.robot_id_rsa_worker_${each.value.id}.key "sudo fdisk -l | grep ${var.xen_infra_settings.node_storage_request.storage.ssd.volume} | awk '{print $2}' | tr -d" > ${path.module}/scripts/get_ssd_device_path_worker_${each.value.id}
+      rm -rvf ./.robot_id_rsa_worker_${each.value.id}.key
+    EOF
+  }
+}
+data "local_file" "disk_ssd_path_workers" {
+  depends_on = [
+    terraform_data.get_ssd_device_path_workers
+  ]
+  for_each = { for i in xenorchestra_vm.vm : i.id => i }
+  filename = "${path.module}/scripts/get_ssd_device_path_worker_${each.value.id}"
+}
