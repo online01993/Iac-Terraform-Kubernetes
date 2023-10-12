@@ -36,7 +36,7 @@ output "nodes" {
         #"present" = var.xen_infra_settings.node_storage_request.storage.ssd.count > 0 ? true : false,
         "hostPath" = fileexists("${path.module}/scripts/get_ssd_device_path_worker_${i}") ? file("${path.module}/scripts/get_ssd_device_path_worker_${i}") : "",
         #"hostPath" = var.xen_infra_settings.node_storage_request.storage.ssd.count > 0 ? var.xen_infra_settings.node_storage_request.storage.ssd.hostPath : "",
-        "volume"  = fileexists("${path.module}/scripts/get_ssd_device_path_worker_${i}") ? var.xen_infra_settings.node_storage_request.storage.ssd.volume : ""
+        "volume"  = fileexists("${path.module}/scripts/get_ssd_device_path_worker_${i}") ? var.xen_infra_settings.node_storage_request.storage.ssd.volume : 0
         #"volume"  = var.xen_infra_settings.node_storage_request.storage.ssd.count > 0 ? var.xen_infra_settings.node_storage_request.storage.ssd.volume : ""
       })
       "nvme"   = ({
@@ -44,7 +44,7 @@ output "nodes" {
         #"present" = var.xen_infra_settings.node_storage_request.storage.nvme.count > 0 ? true : false,
         "hostPath" = fileexists("${path.module}/scripts/get_nvme_device_path_worker_${i}") ? file("${path.module}/scripts/get_nvme_device_path_worker_${i}") : "",
         #"hostPath" = var.xen_infra_settings.node_storage_request.storage.nvme.count > 0 ? var.xen_infra_settings.node_storage_request.storage.nvme.hostPath : "",
-        "volume"  = fileexists("${path.module}/scripts/get_nvme_device_path_worker_${i}") ? var.xen_infra_settings.node_storage_request.storage.nvme.volume : ""
+        "volume"  = fileexists("${path.module}/scripts/get_nvme_device_path_worker_${i}") ? var.xen_infra_settings.node_storage_request.storage.nvme.volume : 0
         #"volume"  = var.xen_infra_settings.node_storage_request.storage.nvme.count > 0 ? var.xen_infra_settings.node_storage_request.storage.nvme.volume : ""
       })
       "hdd"   = ({
@@ -52,7 +52,7 @@ output "nodes" {
         #"present" = var.xen_infra_settings.node_storage_request.storage.hdd.count > 0 ? true : false,
         "hostPath" = fileexists("${path.module}/scripts/get_hdd_device_path_worker_${i}") ? file("${path.module}/scripts/get_hdd_device_path_worker_${i}") : "",
         #"hostPath" = var.xen_infra_settings.node_storage_request.storage.hdd.count > 0 ? var.xen_infra_settings.node_storage_request.storage.hdd.hostPath : "",
-        "volume"  = fileexists("${path.module}/scripts/get_hdd_device_path_worker_${i}") ? var.xen_infra_settings.node_storage_request.storage.hdd.volume : ""
+        "volume"  = fileexists("${path.module}/scripts/get_hdd_device_path_worker_${i}") ? var.xen_infra_settings.node_storage_request.storage.hdd.volume : 0
         #"volume"  = var.xen_infra_settings.node_storage_request.storage.hdd.count > 0 ? var.xen_infra_settings.node_storage_request.storage.hdd.volume : ""
       })
     })
