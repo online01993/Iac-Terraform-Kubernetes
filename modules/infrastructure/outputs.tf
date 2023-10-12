@@ -33,18 +33,18 @@ output "nodes" {
       "storage" = ({
       "ssd"   = ({
         "present" = data.local_file.disk_ssd_path_workers[i].content != "" ? true : false,
-        "hostPath" = fileexists("${path.module}/scripts/get_ssd_device_path_worker_${i}") ? file("${path.module}/scripts/get_ssd_device_path_worker_${i}") : "",
-        "volume"  = fileexists("${path.module}/scripts/get_ssd_device_path_worker_${i}") ? var.xen_infra_settings.node_storage_request.storage.ssd.volume : 0
+        "hostPath" = data.local_file.disk_ssd_path_workers[i].content != "" ? data.local_file.disk_ssd_path_workers[i].content : "",
+        "volume"  = data.local_file.disk_ssd_path_workers[i].content != "" ? var.xen_infra_settings.node_storage_request.storage.ssd.volume : 0
       })
       "nvme"   = ({
-        "present" = fileexists("${path.module}/scripts/get_nvme_device_path_worker_${i}") ? true : false,
-        "hostPath" = fileexists("${path.module}/scripts/get_nvme_device_path_worker_${i}") ? file("${path.module}/scripts/get_nvme_device_path_worker_${i}") : "",
-        "volume"  = fileexists("${path.module}/scripts/get_nvme_device_path_worker_${i}") ? var.xen_infra_settings.node_storage_request.storage.nvme.volume : 0
+        "present" = data.local_file.disk_nvme_path_workers[i].content != "" ? true : false,
+        "hostPath" = data.local_file.disk_nvme_path_workers[i].content != "" ? data.local_file.disk_nvme_path_workers[i].content : "",
+        "volume"  = data.local_file.disk_nvme_path_workers[i].content != "" ? var.xen_infra_settings.node_storage_request.storage.nvme.volume : 0
       })
       "hdd"   = ({
-        "present" = fileexists("${path.module}/scripts/get_hdd_device_path_worker_${i}") ? true : false,
-        "hostPath" = fileexists("${path.module}/scripts/get_hdd_device_path_worker_${i}") ? file("${path.module}/scripts/get_hdd_device_path_worker_${i}") : "",
-        "volume"  = fileexists("${path.module}/scripts/get_hdd_device_path_worker_${i}") ? var.xen_infra_settings.node_storage_request.storage.hdd.volume : 0
+        "present" = data.local_file.disk_hdd_path_workers[i].content != "" ? true : false,
+        "hostPath" = data.local_file.disk_hdd_path_workers[i].content != "" ? data.local_file.disk_hdd_path_workers[i].content : "",
+        "volume"  = data.local_file.disk_hdd_path_workers[i].content != "" ? var.xen_infra_settings.node_storage_request.storage.hdd.volume : 0
       })
     })
     }
