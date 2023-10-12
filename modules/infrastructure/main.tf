@@ -309,14 +309,14 @@ resource "terraform_data" "get_device_path_workers" {
       rm -rvf ${path.module}/scripts/.robot_id_rsa_worker_${each.value.id}.key
     EOF
   }
-provisioner "local-exec" {
+/* provisioner "local-exec" {
     when    = destroy
     command = <<EOF
       rm -rvf ${path.module}/scripts/get_ssd_device_path_worker*
       rm -rvf ${path.module}/scripts/get_nvme_device_path_worker*
       rm -rvf ${path.module}/scripts/get_hdd_device_path_worker*
     EOF
-  }  
+  }   */
 }
 data "local_file" "disk_ssd_path_workers" {
   depends_on = [
