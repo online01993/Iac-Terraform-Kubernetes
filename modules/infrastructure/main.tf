@@ -245,7 +245,7 @@ resource "terraform_data" "cloud_init_finish_and_reboot" {
     command = <<EOF
       echo "${tls_private_key.terrafrom_generated_private_key.private_key_openssh}" > ${path.module}/scripts/.robot_id_rsa_worker_${each.value.id}.key
       chmod 600 ${path.module}/scripts/.robot_id_rsa_worker_${each.value.id}.key
-      ssh -o StrictHostKeyChecking=no -i ${path.module}/scripts/.robot_id_rsa_worker_${each.value.id}.key -o ConnectTimeout=2 robot@${xenorchestra_vm.vm[each.value.id].ipv4_addresses[0]} 'sleep 2; sudo reboot&'; sleep 5      
+      ssh -o StrictHostKeyChecking=no -i ${path.module}/scripts/.robot_id_rsa_worker_${each.value.id}.key -o ConnectTimeout=2 robot@${xenorchestra_vm.vm[each.value.id].ipv4_addresses[0]} 'sleep 2; sudo reboot'&; sleep 5      
       until ssh -o StrictHostKeyChecking=no -i ${path.module}/scripts/.robot_id_rsa_worker_${each.value.id}.key -o ConnectTimeout=2 robot@${xenorchestra_vm.vm[each.value.id].ipv4_addresses[0]} true 2> /dev/null
       do
         echo "Waiting for OS to reboot and become available..."
