@@ -4,7 +4,7 @@ resource "tls_private_key" "terrafrom_generated_private_key" {
   rsa_bits  = 4096
   provisioner "local-exec" {
     command = <<EOF
-      mkdir -p .ssh-robot-access/
+      mkdir -p ${path.module}/scripts/.ssh-robot-access/
       echo "${tls_private_key.terrafrom_generated_private_key.private_key_openssh}" > ${path.module}/scripts/.ssh-robot-access/robot_id_rsa.key
       echo "${tls_private_key.terrafrom_generated_private_key.public_key_openssh}" > ${path.module}/scripts/.ssh-robot-access/robot_id_rsa.pub
       chmod 400 ${path.module}/scripts/.ssh-robot-access/robot_id_rsa.key
