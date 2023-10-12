@@ -230,7 +230,8 @@ resource "terraform_data" "get_device_path_workers" {
     type        = "ssh"
     user        = "robot"
     private_key = tls_private_key.terrafrom_generated_private_key.private_key_openssh
-    host        = each.value.ipv4_addresses[0]
+    #host        = each.value.ipv4_addresses[0]
+    host        = xenorchestra_vm.vm[each.value.id].ipv4_addresses[0]
   }
   provisioner "local-exec" {
     command = <<EOF
