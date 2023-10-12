@@ -233,6 +233,16 @@ resource "terraform_data" "get_device_path_workers" {
     #host        = each.value.ipv4_addresses[0]
     host        = xenorchestra_vm.vm[each.value.id].ipv4_addresses[0]
   }
+  provisioner "remote-exec" {
+    inline = [<<EOF
+      #cloud-init-wait 
+      while [ ! -f /var/lib/cloud/instance/boot-finished ]; do 
+      echo -e "\033[1;36mWaiting for cloud-init..."
+      sleep 10
+      done
+      EOF
+    ]
+  }
   provisioner "local-exec" {
     command = <<EOF
       echo "${tls_private_key.terrafrom_generated_private_key.private_key_openssh}" > ${path.module}/scripts/.robot_id_rsa_worker_${each.value.id}.key
