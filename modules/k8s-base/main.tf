@@ -22,8 +22,10 @@ resource "terraform_data" "k8s-base-setup_01_resource_masters" {
     command = <<EOF
       echo "${var.vm_rsa_ssh_key_private}" > ./.robot_id_rsa_master_${each.value.id}.key
       chmod 600 ./.robot_id_rsa_master_${each.value.id}.key
+      echo -e "\033[1;36mSending for reboot..."
       ssh -o StrictHostKeyChecking=no -i ./.robot_id_rsa_master_${each.value.id}.key -o ConnectTimeout=2 robot@${each.value.address} sudo shutdown -r +1
-      sleep 65     
+      echo -e "\033[1;36mWaiting while reboting..."
+      sleep 65
       until ssh -o StrictHostKeyChecking=no -i ./.robot_id_rsa_master_${each.value.id}.key -o ConnectTimeout=2 robot@${each.value.address} true 2> /dev/null
       do
         echo "Waiting for OS to reboot and become available..."

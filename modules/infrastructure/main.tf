@@ -245,7 +245,9 @@ resource "terraform_data" "cloud_init_finish_and_reboot" {
     command = <<EOF
       echo "${tls_private_key.terrafrom_generated_private_key.private_key_openssh}" > ${path.module}/scripts/.robot_id_rsa_worker_${each.value.id}.key
       chmod 600 ${path.module}/scripts/.robot_id_rsa_worker_${each.value.id}.key
+      echo -e "\033[1;36mSending for reboot..."
       ssh -o StrictHostKeyChecking=no -i ${path.module}/scripts/.robot_id_rsa_worker_${each.value.id}.key -o ConnectTimeout=2 robot@${xenorchestra_vm.vm[each.value.id].ipv4_addresses[0]} sudo shutdown -r +1      
+      echo -e "\033[1;36mWaiting while reboting..."
       sleep 65
       until ssh -o StrictHostKeyChecking=no -i ${path.module}/scripts/.robot_id_rsa_worker_${each.value.id}.key -o ConnectTimeout=2 robot@${xenorchestra_vm.vm[each.value.id].ipv4_addresses[0]} true 2> /dev/null
       do
