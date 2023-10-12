@@ -308,7 +308,7 @@ resource "terraform_data" "get_device_path_workers" {
     EOF
   }
 }
-/* data "local_file" "disk_ssd_path_workers" {
+data "local_file" "disk_ssd_path_workers" {
   depends_on = [
     terraform_data.get_device_path_workers
   ]
@@ -346,4 +346,4 @@ data "local_file" "disk_hdd_path_workers" {
     ]) : i.id => i 
   }
   filename = "${path.module}/scripts/get_hdd_device_path_worker_${each.value.id}"
-} */
+}
