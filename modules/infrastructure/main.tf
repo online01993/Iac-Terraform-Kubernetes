@@ -215,7 +215,7 @@ resource "xenorchestra_vm" "vm" {
   }
 }
 #####
-resource "terraform_data" "get_ssd_device_path_workers" {
+resource "terraform_data" "get_device_path_workers" {
   depends_on = [
     xenorchestra_vm.vm
   ]
@@ -255,11 +255,63 @@ resource "terraform_data" "get_ssd_device_path_workers" {
       rm -rvf ${path.module}/scripts/.robot_id_rsa_worker_${each.value.id}.key
     EOF
   }
+  #NVMe
+  provisioner "local-exec" {
+    command = <<EOF
+      rm -rvf ${path.module}/scripts/get_nvme_device_path_worker_${each.value.id}
+      echo "${tls_private_key.terrafrom_generated_private_key.private_key_openssh}" > ${path.module}/scripts/.robot_id_rsa_worker_${each.value.id}.key
+      chmod 600 ${path.module}/scripts/.robot_id_rsa_worker_${each.value.id}.key
+      ssh robot@${each.value.ipv4_addresses[0]} -o StrictHostKeyChecking=no -i ${path.module}/scripts/.robot_id_rsa_worker_${each.value.id}.key "sudo fdisk -l | grep ${var.xen_infra_settings.node_storage_request.storage.nvme.volume} | awk '{print $2}' | tr -d" > ${path.module}/scripts/get_nvme_device_path_worker_${each.value.id}
+      rm -rvf ${path.module}/scripts/.robot_id_rsa_worker_${each.value.id}.key
+    EOF
+  }
+  #HDD
+  provisioner "local-exec" {
+    command = <<EOF
+      rm -rvf ${path.module}/scripts/get_hdd_device_path_worker_${each.value.id}
+      echo "${tls_private_key.terrafrom_generated_private_key.private_key_openssh}" > ${path.module}/scripts/.robot_id_rsa_worker_${each.value.id}.key
+      chmod 600 ${path.module}/scripts/.robot_id_rsa_worker_${each.value.id}.key
+      ssh robot@${each.value.ipv4_addresses[0]} -o StrictHostKeyChecking=no -i ${path.module}/scripts/.robot_id_rsa_worker_${each.value.id}.key "sudo fdisk -l | grep ${var.xen_infra_settings.node_storage_request.storage.hdd.volume} | awk '{print $2}' | tr -d" > ${path.module}/scripts/get_hdd_device_path_worker_${each.value.id}
+      rm -rvf ${path.module}/scripts/.robot_id_rsa_worker_${each.value.id}.key
+    EOF
+  }
 }
 data "local_file" "disk_ssd_path_workers" {
   depends_on = [
-    terraform_data.get_ssd_device_path_workers
+    terraform_data.get_device_path_workers
   ]
-  for_each = { for i in xenorchestra_vm.vm : i.id => i }
+  for_each = { 
+    for i in toset([ 
+      for index, i in range(0,var.xen_infra_settings.worker_vm_request.vm_settings.count) : {
+        "id" = index
+      } 
+    ]) : i.id => i 
+  }
   filename = "${path.module}/scripts/get_ssd_device_path_worker_${each.value.id}"
+}
+data "local_file" "disk_nvme_path_workers" {
+  depends_on = [
+    terraform_data.get_device_path_workers
+  ]
+  for_each = { 
+    for i in toset([ 
+      for index, i in range(0,var.xen_infra_settings.worker_vm_request.vm_settings.count) : {
+        "id" = index
+      } 
+    ]) : i.id => i 
+  }
+  filename = "${path.module}/scripts/get_nvme_device_path_worker_${each.value.id}"
+}
+data "local_file" "disk_hdd_path_workers" {
+  depends_on = [
+    terraform_data.get_device_path_workers
+  ]
+  for_each = { 
+    for i in toset([ 
+      for index, i in range(0,var.xen_infra_settings.worker_vm_request.vm_settings.count) : {
+        "id" = index
+      } 
+    ]) : i.id => i 
+  }
+  filename = "${path.module}/scripts/get_hdd_device_path_worker_${each.value.id}"
 }
