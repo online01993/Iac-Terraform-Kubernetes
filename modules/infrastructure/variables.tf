@@ -45,7 +45,6 @@ variable "xen_infra_settings" {
     node_storage_request = object({
       storage = object({
         system   = object({
-          hostPath = string,
           volume  = number,
           sr_ids  = list(string)
         })
@@ -53,19 +52,16 @@ variable "xen_infra_settings" {
           count = number
         })
         ssd   = object({
-          hostPath = string,
           volume  = number,
           sr_ids  = list(string),
           count = number
         })
         nvme   = object({
-          hostPath = string,
           volume  = number,
           sr_ids  = list(string),
           count = number
         })
         hdd   = object({
-          hostPath = string,
           volume  = number,
           sr_ids  = list(string),
           count = number
@@ -90,5 +86,37 @@ variable "xen_infra_settings" {
     ssh_auth_request = object({
       vm_rsa_ssh_key = string
     })
-  })  
+  })
+  validation {
+    condition = var.xen_infra_settings.master_vm_request.vm_settings.count = 1 || var.xen_infra_settings.master_vm_request.vm_settings.count => 3 
+    error_message = "Master VM count must be 1 or 3 and more for HA"
+  }
+  validation {
+    condition = var.xen_infra_settings.master_vm_request.vm_settings.cpu_count => 2
+    error_message = "Master VM CPU count must be great or equal 2"
+  }
+  validation {
+    condition = var.xen_infra_settings.worker_vm_request.vm_settings.cpu_count => 2
+    error_message = "Worker VM CPU count must be great or equal 2"
+  }
+  validation {
+    condition = var.xen_infra_settings.master_vm_request.vm_settings.memory_size_gb => 2 * 1024 * 1024 * 1024
+    error_message = "Master VM MEM size must be great or equal 2GB"
+  }
+  validation {
+    condition = var.xen_infra_settings.worker_vm_request.vm_settings.memory_size_gb => 2 * 1024 * 1024 * 1024
+    error_message = "Worker VM MEM size must be great or equal 2GB"
+  }
+  validation {
+    condition = var.xen_infra_settings.node_storage_request.storage.ssd.volume != var.xen_infra_settings.node_storage_request.storage.nvme.volume && var.xen_infra_settings.node_storage_request.storage.ssd.volume != var.xen_infra_settings.node_storage_request.storage.hdd.volume
+    error_message = "Volume size ssd must not equal nvme or hdd"
+  }
+  validation {
+    condition = var.xen_infra_settings.node_storage_request.storage.nvme.volume != var.xen_infra_settings.node_storage_request.storage.ssd.volume && var.xen_infra_settings.node_storage_request.storage.nvme.volume != var.xen_infra_settings.node_storage_request.storage.hdd.volume
+    error_message = "Volume size nvme must not equal ssd or hdd"
+  }
+  validation {
+    condition = var.xen_infra_settings.node_storage_request.storage.hdd.volume != var.xen_infra_settings.node_storage_request.storage.ssd.volume && var.xen_infra_settings.node_storage_request.storage.hdd.volume != var.xen_infra_settings.node_storage_request.storage.nvme.volume
+    error_message = "Volume size hdd must not equal ssd or nvme"
+  }      
 }
