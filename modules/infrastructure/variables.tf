@@ -88,7 +88,7 @@ variable "xen_infra_settings" {
     })
   })
   validation {
-    condition = var.xen_infra_settings.master_vm_request.vm_settings.count = 1 || var.xen_infra_settings.master_vm_request.vm_settings.count => 3 
+    condition = var.xen_infra_settings.master_vm_request.vm_settings.count == 1 || var.xen_infra_settings.master_vm_request.vm_settings.count => 3 
     error_message = "Master VM count must be 1 or 3 and more for HA"
   }
   validation {
