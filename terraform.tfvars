@@ -29,7 +29,7 @@ global_xen_infra_settings = {
       "name_label_prefix" = "deb11-k8s-master",
       "count" = 3,
       "cpu_count" = 2,
-      "memory_size_gb" = 1 * 1024 * 1024 * 1024, # GB to B,
+      "memory_size_gb" = 2 * 1024 * 1024 * 1024, # GB to B,
       "labels" = {
         "ntmax.ca/cloud-platform" = "xcp-ng"
         "ntmax.ca/cloud-os"       = "debian-11-focal"
@@ -47,7 +47,7 @@ global_xen_infra_settings = {
       "node_address_mask" = "10.200.0.",
       "node_address_start_ip" = 11,
       "node_network_dhcp" = false,
-      "nodes_mask" = "255.255.255.0",
+      "nodes_mask" = 24,
       "nodes_gateway" = "10.200.0.1",
       "nodes_dns_address" = "10.200.0.1"
     }
@@ -75,7 +75,7 @@ global_xen_infra_settings = {
       "node_address_mask" = "10.200.0.",
       "node_address_start_ip" = 20,
       "node_network_dhcp" = false,
-      "nodes_mask" = "255.255.255.0",
+      "nodes_mask" = 24,
       "nodes_gateway" = "10.200.0.1",
       "nodes_dns_address" = "10.200.0.1"
     }

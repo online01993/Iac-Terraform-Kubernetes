@@ -78,8 +78,10 @@ resource "xenorchestra_cloud_config" "cloud_network_config_masters" {
   }
   name  = "${var.xen_infra_settings.master_vm_request.vm_settings.name_label_prefix}-cloud_config_network-${each.value.id}"
   template = var.xen_infra_settings.master_vm_request.network_settings.node_network_dhcp == false ? templatefile("${path.module}/scripts/cloud_network_static.yaml", {
-    node_address     = "${var.xen_infra_settings.master_vm_request.network_settings.node_address_mask}${each.value.id + var.xen_infra_settings.master_vm_request.network_settings.node_address_start_ip}"
-    node_mask        = "${var.xen_infra_settings.master_vm_request.network_settings.nodes_mask}"
+    #node_address     = "${var.xen_infra_settings.master_vm_request.network_settings.node_address_mask}${each.value.id + var.xen_infra_settings.master_vm_request.network_settings.node_address_start_ip}"
+    node_address     = cidrhost("${var.xen_infra_settings.master_vm_request.network_settings.node_address_mask}/${var.xen_infra_settings.master_vm_request.network_settings.nodes_mask}", each.value.id + var.xen_infra_settings.master_vm_request.network_settings.node_address_start_ip)
+    #node_mask        = "${var.xen_infra_settings.master_vm_request.network_settings.nodes_mask}"
+    node_mask        = cidrnetmask("${var.xen_infra_settings.master_vm_request.network_settings.node_address_mask}/${var.xen_infra_settings.master_vm_request.network_settings.nodes_mask}")
     node_gateway     = "${var.xen_infra_settings.master_vm_request.network_settings.nodes_gateway}"
     node_dns_address = "${var.xen_infra_settings.master_vm_request.network_settings.nodes_dns_address}"
     node_dns_search  = "${substr(lower(var.xen_infra_settings.dns_request.dns_zone), 0, length(var.xen_infra_settings.dns_request.dns_zone) - 1)}"
@@ -112,8 +114,10 @@ resource "xenorchestra_cloud_config" "cloud_network_config_workers" {
   }
   name  = "${var.xen_infra_settings.worker_vm_request.vm_settings.name_label_prefix}-cloud_config_network-${each.value.id}"
   template = var.xen_infra_settings.worker_vm_request.network_settings.node_network_dhcp == false ? templatefile("${path.module}/scripts/cloud_network_static.yaml", {
-    node_address     = "${var.xen_infra_settings.worker_vm_request.network_settings.node_address_mask}${each.value.id + var.xen_infra_settings.worker_vm_request.network_settings.node_address_start_ip}"
-    node_mask        = "${var.xen_infra_settings.worker_vm_request.network_settings.nodes_mask}"
+    #node_address     = "${var.xen_infra_settings.worker_vm_request.network_settings.node_address_mask}${each.value.id + var.xen_infra_settings.worker_vm_request.network_settings.node_address_start_ip}"
+    node_address     = cidrhost("${var.xen_infra_settings.worker_vm_request.network_settings.node_address_mask}/${var.xen_infra_settings.worker_vm_request.network_settings.nodes_mask}", each.value.id + var.xen_infra_settings.worker_vm_request.network_settings.node_address_start_ip)
+    #node_mask        = "${var.xen_infra_settings.worker_vm_request.network_settings.nodes_mask}"
+    node_mask        = cidrnetmask("${var.xen_infra_settings.worker_vm_request.network_settings.node_address_mask}/${var.xen_infra_settings.worker_vm_request.network_settings.nodes_mask}")
     node_gateway     = "${var.xen_infra_settings.worker_vm_request.network_settings.nodes_gateway}"
     node_dns_address = "${var.xen_infra_settings.worker_vm_request.network_settings.nodes_dns_address}"
     node_dns_search  = "${substr(lower(var.xen_infra_settings.dns_request.dns_zone), 0, length(var.xen_infra_settings.dns_request.dns_zone) - 1)}"
