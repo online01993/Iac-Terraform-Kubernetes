@@ -88,23 +88,23 @@ variable "xen_infra_settings" {
     })
   })
   validation {
-    condition = var.xen_infra_settings.master_vm_request.vm_settings.count == 1 || var.xen_infra_settings.master_vm_request.vm_settings.count => 3 
+    condition = var.xen_infra_settings.master_vm_request.vm_settings.count == 1 || var.xen_infra_settings.master_vm_request.vm_settings.count >= 3 
     error_message = "Master VM count must be 1 or 3 and more for HA"
   }
   validation {
-    condition = var.xen_infra_settings.master_vm_request.vm_settings.cpu_count => 2
+    condition = var.xen_infra_settings.master_vm_request.vm_settings.cpu_count >= 2
     error_message = "Master VM CPU count must be great or equal 2"
   }
   validation {
-    condition = var.xen_infra_settings.worker_vm_request.vm_settings.cpu_count => 2
+    condition = var.xen_infra_settings.worker_vm_request.vm_settings.cpu_count >= 2
     error_message = "Worker VM CPU count must be great or equal 2"
   }
   validation {
-    condition = var.xen_infra_settings.master_vm_request.vm_settings.memory_size_gb => 2 * 1024 * 1024 * 1024
+    condition = var.xen_infra_settings.master_vm_request.vm_settings.memory_size_gb >= 2 * 1024 * 1024 * 1024
     error_message = "Master VM MEM size must be great or equal 2GB"
   }
   validation {
-    condition = var.xen_infra_settings.worker_vm_request.vm_settings.memory_size_gb => 2 * 1024 * 1024 * 1024
+    condition = var.xen_infra_settings.worker_vm_request.vm_settings.memory_size_gb >= 2 * 1024 * 1024 * 1024
     error_message = "Worker VM MEM size must be great or equal 2GB"
   }
   validation {
