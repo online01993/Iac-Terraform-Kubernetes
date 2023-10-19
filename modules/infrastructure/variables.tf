@@ -19,7 +19,7 @@ variable "xen_infra_settings" {
         node_address_mask = string,
         node_address_start_ip = number,
         node_network_dhcp = bool,
-        nodes_mask = string,
+        nodes_mask = number,
         nodes_gateway = string,
         nodes_dns_address = string
       })
@@ -37,7 +37,7 @@ variable "xen_infra_settings" {
         node_address_mask = string,
         node_address_start_ip = number,
         node_network_dhcp = bool,
-        nodes_mask = string,
+        nodes_mask = number,
         nodes_gateway = string,
         nodes_dns_address = string
       })
