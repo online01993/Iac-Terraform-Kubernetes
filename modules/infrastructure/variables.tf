@@ -105,7 +105,7 @@ variable "xen_infra_settings" {
   }
   validation {
     condition = can(cidrnetmask("${var.xen_infra_settings.worker_vm_request.network_settings.node_address_mask}/${var.xen_infra_settings.worker_vm_request.network_settings.nodes_mask}"))
-    error_message = "CIDRnetmask Master VM validate error"
+    error_message = "CIDRnetmask Worker VM validate error"
   }
   validation {
     condition = cidrhost("${var.xen_infra_settings.master_vm_request.network_settings.node_address_mask}/${var.xen_infra_settings.master_vm_request.network_settings.nodes_mask}", var.xen_infra_settings.master_vm_request.vm_settings.count + var.xen_infra_settings.master_vm_request.network_settings.node_address_start_ip) >= cidrhost("${var.xen_infra_settings.worker_vm_request.network_settings.node_address_mask}/${var.xen_infra_settings.worker_vm_request.network_settings.nodes_mask}", var.xen_infra_settings.worker_vm_request.network_settings.node_address_start_ip)
