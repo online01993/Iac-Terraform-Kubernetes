@@ -134,12 +134,12 @@ global_xen_infra_settings = {
 #
 global_kubernetes_infra_setup_settings = {
   "kubernetes_settings" = {
-      "master_node_address_mask" = "10.200.0.",
+      "master_node_address_mask" = "10.200.0",
       "master_node_address_start_ip" = 11,
       "version_containerd" = "1.7.2",
       "version_runc" = "1.1.7",
       "version_cni-plugin" = "1.3.0",
-      "k8s_api_endpoint_ip" = "10.200.0.10",
+      "k8s_api_endpoint_ip" = "10.200.0.10.a",
       "k8s_api_endpoint_port" = 8888,
       "k8s_cni_hairpinMode" = true, 
       "k8s_cni_isDefaultGateway" = true,
