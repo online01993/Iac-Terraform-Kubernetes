@@ -103,7 +103,7 @@ resource "random_password" "k8s-vrrp_random_pass_resource" {
   special = false
   numeric = true
 }
-resource "terraform_data" "02-k8s-ha-setup_resource" {
+resource "terraform_data" "k8s-ha-setup_02_resource" {
   depends_on = [
     terraform_data.k8s-base-setup_01_resource_masters
   ]
@@ -139,7 +139,7 @@ resource "terraform_data" "02-k8s-ha-setup_resource" {
 resource "terraform_data" "k8s-kubeadm_init_03_resource" {
   depends_on = [
     terraform_data.k8s-base-setup_01_resource_masters,
-    terraform_data.02-k8s-ha-setup_resource
+    terraform_data.k8s-ha-setup_02_resource
   ]
   for_each = { for i in var.masters : i.id => i }
   connection {
