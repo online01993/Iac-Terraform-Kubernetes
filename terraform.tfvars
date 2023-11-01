@@ -48,7 +48,7 @@ global_xen_infra_settings = {
       "node_address_start_ip" = 11,
       "node_network_dhcp" = false,
       "nodes_mask" = 24,
-      "nodes_gateway" = "10.200.0.1",
+      "nodes_gateway" = "10.200.0.1a",
       "nodes_dns_address" = "10.200.0.1"
     }
   }  
