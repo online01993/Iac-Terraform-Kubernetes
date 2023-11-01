@@ -157,7 +157,6 @@ resource "terraform_data" "k8s-kubeadm_init_03_resource" {
       pod-network-cidr             = "${var.kubernetes_infra_setup_settings.pods_request.network_settings.pods_address_mask}/${var.kubernetes_infra_setup_settings.pods_request.network_settings.pods_mask_bits}"
       k8s_api_endpoint_ip          = "${var.kubernetes_infra_setup_settings.kubernetes_settings.k8s_api_endpoint_ip}"
       k8s_api_endpoint_port        = "${var.kubernetes_infra_setup_settings.kubernetes_settings.k8s_api_endpoint_port}"
-      k8s-vrrp_random_pass         = "${random_password.k8s-vrrp_random_pass_resource.result}"
     })
   }
   provisioner "remote-exec" {
