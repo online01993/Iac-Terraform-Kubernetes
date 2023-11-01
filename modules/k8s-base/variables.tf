@@ -49,4 +49,8 @@ variable "kubernetes_infra_setup_settings" {
     condition = can(regex("^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$","${var.kubernetes_infra_setup_settings.kubernetes_settings.master_node_address_mask}${var.kubernetes_infra_setup_settings.kubernetes_settings.master_node_address_start_ip}"))
     error_message = "Invalid master_node_address_mask AND/OR master_node_address_start_ip address provided"
   }
+  validation {
+    condition = var.kubernetes_infra_setup_settings.kubernetes_settings.k8s_api_endpoint_port > 1024 && var.kubernetes_infra_setup_settings.kubernetes_settings.k8s_api_endpoint_port <= 65535
+    error_message = "Invalid k8s_api_endpoint_port provided, set correct port between 1024 and 65535"
+  }
 }
