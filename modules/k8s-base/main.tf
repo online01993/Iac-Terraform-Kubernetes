@@ -37,9 +37,9 @@ resource "terraform_data" "k8s-base-setup_01_resource_masters" {
   provisioner "file" {
     destination = "/tmp/01-k8s-base-setup.sh"
     content = templatefile("${path.module}/scripts/01-k8s-base-setup.sh.tpl", {
-      version_containerd = "${var.version_containerd}"
-      version_runc       = "${var.version_runc}"
-      version_cni-plugin = "${var.version_cni-plugin}"
+      version_containerd = "${var.kubernetes_infra_setup_settings.kubernetes_settings.version_containerd}"
+      version_runc       = "${var.kubernetes_infra_setup_settings.kubernetes_settings.version_runc}"
+      version_cni-plugin = "${var.kubernetes_infra_setup_settings.kubernetes_settings.version_cni-plugin}"
     })
   }
   provisioner "remote-exec" {
@@ -85,9 +85,9 @@ resource "terraform_data" "k8s-base-setup_01_resource_nodes" {
   provisioner "file" {
     destination = "/tmp/01-k8s-base-setup.sh"
     content = templatefile("${path.module}/scripts/01-k8s-base-setup.sh.tpl", {
-      version_containerd = "${var.version_containerd}"
-      version_runc       = "${var.version_runc}"
-      version_cni-plugin = "${var.version_cni-plugin}"
+      version_containerd = "${var.kubernetes_infra_setup_settings.kubernetes_settings.version_containerd}"
+      version_runc       = "${var.kubernetes_infra_setup_settings.kubernetes_settings.version_runc}"
+      version_cni-plugin = "${var.kubernetes_infra_setup_settings.kubernetes_settings.version_cni-plugin}"
     })
   }
   provisioner "remote-exec" {
@@ -119,11 +119,11 @@ resource "terraform_data" "k8s-kubeadm_init_02_resource" {
     content = templatefile("${path.module}/scripts/02-k8s-kubeadm_init.sh.tpl", {
       itterator                    = each.value.id
       master_count                 = length(var.masters)
-      master_network_mask          = "${var.master_node_address_mask}"
-      master_node_address_start_ip = "${var.master_node_address_start_ip}"
-      pod-network-cidr             = "${var.pods_mask_cidr}"
-      k8s_api_endpoint_ip          = "${var.k8s_api_endpoint_ip}"
-      k8s_api_endpoint_port        = "${var.k8s_api_endpoint_port}"
+      master_network_mask          = "${var.kubernetes_infra_setup_settings.kubernetes_settings.master_node_address_mask}"
+      master_node_address_start_ip = "${var.kubernetes_infra_setup_settings.kubernetes_settings.master_node_address_start_ip}"
+      pod-network-cidr             = "${var.kubernetes_infra_setup_settings.pods_request.network_settings.pods_address_mask}/${var.kubernetes_infra_setup_settings.pods_request.network_settings.pods_mask_bits}"
+      k8s_api_endpoint_ip          = "${var.kubernetes_infra_setup_settings.kubernetes_settings.k8s_api_endpoint_ip}"
+      k8s_api_endpoint_port        = "${var.kubernetes_infra_setup_settings.kubernetes_settings.k8s_api_endpoint_port}"
       k8s-vrrp_random_pass         = "${random_password.k8s-vrrp_random_pass_resource.result}"
     })
   }
@@ -221,7 +221,7 @@ resource "terraform_data" "k8s-kubeadm_init_token_join_master_03_resource" {
       rm -rvf ${path.module}/scripts/k8s-kubeadm_init_token_master_join.sh
       echo "${var.vm_rsa_ssh_key_private}" > ./.robot_id_rsa_master.key
       chmod 600 ./.robot_id_rsa_master.key
-      ssh robot@${var.k8s_api_endpoint_ip} -o StrictHostKeyChecking=no -i ./.robot_id_rsa_master.key "(sudo kubeadm token create --print-join-command && echo ' --control-plane --certificate-key ' && sudo kubeadm init phase upload-certs --upload-certs | grep -v '^[\[]') | tr -d '\n'" > ${path.module}/scripts/k8s-kubeadm_init_token_master_join.sh
+      ssh robot@${var.kubernetes_infra_setup_settings.kubernetes_settings.k8s_api_endpoint_ip} -o StrictHostKeyChecking=no -i ./.robot_id_rsa_master.key "(sudo kubeadm token create --print-join-command && echo ' --control-plane --certificate-key ' && sudo kubeadm init phase upload-certs --upload-certs | grep -v '^[\[]') | tr -d '\n'" > ${path.module}/scripts/k8s-kubeadm_init_token_master_join.sh
       rm -rvf ./.robot_id_rsa_master.key
     EOF
   }
@@ -250,7 +250,7 @@ resource "terraform_data" "k8s-kubeadm_init_token_join_node_03_resource" {
       rm -rvf ${path.module}/scripts/k8s-kubeadm_init_token_join.sh
       echo "${var.vm_rsa_ssh_key_private}" > ./.robot_id_rsa_node.key
       chmod 600 ./.robot_id_rsa_node.key
-      ssh robot@${var.k8s_api_endpoint_ip} -o StrictHostKeyChecking=no -i ./.robot_id_rsa_node.key "sudo kubeadm token create --print-join-command" > ${path.module}/scripts/k8s-kubeadm_init_token_join.sh
+      ssh robot@${var.kubernetes_infra_setup_settings.kubernetes_settings.k8s_api_endpoint_ip} -o StrictHostKeyChecking=no -i ./.robot_id_rsa_node.key "sudo kubeadm token create --print-join-command" > ${path.module}/scripts/k8s-kubeadm_init_token_join.sh
       rm -rvf ./.robot_id_rsa_node.key
     EOF
   }

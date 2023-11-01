@@ -13,8 +13,6 @@ global_xen_xoa_username = "admin"
 global_xen_xoa_password = "nt[yjkjubz"
 #XO use secure ssl false|true
 global_xen_xoa_insecure = true
-
-
 #
 # Xen ifra deploy request
 #
@@ -131,33 +129,29 @@ global_xen_infra_settings = {
     #https://github.com/terraform-linters/tflint-ruleset-aws/issues/42#issuecomment-928199917
   }
 }
-
+#
 #Kubernetes settings
-global_master_node_address_mask = "10.200.0."
-global_master_node_address_start_ip = 11
-
-global_pods_address_mask = "10.244.0.0"
-#Nodes mask in CIDR format, default 16
-global_pods_mask_cidr = 16
-#Runtime containerd version
-#https://github.com/containerd/containerd/releases
-global_version_containerd = "1.7.2"
-#Runtime runc library version
-#https://github.com/opencontainers/runc/releases/download
-global_version_runc = "1.1.7"
-#CNI network plugin
-#https://github.com/containernetworking/plugins/releases/download
-global_version_cni-plugin = "1.3.0"
-#IP address endpoint of Kubernetes cluster
-global_k8s_api_endpoint_ip = "10.200.0.10"
-#IP PORT endpoint of Kubernetes cluster via VRRP_HAProxy
-global_k8s_api_endpoint_port = "8888"
-#Make NAT for CNI pod network
-global_k8s_cni_hairpinMode = true
-#Make default gateway for CNI pod network
-global_k8s_cni_isDefaultGateway = true
-#Backend type for CNI pod network
-global_k8s_cni_Backend_Type = "vxlan"
+#
+global_kubernetes_infra_setup_settings = {
+  "kubernetes_settings" = {
+      "master_node_address_mask" = "10.200.0.",
+      "master_node_address_start_ip" = 11,
+      "version_containerd" = "1.7.2",
+      "version_runc" = "1.1.7",
+      "version_cni-plugin" = "1.3.0",
+      "k8s_api_endpoint_ip" = "10.200.0.10",
+      "k8s_api_endpoint_port" = 8888,
+      "k8s_cni_hairpinMode" = true, 
+      "k8s_cni_isDefaultGateway" = true,
+      "k8s_cni_Backend_Type" = "vxlan"
+  }
+  "pods_request" = {
+      "network_settings" = {
+        "pods_address_mask" = "10.244.0.0",
+        "pods_mask_bits" = 16
+      }
+  }
+}
 #NodePort for Kube-dashboard
 global_kube-dashboard_nodePort = 30100
 #SSD LVM Storage type for Linstore Thin or Thick

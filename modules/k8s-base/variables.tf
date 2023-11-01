@@ -20,32 +20,33 @@ variable "nodes" {
     address = string
   }))
 }
-variable "version_containerd" {
-  type = string
-}
-variable "version_runc" {
-  type = string
-}
-variable "version_cni-plugin" {
-  type = string
-}
-variable "master_node_address_mask" {
-  #default = 10.244.0.
-  type = string
-}
-variable "master_node_address_start_ip" {
-  #default = 11
-  type = number
-}
-variable "pods_mask_cidr" {
-  #default = ""
-  type = string
-}
-variable "k8s_api_endpoint_ip" {
-  #default = 16
-  type = string
-}
-variable "k8s_api_endpoint_port" {
-  #default = 8888
-  type = string
+variable "kubernetes_infra_setup_settings" {
+  type = object({
+    kubernetes_settings = object({
+      master_node_address_mask = string, #default = 10.244.0.
+      master_node_address_start_ip = number, #default = 11
+      version_containerd = string, #Runtime containerd version, https://github.com/containerd/containerd/releases
+      version_runc = string, #Runtime runc library version, https://github.com/opencontainers/runc/releases/download
+      version_cni-plugin = string, #CNI network plugin, https://github.com/containernetworking/plugins/releases/download
+      k8s_api_endpoint_ip = string, #IP address endpoint of Kubernetes cluster
+      k8s_api_endpoint_port = number, #IP PORT endpoint of Kubernetes cluster via VRRP_HAProxy
+      k8s_cni_hairpinMode = bool, #Make NAT for CNI pod network
+      k8s_cni_isDefaultGateway = bool, #Make default gateway for CNI pod network
+      k8s_cni_Backend_Type = string #Backend type for CNI pod network
+    })
+    pods_request = object({
+      network_settings = object({
+        pods_address_mask = string, #PODS adress mask in CIDR format, default 10.244.0.0
+        pods_mask_bits = number #PODS mask bits, default 16
+      })
+    })
+  })
+  validation {
+    condition = can(regex("^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$",var.kubernetes_infra_setup_settings.kubernetes_settings.k8s_api_endpoint_ip))
+    error_message = "Invalid k8s_api_endpoint_ip address provided"
+  } 
+  validation {
+    condition = can(regex("^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$","${var.kubernetes_infra_setup_settings.kubernetes_settings.master_node_address_mask}${var.kubernetes_infra_setup_settings.kubernetes_settings.master_node_address_start_ip}"))
+    error_message = "Invalid master_node_address_mask AND/OR master_node_address_start_ip address provided"
+  }
 }

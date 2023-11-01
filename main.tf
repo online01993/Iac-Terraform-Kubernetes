@@ -6,24 +6,17 @@ module "infrastructure" {
 module "kubernetes-base" {
   depends_on                   = [module.infrastructure]
   source                       = "./modules/k8s-base"
+  kubernetes_infra_setup_settings           = var.global_kubernetes_infra_setup_settings
   vm_rsa_ssh_key_public        = module.infrastructure.vm_rsa_ssh_key_public
   vm_rsa_ssh_key_private       = module.infrastructure.vm_rsa_ssh_key_private
-  masters                      = module.infrastructure.masters
-  nodes                        = module.infrastructure.nodes
-  master_node_address_mask     = var.global_master_node_address_mask
-  master_node_address_start_ip = var.global_master_node_address_start_ip
-  version_containerd           = var.global_version_containerd
-  version_runc                 = var.global_version_runc
-  version_cni-plugin           = var.global_version_cni-plugin
-  pods_mask_cidr               = "${var.global_pods_address_mask}/${var.global_pods_mask_cidr}"  
-  k8s_api_endpoint_ip          = var.global_k8s_api_endpoint_ip
-  k8s_api_endpoint_port        = var.global_k8s_api_endpoint_port
+  masters                      = module.infrastructure.xen_masters
+  nodes                        = module.infrastructure.xen_nodes
 }
 module "k8s-system-services" {
   depends_on                   = [module.kubernetes-base]
   source                       = "./modules/k8s-system-services"
-  masters                      = module.infrastructure.masters
-  nodes                        = module.infrastructure.nodes
+  masters                      = module.infrastructure.xen_masters
+  nodes                        = module.infrastructure.xen_nodes
   k8s_cni_hairpinMode          = var.global_k8s_cni_hairpinMode
   k8s_cni_isDefaultGateway     = var.global_k8s_cni_isDefaultGateway
   k8s_cni_Backend_Type         = var.global_k8s_cni_Backend_Type

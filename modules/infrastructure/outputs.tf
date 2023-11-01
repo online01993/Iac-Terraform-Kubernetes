@@ -10,7 +10,7 @@
 # "address" = xenorchestra_vm.vm[*].ipv4_addresses[0]
 # })
 # }
-output "masters" {
+output "xen_masters" {
   value = [
     for i in range(length(xenorchestra_vm.vm_master)) :
     {
@@ -22,7 +22,7 @@ output "masters" {
     }
   ]
 }
-output "nodes" {
+output "xen_nodes" {
   value = [
     for i in range(length(xenorchestra_vm.vm)) :
     {
