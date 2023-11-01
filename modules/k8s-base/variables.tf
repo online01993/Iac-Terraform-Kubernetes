@@ -7,16 +7,12 @@ variable "vm_rsa_ssh_key_public" {
 variable "masters" {
   type = list(object({
     id      = number
-    netbios = string
-    fqdn    = string
     address = string
   }))
 }
 variable "nodes" {
   type = list(object({
     id      = number
-    netbios = string
-    fqdn    = string
     address = string
   }))
 }

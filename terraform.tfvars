@@ -143,7 +143,7 @@ global_kubernetes_infra_setup_settings = {
       "k8s_api_endpoint_port" = 8888,
       "k8s_cni_hairpinMode" = true, 
       "k8s_cni_isDefaultGateway" = true,
-      "k8s_cni_Backend_Type" = "vxlana"
+      "k8s_cni_Backend_Type" = "vxlan"
   }
   "pods_request" = {
       "network_settings" = {
