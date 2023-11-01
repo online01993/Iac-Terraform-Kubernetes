@@ -1,8 +1,8 @@
 output "k8s-api-endpont-url" {
-  value = "https://${var.k8s_api_endpoint_ip}:${var.k8s_api_endpoint_port}"
+  value = "https://${var.kubernetes_infra_setup_settings.kubernetes_settings.k8s_api_endpoint_ip}:${var.kubernetes_infra_setup_settings.kubernetes_settings.k8s_api_endpoint_port}"
 }
 output "k8s-endpont-ip" {
-  value = var.k8s_api_endpoint_ip
+  value = var.kubernetes_infra_setup_settings.kubernetes_settings.k8s_api_endpoint_ip
 }
 output "k8s-admin_file" {
   value     = data.local_sensitive_file.k8s-kubeadm_init_02_config_file.content
