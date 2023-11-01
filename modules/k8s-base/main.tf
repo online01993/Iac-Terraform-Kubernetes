@@ -126,6 +126,7 @@ resource "terraform_data" "k8s-ha-setup_02_resource" {
       master_count                 = length(var.masters)
       master_network_mask          = "${var.kubernetes_infra_setup_settings.kubernetes_settings.master_node_address_mask}"
       master_node_address_start_ip = var.kubernetes_infra_setup_settings.kubernetes_settings.master_node_address_start_ip
+      k8s-vrrp_random_pass         = "${random_password.k8s-vrrp_random_pass_resource.result}"
     })
   }
   provisioner "remote-exec" {
