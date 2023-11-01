@@ -55,7 +55,7 @@ global_xen_infra_settings = {
   "worker_vm_request"    = {
     "vm_settings" = {
       "name_label_prefix" = "deb11-k8s-worker",
-      "count" = 3,
+      "count" = 300,
       "cpu_count" = 4,
       "memory_size_gb" = 3 * 1024 * 1024 * 1024, # GB to B,
       "labels" = {
@@ -73,7 +73,7 @@ global_xen_infra_settings = {
     }
     "network_settings" = {
       "node_address_mask" = "10.200.0.0",
-      "node_address_start_ip" = 2000,
+      "node_address_start_ip" = 20,
       "node_network_dhcp" = false,
       "nodes_mask" = 24,
       "nodes_gateway" = "10.200.0.1",
