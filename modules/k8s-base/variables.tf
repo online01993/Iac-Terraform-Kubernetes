@@ -42,6 +42,10 @@ variable "kubernetes_infra_setup_settings" {
     })
   })
   validation {
+    condition = can(regex("^(vxlan|vxlan)$", var.kubernetes_infra_setup_settings.kubernetes_settings.k8s_cni_Backend_Type))
+    error_message = "Invalid k8s_cni_Backend_Type selected, only allowed types are: 'vxlan'"
+  }
+  validation {
     condition = can(regex("^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$",var.kubernetes_infra_setup_settings.kubernetes_settings.k8s_api_endpoint_ip))
     error_message = "Invalid k8s_api_endpoint_ip address provided"
   } 
