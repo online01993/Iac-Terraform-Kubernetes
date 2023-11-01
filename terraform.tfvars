@@ -44,7 +44,7 @@ global_xen_infra_settings = {
       ]
     }
     "network_settings" = {
-      "node_address_mask" = "10.200.0.0a",
+      "node_address_mask" = "10.200.0.0",
       "node_address_start_ip" = 11,
       "node_network_dhcp" = false,
       "nodes_mask" = 24,
@@ -72,7 +72,7 @@ global_xen_infra_settings = {
       ]
     }
     "network_settings" = {
-      "node_address_mask" = "10.200.0.0",
+      "node_address_mask" = "10.200.0.0a",
       "node_address_start_ip" = 20,
       "node_network_dhcp" = false,
       "nodes_mask" = 24,
