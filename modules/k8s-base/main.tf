@@ -103,9 +103,43 @@ resource "random_password" "k8s-vrrp_random_pass_resource" {
   special = false
   numeric = true
 }
-resource "terraform_data" "k8s-kubeadm_init_03_resource" {
+resource "terraform_data" "02-k8s-ha-setup_resource" {
   depends_on = [
     terraform_data.k8s-base-setup_01_resource_masters
+  ]
+  triggers_replace = [
+    var.masters,
+    var.kubernetes_infra_setup_settings.kubernetes_settings.master_node_address_mask,
+    var.kubernetes_infra_setup_settings.kubernetes_settings.master_node_address_start_ip
+  ]
+  for_each = { for i in var.masters : i.id => i }
+  connection {
+    type        = "ssh"
+    user        = "robot"
+    private_key = var.vm_rsa_ssh_key_private
+    host        = each.value.address
+  }
+  provisioner "file" {
+    destination = "/tmp/02-k8s-ha-setup.sh"
+    content = templatefile("${path.module}/scripts/02-k8s-ha-setup.sh.tpl", {
+      itterator                    = each.value.id
+      master_count                 = length(var.masters)
+      master_network_mask          = "${var.kubernetes_infra_setup_settings.kubernetes_settings.master_node_address_mask}"
+      master_node_address_start_ip = "${var.kubernetes_infra_setup_settings.kubernetes_settings.master_node_address_start_ip}"
+    })
+  }
+  provisioner "remote-exec" {
+    inline = [
+      "chmod +x /tmp/02-k8s-ha-setup.sh",
+      "/tmp/02-k8s-ha-setup.sh",
+      "rm -rf /tmp/02-k8s-ha-setup.sh",
+    ]
+  }
+}
+resource "terraform_data" "k8s-kubeadm_init_03_resource" {
+  depends_on = [
+    terraform_data.k8s-base-setup_01_resource_masters,
+    terraform_data.02-k8s-ha-setup_resource
   ]
   for_each = { for i in var.masters : i.id => i }
   connection {
