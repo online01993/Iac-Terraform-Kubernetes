@@ -108,15 +108,15 @@ variable "xen_infra_settings" {
     error_message = "CIDRnetmask Worker VM validate error"
   }
   validation {
-    condition = can(cidrhost("${var.xen_infra_settings.master_vm_request.network_settings.node_address_mask}/${var.xen_infra_settings.master_vm_request.network_settings.nodes_mask}", var.xen_infra_settings.master_vm_request.count + var.xen_infra_settings.master_vm_request.network_settings.node_address_start_ip))
+    condition = can(cidrhost("${var.xen_infra_settings.master_vm_request.network_settings.node_address_mask}/${var.xen_infra_settings.master_vm_request.network_settings.nodes_mask}", var.xen_infra_settings.master_vm_request.vm_settings.count + var.xen_infra_settings.master_vm_request.network_settings.node_address_start_ip))
     error_message = "Master VM End of IP Pool address incorrect - set other network settings"
   } 
   validation {
-    condition = can(cidrhost("${var.xen_infra_settings.worker_vm_request.network_settings.node_address_mask}/${var.xen_infra_settings.worker_vm_request.network_settings.nodes_mask}", var.xen_infra_settings.worker_vm_request.count + var.xen_infra_settings.worker_vm_request.network_settings.node_address_start_ip))
+    condition = can(cidrhost("${var.xen_infra_settings.worker_vm_request.network_settings.node_address_mask}/${var.xen_infra_settings.worker_vm_request.network_settings.nodes_mask}", var.xen_infra_settings.worker_vm_request.vm_settings.count + var.xen_infra_settings.worker_vm_request.network_settings.node_address_start_ip))
     error_message = "Worker VM End of IP Pool address incorrect - set other network settings"
   } 
   validation {
-    condition = var.xen_infra_settings.master_vm_request.count + var.xen_infra_settings.master_vm_request.network_settings.node_address_start_ip - 1 < var.xen_infra_settings.worker_vm_request.network_settings.node_address_start_ip
+    condition = var.xen_infra_settings.master_vm_request.vm_settings.count + var.xen_infra_settings.master_vm_request.network_settings.node_address_start_ip - 1 < var.xen_infra_settings.worker_vm_request.network_settings.node_address_start_ip
     error_message = "Last Master VM IP address is equal or greate of first Worker VM IP address"
   }
   validation {
