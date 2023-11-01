@@ -127,6 +127,8 @@ resource "terraform_data" "k8s-ha-setup_02_resource" {
       master_network_mask          = "${var.kubernetes_infra_setup_settings.kubernetes_settings.master_node_address_mask}"
       master_node_address_start_ip = var.kubernetes_infra_setup_settings.kubernetes_settings.master_node_address_start_ip
       k8s-vrrp_random_pass         = "${random_password.k8s-vrrp_random_pass_resource.result}"
+      k8s_api_endpoint_ip          = "${var.kubernetes_infra_setup_settings.kubernetes_settings.k8s_api_endpoint_ip}"
+      k8s_api_endpoint_port        = "${var.kubernetes_infra_setup_settings.kubernetes_settings.k8s_api_endpoint_port}"
     })
   }
   provisioner "remote-exec" {
@@ -155,8 +157,6 @@ resource "terraform_data" "k8s-kubeadm_init_03_resource" {
       itterator                    = each.value.id
       master_count                 = length(var.masters)
       pod-network-cidr             = "${var.kubernetes_infra_setup_settings.pods_request.network_settings.pods_address_mask}/${var.kubernetes_infra_setup_settings.pods_request.network_settings.pods_mask_bits}"
-      k8s_api_endpoint_ip          = "${var.kubernetes_infra_setup_settings.kubernetes_settings.k8s_api_endpoint_ip}"
-      k8s_api_endpoint_port        = "${var.kubernetes_infra_setup_settings.kubernetes_settings.k8s_api_endpoint_port}"
     })
   }
   provisioner "remote-exec" {
