@@ -12,7 +12,7 @@ module "kubernetes-base" {
   masters                      = module.infrastructure.xen_masters
   nodes                        = module.infrastructure.xen_nodes
 }
-module "k8s-system-services" {
+/* module "k8s-system-services" {
   depends_on                   = [module.kubernetes-base]
   source                       = "./modules/k8s-system-services"
   masters                      = module.infrastructure.xen_masters
@@ -28,4 +28,4 @@ module "k8s-system-services" {
   nvme_k8s_stor_pool_name      = var.global_nvme_k8s_stor_pool_name
   hdd_k8s_stor_pool_type       = var.global_hdd_k8s_stor_pool_type
   hdd_k8s_stor_pool_name       = var.global_hdd_k8s_stor_pool_name
-}  
+} */  
