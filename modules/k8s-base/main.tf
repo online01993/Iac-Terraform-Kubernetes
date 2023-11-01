@@ -103,7 +103,7 @@ resource "random_password" "k8s-vrrp_random_pass_resource" {
   special = false
   numeric = true
 }
-resource "terraform_data" "k8s-kubeadm_init_02_resource" {
+resource "terraform_data" "k8s-kubeadm_init_03_resource" {
   depends_on = [
     terraform_data.k8s-base-setup_01_resource_masters
   ]
@@ -115,8 +115,8 @@ resource "terraform_data" "k8s-kubeadm_init_02_resource" {
     host        = each.value.address
   }
   provisioner "file" {
-    destination = "/tmp/02-k8s-kubeadm_init.sh"
-    content = templatefile("${path.module}/scripts/02-k8s-kubeadm_init.sh.tpl", {
+    destination = "/tmp/03-k8s-kubeadm_init.sh"
+    content = templatefile("${path.module}/scripts/03-k8s-kubeadm_init.sh.tpl", {
       itterator                    = each.value.id
       master_count                 = length(var.masters)
       master_network_mask          = "${var.kubernetes_infra_setup_settings.kubernetes_settings.master_node_address_mask}"
@@ -129,15 +129,15 @@ resource "terraform_data" "k8s-kubeadm_init_02_resource" {
   }
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/02-k8s-kubeadm_init.sh",
-      "/tmp/02-k8s-kubeadm_init.sh",
-      "rm -rf /tmp/02-k8s-kubeadm_init.sh",
+      "chmod +x /tmp/03-k8s-kubeadm_init.sh",
+      "/tmp/03-k8s-kubeadm_init.sh",
+      "rm -rf /tmp/03-k8s-kubeadm_init.sh",
     ]
   }
 }
 resource "terraform_data" "k8s-kubeadm_init_02_config_get_resource" {
   depends_on = [
-    terraform_data.k8s-kubeadm_init_02_resource
+    terraform_data.k8s-kubeadm_init_03_resource
   ]
   provisioner "local-exec" {
     command = <<EOF
@@ -214,7 +214,7 @@ resource "terraform_data" "k8s-kubeadm_init_token_join_master_03_resource" {
     terraform_data.k8s-base-setup_01_resource_masters
   ]
   depends_on = [
-    terraform_data.k8s-kubeadm_init_02_resource
+    terraform_data.k8s-kubeadm_init_03_resource
   ]
   provisioner "local-exec" {
     command = <<EOF
@@ -243,7 +243,7 @@ resource "terraform_data" "k8s-kubeadm_init_token_join_node_03_resource" {
     terraform_data.k8s-base-setup_01_resource_nodes
   ]
   depends_on = [
-    terraform_data.k8s-kubeadm_init_02_resource
+    terraform_data.k8s-kubeadm_init_03_resource
   ]
   provisioner "local-exec" {
     command = <<EOF
@@ -269,7 +269,7 @@ data "local_sensitive_file" "kubeadm_token_node_file" {
 }
 resource "terraform_data" "k8s-kubeadm-join_masters_04_resource" {
   depends_on = [
-    terraform_data.k8s-kubeadm_init_02_resource,
+    terraform_data.k8s-kubeadm_init_03_resource,
     data.local_sensitive_file.kubeadm_token_master_file
   ]
   #for_each = module.infrastructure.masters
@@ -298,7 +298,7 @@ resource "terraform_data" "k8s-kubeadm-join_masters_04_resource" {
 }
 resource "terraform_data" "k8s-kubeadm-join_nodes_04_resource" {
   depends_on = [
-    terraform_data.k8s-kubeadm_init_02_resource,
+    terraform_data.k8s-kubeadm_init_03_resource,
     data.local_sensitive_file.kubeadm_token_node_file
   ]
   #for_each = module.infrastructure.nodes
