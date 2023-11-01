@@ -119,11 +119,21 @@ variable "xen_infra_settings" {
     condition = var.xen_infra_settings.master_vm_request.vm_settings.count + var.xen_infra_settings.master_vm_request.network_settings.node_address_start_ip - 1 < var.xen_infra_settings.worker_vm_request.network_settings.node_address_start_ip
     error_message = "Last Master VM IP address is equal or greate of first Worker VM IP address"
   }
-
-
   validation {
     condition = alltrue([for i, v in split(".", var.xen_infra_settings.master_vm_request.network_settings.nodes_gateway): tonumber(split(".", cidrhost("${var.xen_infra_settings.master_vm_request.network_settings.node_address_mask}/${var.xen_infra_settings.master_vm_request.network_settings.nodes_mask}", 0))[i]) <= tonumber(v) && tonumber(v) <= tonumber(split(".", cidrhost("${var.xen_infra_settings.master_vm_request.network_settings.node_address_mask}/${var.xen_infra_settings.master_vm_request.network_settings.nodes_mask}", -1))[i]) ])
     error_message = "Master VM nodes_gateway IP address incorrect - set other nodes_gateway"
+  } 
+  validation {
+    condition = alltrue([for i, v in split(".", var.xen_infra_settings.master_vm_request.network_settings.nodes_dns_address): tonumber(split(".", cidrhost("${var.xen_infra_settings.master_vm_request.network_settings.node_address_mask}/${var.xen_infra_settings.master_vm_request.network_settings.nodes_mask}", 0))[i]) <= tonumber(v) && tonumber(v) <= tonumber(split(".", cidrhost("${var.xen_infra_settings.master_vm_request.network_settings.node_address_mask}/${var.xen_infra_settings.master_vm_request.network_settings.nodes_mask}", -1))[i]) ])
+    error_message = "Master VM nodes_dns_address IP address incorrect - set other nodes_dns_address"
+  } 
+  validation {
+    condition = alltrue([for i, v in split(".", var.xen_infra_settings.worker_vm_request.network_settings.nodes_gateway): tonumber(split(".", cidrhost("${var.xen_infra_settings.worker_vm_request.network_settings.node_address_mask}/${var.xen_infra_settings.worker_vm_request.network_settings.nodes_mask}", 0))[i]) <= tonumber(v) && tonumber(v) <= tonumber(split(".", cidrhost("${var.xen_infra_settings.worker_vm_request.network_settings.node_address_mask}/${var.xen_infra_settings.worker_vm_request.network_settings.nodes_mask}", -1))[i]) ])
+    error_message = "Worker VM nodes_gateway IP address incorrect - set other nodes_gateway"
+  } 
+  validation {
+    condition = alltrue([for i, v in split(".", var.xen_infra_settings.worker_vm_request.network_settings.nodes_dns_address): tonumber(split(".", cidrhost("${var.xen_infra_settings.worker_vm_request.network_settings.node_address_mask}/${var.xen_infra_settings.worker_vm_request.network_settings.nodes_mask}", 0))[i]) <= tonumber(v) && tonumber(v) <= tonumber(split(".", cidrhost("${var.xen_infra_settings.worker_vm_request.network_settings.node_address_mask}/${var.xen_infra_settings.worker_vm_request.network_settings.nodes_mask}", -1))[i]) ])
+    error_message = "Worker VM nodes_dns_address IP address incorrect - set other nodes_dns_address"
   } 
   validation {
     condition = var.xen_infra_settings.master_vm_request.vm_settings.memory_size_gb >= 2 * 1024 * 1024 * 1024
