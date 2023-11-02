@@ -1,5 +1,8 @@
 #main.tf
 resource "terraform_data" "k8s-base-setup_01_resource_masters" {
+  triggers_replace = [
+    var.masters
+  ]
   #for_each = module.infrastructure.masters
   for_each = { for i in var.masters : i.id => i }
   connection {
@@ -51,6 +54,9 @@ resource "terraform_data" "k8s-base-setup_01_resource_masters" {
   }
 }
 resource "terraform_data" "k8s-base-setup_01_resource_nodes" {
+  triggers_replace = [
+    var.nodes
+  ]
   #for_each = module.infrastructure.nodes
   for_each = { for i in var.nodes : i.id => i }
   connection {
@@ -306,6 +312,9 @@ resource "terraform_data" "k8s-kubeadm-join_masters_04_resource" {
     terraform_data.k8s-kubeadm_init_03_resource,
     data.local_sensitive_file.kubeadm_token_master_file
   ]
+  triggers_replace = [
+    var.masters
+  ]
   #for_each = module.infrastructure.masters
   for_each = { for i in var.masters : i.id => i }
   connection {
@@ -334,6 +343,9 @@ resource "terraform_data" "k8s-kubeadm-join_nodes_04_resource" {
   depends_on = [
     terraform_data.k8s-kubeadm_init_03_resource,
     data.local_sensitive_file.kubeadm_token_node_file
+  ]
+  triggers_replace = [
+    var.nodes
   ]
   #for_each = module.infrastructure.nodes
   for_each = { for i in var.nodes : i.id => i }
