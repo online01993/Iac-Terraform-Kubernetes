@@ -19,16 +19,21 @@ while [ ! -f /var/lib/cloud/instance/01-k8s-base-setup ]; do
   echo -e "\033[1;36mWaiting for 01-k8s-base-setup..."
   sleep 10
 done
+if [[ -f /var/lib/cloud/instance/04-k8s-kubeadm-join_masters ]]
+then
+  echo "not first run, exit"
+  exit 0
+fi 
 if [[ ${master_count} -eq 1 && ${itterator} -eq 0 ]] || [[ ${master_count} -gt 1 && ${itterator} -eq 0 ]]
 then
 	#dont do anything for first master node
     exit 0
 elif [[ ${master_count} -eq 3 ]] && [[ ${itterator} -gt 0 ]]
 then
-    sudo bash -c 'touch /var/lib/cloud/instance/04-k8s-kubeadm-join_masters.log'
+    sudo bash -c 'touch /var/lib/cloud/instance/04-k8s-kubeadm-join_masters'
 	set +xe
-	while [[ "$(grep -c "This node has joined the cluster and a new control plane instance was created:" /var/lib/cloud/instance/04-k8s-kubeadm-join_masters.log)" -eq 0 ]]; do
-     sudo bash -c '${kubeadm-join_string} > /var/lib/cloud/instance/04-k8s-kubeadm-join_masters.log 2>&1'
+	while [[ "$(grep -c "This node has joined the cluster and a new control plane instance was created:" /var/lib/cloud/instance/04-k8s-kubeadm-join_masters)" -eq 0 ]]; do
+     sudo bash -c '${kubeadm-join_string} > /var/lib/cloud/instance/04-k8s-kubeadm-join_masters 2>&1'
      sleep 3
     done
     set -xe
@@ -53,10 +58,10 @@ then
 	sudo bash -c 'echo "K8s adding current node ${master_count} as control plane master" >> /var/lib/cloud/instance/04-k8s-kubeadm-join_masters'
 elif [[ ${master_count} -gt 3 ]] && [[ ${itterator} -gt 0 ]]
 then
-	sudo bash -c 'touch /var/lib/cloud/instance/04-k8s-kubeadm-join_masters.log'
+	sudo bash -c 'touch /var/lib/cloud/instance/04-k8s-kubeadm-join_masters'
 	set +xe
-	while [[ "$(grep -c "This node has joined the cluster and a new control plane instance was created:" /var/lib/cloud/instance/04-k8s-kubeadm-join_masters.log)" -eq 0 ]]; do
-     sudo bash -c '${kubeadm-join_string} > /var/lib/cloud/instance/04-k8s-kubeadm-join_masters.log 2>&1'
+	while [[ "$(grep -c "This node has joined the cluster and a new control plane instance was created:" /var/lib/cloud/instance/04-k8s-kubeadm-join_masters)" -eq 0 ]]; do
+     sudo bash -c '${kubeadm-join_string} > /var/lib/cloud/instance/04-k8s-kubeadm-join_masters 2>&1'
      sleep 3
     done
     set -xe

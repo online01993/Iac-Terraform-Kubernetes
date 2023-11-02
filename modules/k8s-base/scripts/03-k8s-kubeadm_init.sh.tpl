@@ -19,6 +19,11 @@ while [ ! -f /var/lib/cloud/instance/02-k8s-ha-setup ]; do
   echo -e "\033[1;36mWaiting for 02-k8s-ha-setup..."
   sleep 10
 done
+if [[ -f /var/lib/cloud/instance/03-k8s-kubeadm_init ]]
+then
+  echo "not first run, exit"
+  exit 0
+fi  
 #Enabling k8s with kubeadm
 if [[ ${master_count} -eq 1 && ${itterator} -eq 0 ]] || [[ ${master_count} -gt 1 && ${itterator} -eq 0 ]]
 then
